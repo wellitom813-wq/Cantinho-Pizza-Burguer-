@@ -1,15 +1,15 @@
-# Cantinho Pizza Burguer — Black Clean Final
+# Cantinho Pizza Burguer — Delivery por categorias
 
-Versão refeita após revisão da página publicada.
+- 26 produtos
+- mesmos preços e taxas
+- tema preto com letras grandes
+- produtos organizados por categoria
+- desktop: 4 por linha
+- tablet: 3 por linha
+- celular: 2 por linha
+- cards padronizados e botões alinhados
+- Supabase e ESGOTADO
+- horário de teste: 04h às 22h
+- carrinho e checkout pelo WhatsApp
 
-Principais correções:
-- todas as letras maiores e padronizadas
-- todos os cards usam a mesma estrutura
-- nome, preço e descrição têm áreas controladas
-- botão Adicionar fica sempre alinhado no rodapé do card
-- tema preto integral com texto branco
-- removidos blocos que deixavam a página inicial carregada
-- mantidos topo, apresentação, busca, categorias, produtos, taxas, carrinho e checkout
-- mantidos produtos, preços, taxas, estoque Supabase e horário de teste 04h–22h
-
-Importante: coloque o WhatsApp correto no começo do script.js caso ainda apareça COLOQUE_SEU_NUMERO_AQUI.
+Configure o número no começo do script.js.

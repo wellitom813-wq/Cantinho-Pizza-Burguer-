@@ -34,9 +34,9 @@
       <div class="hero-gradient"></div>
       <div class="hero-copy">
         <span class="hero-kicker">🍔 CANTINHO PIZZA BURGUER</span>
-        <h1>Seu delivery, com experiência de app.</h1>
-        <p>Escolha seus produtos, confira a entrega e finalize direto no WhatsApp.</p>
-        <div class="hero-actions"><button onclick="rolarCardapio()">Ver cardápio</button><button class="secondary" onclick="abrirCarrinho()">Meu pedido</button></div>
+        <h1>Seu pedido, rápido e fácil.</h1>
+        <p>Escolha seus produtos, confira sua região e finalize direto pelo WhatsApp.</p>
+        <div class="hero-actions"><button onclick="rolarCardapio()">Ver cardápio</button></div>
       </div>
       <div class="hero-food">🍕</div><div class="hero-food two">🍔</div>
     </div>
@@ -48,24 +48,11 @@
           <div><h2>Cantinho Pizza Burguer</h2><div class="store-details"><span>🍔 Hamburgueria</span><span>•</span><span>🍕 Pizzaria</span><span>•</span><span>🥤 Bebidas</span></div></div>
           <button class="store-heart" onclick="this.classList.toggle('active')">♡</button>
         </div>
-        <div class="store-features"><span>🛵 Entrega</span><span>🏪 Retirada</span><span>💳 Pix, cartão e dinheiro</span><span>🕓 Teste: 04h às 22h</span></div>
+        <div class="store-features"><span>🛵 Entrega</span><span>🏪 Retirada</span><span>🕓 04h às 22h</span></div>
       </div>
     </div>
   </section>
-
-  <section class="quick-info">
-    <article><div class="quick-icon">🕓</div><div><small>Horário de teste</small><strong>04h às 22h</strong></div></article>
-    <article><div class="quick-icon">🛵</div><div><small>Entrega</small><strong>Taxa por região</strong></div></article>
-    <article><div class="quick-icon">💬</div><div><small>Finalização</small><strong>WhatsApp</strong></div></article>
-    <article><div class="quick-icon">🔴</div><div><small>Estoque</small><strong>Atualização online</strong></div></article>
-  </section>
-
-  <section class="featured-row">
-    <article class="feature-banner feature-dark"><div><span>DESTAQUE DA CASA</span><h3>Moda da Casa</h3><p>Um lanche completo para quem quer matar a fome de verdade.</p><button onclick="buscarProduto('moda da casa')">Ver no cardápio</button></div><div class="feature-emoji">🍔</div></article>
-    <article class="feature-banner feature-red"><div><span>PIZZA NIGHT</span><h3>Pizzas a partir de R$ 38</h3><p>Calabresa, muçarela, frango, portuguesa, baiana e milho.</p><button onclick="filtrarCategoria('pizzas')">Explorar pizzas</button></div><div class="feature-emoji">🍕</div></article>
-  </section>
-
-  <section class="sticky-tools" id="cardapio">
+<section class="sticky-tools" id="cardapio">
     <div class="mobile-search"><span>⌕</span><input id="searchMobile" type="search" placeholder="Buscar no cardápio"></div>
     <div class="category-bar">
       <button class="category active" data-filter="todos">✨ Todos</button>
@@ -78,7 +65,7 @@
   </section>
 
   <section class="catalog-header">
-    <div><span>CARDÁPIO COMPLETO</span><h2>O que você vai pedir hoje?</h2></div>
+    <div><span>CARDÁPIO COMPLETO</span><h2>Escolha seu pedido</h2></div>
     <div class="catalog-actions"><button onclick="mostrarFavoritos()">♡ Favoritos</button><button onclick="limparFiltros()">Limpar filtros</button></div>
   </section>
 
@@ -608,7 +595,7 @@
   <div id="emptySearch" class="empty-search hidden"><div>🔎</div><strong>Nenhum produto encontrado</strong><span>Tente outra busca ou categoria.</span></div>
 
   <section class="delivery-fees">
-    <div class="fees-head"><span>ENTREGA</span><h2>Taxa automática por região</h2><p>O valor é somado ao pedido somente quando o cliente escolhe entrega.</p></div>
+    <div class="fees-head"><span>ENTREGA</span><h2>Taxa automática por região</h2><p>A taxa é adicionada automaticamente quando você escolhe sua região.</p></div>
     <div class="fee-cards">
       <article><small>Região</small><strong>N1</strong><span>R$ 4,00</span></article>
       <article><small>Região</small><strong>N3</strong><span>R$ 3,00</span></article>
@@ -617,14 +604,11 @@
     </div>
   </section>
 
-  <section class="how-it-works">
-    <div class="how-head"><span>COMO FUNCIONA</span><h2>Pedido em 3 passos</h2></div>
-    <div class="steps">
-      <article><b>1</b><div><strong>Escolha os produtos</strong><p>Use busca, categorias e favoritos.</p></div></article>
-      <article><b>2</b><div><strong>Informe entrega e pagamento</strong><p>A taxa é calculada automaticamente.</p></div></article>
-      <article><b>3</b><div><strong>Envie pelo WhatsApp</strong><p>O pedido chega pronto para conferência.</p></div></article>
-    </div>
-  </section>
+<footer class="site-footer">
+  <strong>Cantinho Pizza Burguer</strong>
+  <span>Delivery • Hambúrgueres • Pizzas • Calzones • Bebidas</span>
+</footer>
+
 </main>
 
 <div class="floating-cart" onclick="abrirCarrinho()"><div class="floating-count">🛒 <span id="floatingCartCount">0</span></div><div class="floating-copy"><small>Meu pedido</small><strong id="floatingCartTotal">R$ 0,00</strong></div><div class="floating-arrow">→</div></div>

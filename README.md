@@ -34,3 +34,11 @@ Framework: Other
 Root Directory: ./
 Build Command: vazio
 Output Directory: vazio
+
+
+## Bebidas adicionais incluídas
+- Refri Laranja — R$ 7,50
+- Refri Cola — R$ 7,50
+
+Para que essas duas bebidas também sejam reconhecidas pelo estoque global do Supabase,
+execute uma única vez o arquivo `adicionar-bebidas-supabase.sql` no SQL Editor.

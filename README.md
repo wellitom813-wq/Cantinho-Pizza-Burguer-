@@ -1,37 +1,40 @@
-# Cantinho Pizza Burguer — App completo
+# Cantinho Pizza Burguer — Premium Robusto
 
-Versão oficial baseada no mostruário moderno de delivery.
+Versão mais completa e profissional do site de delivery.
 
-Inclui:
+Mantido:
 - 26 produtos
-- fotos
-- busca
-- categorias
-- favoritos
-- carrinho
-- entrega/retirada
-- N1 R$4, N3 R$3, N5 R$5, C2 R$6
-- Pix, cartão e dinheiro
-- troco e observações
-- horário automático: terça, quarta, sexta, sábado e domingo, 18h às 22h
-- botões travados fora do horário
-- estoque global Supabase
-- faixa ESGOTADO
-- atualização do estoque em tempo real
-- validação do estoque antes de enviar
+- mesmos preços
+- mesmas taxas: N1 R$ 4,00 / N3 R$ 3,00 / N5 R$ 5,00 / C2 R$ 6,00
+- mesmos dias: terça, quarta, sexta, sábado e domingo
+- fotos, carrinho, entrega, retirada, pagamento, troco, observações
+- estoque global Supabase e faixa ESGOTADO
 - finalização pelo WhatsApp
-- responsivo para celular
 
-## Única configuração manual
-No começo do `script.js`, substitua:
-`COLOQUE_SEU_NUMERO_AQUI`
-pelo WhatsApp correto no formato 55 + DDD + número.
+Alteração para teste:
+- abertura às 04h
+- fechamento às 22h
 
-## Supabase
-Execute uma vez `sincronizar-produtos-supabase.sql`.
+Recursos novos:
+- layout premium responsivo
+- busca desktop/mobile sincronizada
+- favoritos
+- carrinho persistente no navegador
+- navegação fixa por categorias
+- checkout profissional
+- cards promocionais
+- seção de taxas
+- atualização de estoque em tempo real
+- validação final do estoque
+- botões travados fora do horário
 
-## Vercel
-Framework: Other
-Root Directory: ./
-Build Command: vazio
-Output Directory: vazio
+Antes de publicar:
+1. Abra `script.js`.
+2. Troque `COLOQUE_SEU_NUMERO_AQUI` pelo WhatsApp correto.
+3. Execute `sincronizar-produtos-supabase.sql` uma vez no Supabase.
+
+Vercel:
+- Framework Preset: Other
+- Root Directory: ./
+- Build Command: vazio
+- Output Directory: vazio

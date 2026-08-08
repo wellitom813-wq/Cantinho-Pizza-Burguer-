@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#fff7f2">
-  <meta name="description" content="Cantinho Pizza Burguer - delivery de hambúrgueres, pizzas, calzones e bebidas.">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Cantinho Pizza Burguer - cardápio digital completo com pedidos pelo WhatsApp.">
   <title>Cantinho Pizza Burguer | Delivery</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,715 +13,663 @@
 </head>
 <body>
 
-<header class="topbar">
-  <a class="brand" href="#">
-    <div class="brand-mark">🍔</div>
-    <div>
-      <strong>Cantinho Pizza Burguer</strong>
-      <small>Delivery • Faça seu pedido</small>
+<header class="desktop-header">
+  <div class="header-inner">
+    <a class="brand" href="#inicio">
+      <div class="brand-symbol">🍕</div>
+      <div class="brand-copy"><strong>Cantinho Pizza Burguer</strong><small>Delivery oficial</small></div>
+    </a>
+    <div class="header-search"><span>⌕</span><input id="searchDesktop" type="search" placeholder="Busque por pizza, hambúrguer ou bebida"></div>
+    <div class="header-actions">
+      <button id="headerStatus" class="status-button"><span class="status-dot"></span><span><small>Funcionamento</small><strong id="headerStatusText">Verificando...</strong></span></button>
+      <button class="round-button" onclick="mostrarFavoritos()">♡</button>
+      <button class="order-button" onclick="abrirCarrinho()">🛒 <span id="headerCartCount">0</span></button>
     </div>
-  </a>
-
-  <div class="desktop-actions">
-    <button class="location-btn status-box" type="button" id="statusLoja">
-      <span class="status-circle">●</span>
-      <div><small>Funcionamento</small><strong id="statusTexto">Verificando...</strong></div>
-    </button>
-    <button class="icon-btn" type="button" onclick="mostrarFavoritos()" aria-label="Favoritos">♡</button>
-    <button class="cart-top" type="button" onclick="abrirCarrinho()">🛒 <span id="topCartCount">0</span></button>
   </div>
 </header>
 
-<section class="search-zone">
-  <div class="search-box">
-    <span>⌕</span>
-    <input id="busca" type="search" placeholder="Buscar no cardápio..." autocomplete="off">
+<main id="inicio">
+  <section class="store-hero">
+    <div class="hero-visual">
+      <div class="hero-gradient"></div>
+      <div class="hero-copy">
+        <span class="hero-kicker">🍔 CANTINHO PIZZA BURGUER</span>
+        <h1>Seu delivery, com experiência de app.</h1>
+        <p>Escolha seus produtos, confira a entrega e finalize direto no WhatsApp.</p>
+        <div class="hero-actions"><button onclick="rolarCardapio()">Ver cardápio</button><button class="secondary" onclick="abrirCarrinho()">Meu pedido</button></div>
+      </div>
+      <div class="hero-food">🍕</div><div class="hero-food two">🍔</div>
+    </div>
+
+    <div class="store-panel">
+      <div class="store-logo">🍕</div>
+      <div class="store-main">
+        <div class="store-title-row">
+          <div><h2>Cantinho Pizza Burguer</h2><div class="store-details"><span>🍔 Hamburgueria</span><span>•</span><span>🍕 Pizzaria</span><span>•</span><span>🥤 Bebidas</span></div></div>
+          <button class="store-heart" onclick="this.classList.toggle('active')">♡</button>
+        </div>
+        <div class="store-features"><span>🛵 Entrega</span><span>🏪 Retirada</span><span>💳 Pix, cartão e dinheiro</span><span>🕓 Teste: 04h às 22h</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quick-info">
+    <article><div class="quick-icon">🕓</div><div><small>Horário de teste</small><strong>04h às 22h</strong></div></article>
+    <article><div class="quick-icon">🛵</div><div><small>Entrega</small><strong>Taxa por região</strong></div></article>
+    <article><div class="quick-icon">💬</div><div><small>Finalização</small><strong>WhatsApp</strong></div></article>
+    <article><div class="quick-icon">🔴</div><div><small>Estoque</small><strong>Atualização online</strong></div></article>
+  </section>
+
+  <section class="featured-row">
+    <article class="feature-banner feature-dark"><div><span>DESTAQUE DA CASA</span><h3>Moda da Casa</h3><p>Um lanche completo para quem quer matar a fome de verdade.</p><button onclick="buscarProduto('moda da casa')">Ver no cardápio</button></div><div class="feature-emoji">🍔</div></article>
+    <article class="feature-banner feature-red"><div><span>PIZZA NIGHT</span><h3>Pizzas a partir de R$ 38</h3><p>Calabresa, muçarela, frango, portuguesa, baiana e milho.</p><button onclick="filtrarCategoria('pizzas')">Explorar pizzas</button></div><div class="feature-emoji">🍕</div></article>
+  </section>
+
+  <section class="sticky-tools" id="cardapio">
+    <div class="mobile-search"><span>⌕</span><input id="searchMobile" type="search" placeholder="Buscar no cardápio"></div>
+    <div class="category-bar">
+      <button class="category active" data-filter="todos">✨ Todos</button>
+      <button class="category" data-filter="hamburgueres">🍔 Hambúrgueres</button>
+      <button class="category" data-filter="artesanais">🔥 Artesanais</button>
+      <button class="category" data-filter="pizzas">🍕 Pizzas</button>
+      <button class="category" data-filter="calzones">🥟 Calzones</button>
+      <button class="category" data-filter="bebidas">🥤 Bebidas</button>
+    </div>
+  </section>
+
+  <section class="catalog-header">
+    <div><span>CARDÁPIO COMPLETO</span><h2>O que você vai pedir hoje?</h2></div>
+    <div class="catalog-actions"><button onclick="mostrarFavoritos()">♡ Favoritos</button><button onclick="limparFiltros()">Limpar filtros</button></div>
+  </section>
+
+  <div id="stockMessage" class="system-message hidden"></div>
+  <section class="products-grid">
+<article class="product-card" data-category="hamburgueres" data-name="x-salada" data-produto-id="x-salada">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/x-salada-classico.jpg" alt="X-Salada" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Mais pedido</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'x-salada')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
   </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>X-Salada</h3>
+      <span class="price">R$ 7,50</span>
+    </div>
+    <p>Pão, cheddar, carne, alface, tomate e queijo.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('x-salada','X-Salada',7.5)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="hamburgueres" data-name="x-burguer" data-produto-id="x-burguer">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xburguer.jpg" alt="X-Burguer" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Clássico</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'x-burguer')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>X-Burguer</h3>
+      <span class="price">R$ 11,00</span>
+    </div>
+    <p>Pão, cheddar, carne, alface, calabresa, ovo e queijo.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('x-burguer','X-Burguer',11.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="hamburgueres" data-name="x-bacon" data-produto-id="x-bacon">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xbacon.jpg" alt="X-Bacon" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Clássico</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'x-bacon')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>X-Bacon</h3>
+      <span class="price">R$ 12,00</span>
+    </div>
+    <p>Pão, cheddar, carne, alface, bacon, ovo e queijo.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('x-bacon','X-Bacon',12.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="hamburgueres" data-name="x-tudão" data-produto-id="x-tudao">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xtudao.jpg" alt="X-Tudão" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Reforçado</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'x-tudao')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>X-Tudão</h3>
+      <span class="price">R$ 17,00</span>
+    </div>
+    <p>Pão, cheddar, alface, 2 carnes, ovo, presunto, 2 salsichas, calabresa e queijo.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('x-tudao','X-Tudão',17.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="hamburgueres" data-name="x-tudo" data-produto-id="x-tudo">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xtudo.jpg" alt="X-Tudo" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Completo</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'x-tudo')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>X-Tudo</h3>
+      <span class="price">R$ 15,00</span>
+    </div>
+    <p>Pão, cheddar, alface, carne, ovo, presunto, salsicha, calabresa e queijo.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('x-tudo','X-Tudo',15.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="hamburgueres" data-name="moda da casa" data-produto-id="moda-da-casa">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/modadacasa.jpg" alt="Moda da Casa" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Da casa</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'moda-da-casa')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Moda da Casa</h3>
+      <span class="price">R$ 17,50</span>
+    </div>
+    <p>Pão, cheddar, alface, batata palha, milho, bacon, carne, ovo, presunto, salsicha, calabresa e queijo.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('moda-da-casa','Moda da Casa',17.5)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="artesanais" data-name="hambúrguer simples" data-produto-id="artesanal-simples">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/Hhhhhhhhhh.jpg" alt="Hambúrguer Simples" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Artesanal</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'artesanal-simples')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Hambúrguer Simples</h3>
+      <span class="price">R$ 16,00</span>
+    </div>
+    <p>Pão, carne artesanal, cheddar, alface, tomate, muçarela e molho verde.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('artesanal-simples','Hambúrguer Simples',16.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="artesanais" data-name="x calabresa artesanal" data-produto-id="x-calabresa-artesanal">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xcalabresa.png" alt="X Calabresa Artesanal" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Premium</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'x-calabresa-artesanal')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>X Calabresa Artesanal</h3>
+      <span class="price">R$ 21,00</span>
+    </div>
+    <p>Pão, carne artesanal, cheddar, alface, calabresa, ovo, muçarela e molho verde.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('x-calabresa-artesanal','X Calabresa Artesanal',21.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="artesanais" data-name="x bacon artesanal" data-produto-id="x-bacon-artesanal">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xbaconart.jpg" alt="X Bacon Artesanal" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Premium</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'x-bacon-artesanal')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>X Bacon Artesanal</h3>
+      <span class="price">R$ 24,00</span>
+    </div>
+    <p>Pão, carne artesanal, cheddar, alface, bacon, ovo, muçarela e molho verde.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('x-bacon-artesanal','X Bacon Artesanal',24.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="pizzas" data-name="pizza muçarela" data-produto-id="pizza-mucarela">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/mussarela.jpg" alt="Pizza Muçarela" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Pizza</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'pizza-mucarela')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Pizza Muçarela</h3>
+      <span class="price">R$ 38,00</span>
+    </div>
+    <p>Molho, muçarela, tomate e orégano.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('pizza-mucarela','Pizza Muçarela',38.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="pizzas" data-name="pizza calabresa" data-produto-id="pizza-calabresa">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/calabresa.jpg" alt="Pizza Calabresa" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Pizza</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'pizza-calabresa')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Pizza Calabresa</h3>
+      <span class="price">R$ 38,00</span>
+    </div>
+    <p>Molho, calabresa, cebola e orégano.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('pizza-calabresa','Pizza Calabresa',38.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="pizzas" data-name="pizza de frango" data-produto-id="pizza-frango">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/frango.jpg" alt="Pizza de Frango" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Pizza</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'pizza-frango')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Pizza de Frango</h3>
+      <span class="price">R$ 40,00</span>
+    </div>
+    <p>Molho, frango, muçarela, catupiry e orégano.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('pizza-frango','Pizza de Frango',40.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="pizzas" data-name="pizza portuguesa" data-produto-id="pizza-portuguesa">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/portuguesa.png" alt="Pizza Portuguesa" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Pizza</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'pizza-portuguesa')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Pizza Portuguesa</h3>
+      <span class="price">R$ 40,00</span>
+    </div>
+    <p>Molho, presunto, muçarela, ovo, milho, tomate e orégano.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('pizza-portuguesa','Pizza Portuguesa',40.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="pizzas" data-name="pizza baiana" data-produto-id="pizza-baiana">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/baiana.jpg" alt="Pizza Baiana" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Pizza</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'pizza-baiana')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Pizza Baiana</h3>
+      <span class="price">R$ 38,00</span>
+    </div>
+    <p>Molho, muçarela, calabresa, cebola, pimenta e orégano.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('pizza-baiana','Pizza Baiana',38.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="pizzas" data-name="pizza de milho" data-produto-id="pizza-milho">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/milho.jpg" alt="Pizza de Milho" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Pizza</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'pizza-milho')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Pizza de Milho</h3>
+      <span class="price">R$ 38,00</span>
+    </div>
+    <p>Muçarela, milho, tomate e orégano.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('pizza-milho','Pizza de Milho',38.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="calzones" data-name="calzone de calabresa" data-produto-id="calzone-calabresa">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/calzone.jpg" alt="Calzone de Calabresa" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Calzone</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'calzone-calabresa')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Calzone de Calabresa</h3>
+      <span class="price">R$ 24,00</span>
+    </div>
+    <p>Calabresa com muçarela.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('calzone-calabresa','Calzone de Calabresa',24.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="calzones" data-name="calzone de frango" data-produto-id="calzone-frango">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/calzone.jpg" alt="Calzone de Frango" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Calzone</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'calzone-frango')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Calzone de Frango</h3>
+      <span class="price">R$ 24,00</span>
+    </div>
+    <p>Frango com catupiry.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('calzone-frango','Calzone de Frango',24.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="calzones" data-name="calzone de presunto" data-produto-id="calzone-presunto">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/calzone.jpg" alt="Calzone de Presunto" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Calzone</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'calzone-presunto')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Calzone de Presunto</h3>
+      <span class="price">R$ 24,00</span>
+    </div>
+    <p>Presunto com muçarela.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('calzone-presunto','Calzone de Presunto',24.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="bebidas" data-name="coca-cola lata sem açúcar" data-produto-id="coca-lata-zero">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/cocalata.png" alt="Coca-Cola Lata Sem Açúcar" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Gelada</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'coca-lata-zero')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Coca-Cola Lata Sem Açúcar</h3>
+      <span class="price">R$ 6,00</span>
+    </div>
+    <p>Coca-Cola lata sem açúcar, bem gelada.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('coca-lata-zero','Coca-Cola Lata Sem Açúcar',6.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="bebidas" data-name="coca-cola 2l" data-produto-id="coca-2l">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/cocacola.jpg" alt="Coca-Cola 2L" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">2 litros</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'coca-2l')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Coca-Cola 2L</h3>
+      <span class="price">R$ 14,00</span>
+    </div>
+    <p>Coca-Cola 2 litros.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('coca-2l','Coca-Cola 2L',14.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="bebidas" data-name="coca-cola sem açúcar 2l" data-produto-id="coca-zero-2l">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/cocasema%C3%A7ucar2l.jpg" alt="Coca-Cola Sem Açúcar 2L" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">2 litros</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'coca-zero-2l')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Coca-Cola Sem Açúcar 2L</h3>
+      <span class="price">R$ 14,00</span>
+    </div>
+    <p>Coca-Cola sem açúcar 2 litros.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('coca-zero-2l','Coca-Cola Sem Açúcar 2L',14.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="bebidas" data-name="guaraná antarctica 1l" data-produto-id="guarana-1l">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/guarana1l.jpg" alt="Guaraná Antarctica 1L" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">1 litro</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'guarana-1l')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Guaraná Antarctica 1L</h3>
+      <span class="price">R$ 8,00</span>
+    </div>
+    <p>Guaraná Antarctica 1 litro.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('guarana-1l','Guaraná Antarctica 1L',8.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="bebidas" data-name="pepsi 1l" data-produto-id="pepsi-1l">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/pepis1ll.jpg" alt="Pepsi 1L" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">1 litro</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'pepsi-1l')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Pepsi 1L</h3>
+      <span class="price">R$ 8,00</span>
+    </div>
+    <p>Pepsi 1 litro.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('pepsi-1l','Pepsi 1L',8.0)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="bebidas" data-name="refri guaraná" data-produto-id="refri-guarana">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/refri.jpg" alt="Refri Guaraná" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Refri</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'refri-guarana')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Refri Guaraná</h3>
+      <span class="price">R$ 7,50</span>
+    </div>
+    <p>Refrigerante sabor guaraná.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('refri-guarana','Refri Guaraná',7.5)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="bebidas" data-name="refri laranja" data-produto-id="refri-laranja">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/refrigeranteindaialaranja2litros1.jpg" alt="Refri Laranja" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Refri</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'refri-laranja')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Refri Laranja</h3>
+      <span class="price">R$ 7,50</span>
+    </div>
+    <p>Refrigerante sabor laranja.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('refri-laranja','Refri Laranja',7.5)">Adicionar</button>
+    </div>
+  </div>
+</article>
+
+<article class="product-card" data-category="bebidas" data-name="refri cola" data-produto-id="refri-cola">
+  <div class="product-image">
+    <img src="https://hamburgueria-jet-chi.vercel.app/imagens/refricola.jpg" alt="Refri Cola" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f5f5f5/666?text=Produto';">
+    <span class="badge-label">Refri</span>
+    <button class="heart" type="button" onclick="toggleFavorito(this,'refri-cola')" aria-label="Favoritar">♡</button>
+    <div class="sold-overlay"><span>ESGOTADO</span><small>Temporariamente indisponível</small></div>
+  </div>
+  <div class="product-info">
+    <div class="title-line">
+      <h3>Refri Cola</h3>
+      <span class="price">R$ 7,50</span>
+    </div>
+    <p>Refrigerante sabor cola.</p>
+    <div class="product-meta">
+      <span>Preparado na hora</span>
+      <button class="add-button" onclick="adicionarProduto('refri-cola','Refri Cola',7.5)">Adicionar</button>
+    </div>
+  </div>
+</article>
 </section>
 
-<main>
-  <section class="restaurant-card">
-    <div class="restaurant-cover">
-      <div class="cover-glow"></div>
-      <div class="cover-content">
-        <div class="cover-badge">🔥 DELIVERY OFICIAL</div>
-        <h1>Cantinho Pizza Burguer</h1>
-        <p>Hambúrgueres, pizzas, calzones e bebidas com pedido rápido pelo WhatsApp.</p>
-      </div>
-    </div>
+  <div id="emptySearch" class="empty-search hidden"><div>🔎</div><strong>Nenhum produto encontrado</strong><span>Tente outra busca ou categoria.</span></div>
 
-    <div class="restaurant-info">
-      <div class="restaurant-avatar">🍕</div>
-      <div class="restaurant-meta">
-        <div class="meta-title">
-          <h2>Cantinho Pizza Burguer</h2>
-          <button type="button" aria-label="Favoritar restaurante">♡</button>
-        </div>
-        <div class="meta-line">
-          <span class="rating">★ 4,9</span>
-          <span>•</span>
-          <span>Ter, Qua, Sex, Sáb e Dom</span>
-          <span>•</span>
-          <span>18h–22h</span>
-        </div>
-        <div class="delivery-pills">
-          <span>🛵 Entrega</span>
-          <span>🏪 Retirada</span>
-          <span>💳 Pix • Cartão • Dinheiro</span>
-        </div>
-      </div>
+  <section class="delivery-fees">
+    <div class="fees-head"><span>ENTREGA</span><h2>Taxa automática por região</h2><p>O valor é somado ao pedido somente quando o cliente escolhe entrega.</p></div>
+    <div class="fee-cards">
+      <article><small>Região</small><strong>N1</strong><span>R$ 4,00</span></article>
+      <article><small>Região</small><strong>N3</strong><span>R$ 3,00</span></article>
+      <article><small>Região</small><strong>N5</strong><span>R$ 5,00</span></article>
+      <article><small>Região</small><strong>C2</strong><span>R$ 6,00</span></article>
     </div>
   </section>
 
-  <section class="promo-strip">
-    <div class="promo-card promo-primary">
-      <div>
-        <span class="eyebrow">OFERTA DO DIA</span>
-        <h3>Moda da Casa</h3>
-        <p>Um dos lanches mais completos do cardápio.</p>
-      </div>
-      <div class="promo-emoji">🍔🥤</div>
-    </div>
-
-    <div class="promo-card promo-secondary">
-      <div>
-        <span class="eyebrow">PIZZA NIGHT</span>
-        <h3>Pizzas a partir de R$ 38</h3>
-        <p>Escolha seu sabor favorito e monte seu pedido.</p>
-      </div>
-      <div class="promo-emoji">🍕</div>
-    </div>
-  </section>
-
-  <section class="categories-wrap">
-    <div class="section-head">
-      <div>
-        <span>EXPLORE</span>
-        <h2>Categorias</h2>
-      </div>
-    </div>
-
-    <div class="category-scroll" id="categorias">
-      <button class="category-chip active" data-filter="todos">✨ Todos</button>
-      <button class="category-chip" data-filter="hamburgueres">🍔 Hambúrgueres</button>
-      <button class="category-chip" data-filter="artesanais">🔥 Artesanais</button>
-      <button class="category-chip" data-filter="pizzas">🍕 Pizzas</button>
-      <button class="category-chip" data-filter="calzones">🥟 Calzones</button>
-      <button class="category-chip" data-filter="bebidas">🥤 Bebidas</button>
-    </div>
-  </section>
-
-  <section class="menu-section">
-    <div class="section-head">
-      <div>
-        <span>MAIS PEDIDOS</span>
-        <h2>Escolha seus favoritos</h2>
-      </div>
-      <button class="ghost-btn" type="button">Ver todos</button>
-    </div>
-
-    <div class="sync-notice hidden" id="estoqueAviso"></div>
-    <div class="products-grid" id="produtosGrid">
-
-      <article class="product-card" data-category="hamburgueres" data-name="x-salada" data-produto-id="x-salada">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/x-salada-classico.jpg" alt="X-Salada" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Mais pedido</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>X-Salada</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'x-salada')">♡</button>
-          </div>
-          <p>Pão, cheddar, carne, alface, tomate e queijo.</p>
-          <div class="product-footer">
-            <strong>R$ 7,50</strong>
-            <button class="add-btn" onclick="adicionarProduto('x-salada','X-Salada',7.5)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="hamburgueres" data-name="x-burguer" data-produto-id="x-burguer">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xburguer.jpg" alt="X-Burguer" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Clássico</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>X-Burguer</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'x-burguer')">♡</button>
-          </div>
-          <p>Pão, cheddar, carne, alface, calabresa, ovo e queijo.</p>
-          <div class="product-footer">
-            <strong>R$ 11,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('x-burguer','X-Burguer',11.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="hamburgueres" data-name="x-bacon" data-produto-id="x-bacon">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xbacon.jpg" alt="X-Bacon" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Clássico</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>X-Bacon</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'x-bacon')">♡</button>
-          </div>
-          <p>Pão, cheddar, carne, alface, bacon, ovo e queijo.</p>
-          <div class="product-footer">
-            <strong>R$ 12,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('x-bacon','X-Bacon',12.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="hamburgueres" data-name="x-tudão" data-produto-id="x-tudao">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xtudao.jpg" alt="X-Tudão" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Reforçado</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>X-Tudão</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'x-tudao')">♡</button>
-          </div>
-          <p>Pão, cheddar, alface, 2 carnes, ovo, presunto, 2 salsichas, calabresa e queijo.</p>
-          <div class="product-footer">
-            <strong>R$ 17,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('x-tudao','X-Tudão',17.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="hamburgueres" data-name="x-tudo" data-produto-id="x-tudo">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xtudo.jpg" alt="X-Tudo" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Completo</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>X-Tudo</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'x-tudo')">♡</button>
-          </div>
-          <p>Pão, cheddar, alface, carne, ovo, presunto, salsicha, calabresa e queijo.</p>
-          <div class="product-footer">
-            <strong>R$ 15,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('x-tudo','X-Tudo',15.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="hamburgueres" data-name="moda da casa" data-produto-id="moda-da-casa">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/modadacasa.jpg" alt="Moda da Casa" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Da casa</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Moda da Casa</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'moda-da-casa')">♡</button>
-          </div>
-          <p>Pão, cheddar, alface, batata palha, milho, bacon, carne, ovo, presunto, salsicha, calabresa e queijo.</p>
-          <div class="product-footer">
-            <strong>R$ 17,50</strong>
-            <button class="add-btn" onclick="adicionarProduto('moda-da-casa','Moda da Casa',17.5)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="artesanais" data-name="hambúrguer simples" data-produto-id="artesanal-simples">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/Hhhhhhhhhh.jpg" alt="Hambúrguer Simples" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Artesanal</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Hambúrguer Simples</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'artesanal-simples')">♡</button>
-          </div>
-          <p>Pão, carne artesanal, cheddar, alface, tomate, muçarela e molho verde.</p>
-          <div class="product-footer">
-            <strong>R$ 16,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('artesanal-simples','Hambúrguer Simples',16.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="artesanais" data-name="x calabresa artesanal" data-produto-id="x-calabresa-artesanal">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xcalabresa.png" alt="X Calabresa Artesanal" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Premium</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>X Calabresa Artesanal</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'x-calabresa-artesanal')">♡</button>
-          </div>
-          <p>Pão, carne artesanal, cheddar, alface, calabresa, ovo, muçarela e molho verde.</p>
-          <div class="product-footer">
-            <strong>R$ 21,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('x-calabresa-artesanal','X Calabresa Artesanal',21.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="artesanais" data-name="x bacon artesanal" data-produto-id="x-bacon-artesanal">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/xbaconart.jpg" alt="X Bacon Artesanal" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Premium</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>X Bacon Artesanal</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'x-bacon-artesanal')">♡</button>
-          </div>
-          <p>Pão, carne artesanal, cheddar, alface, bacon, ovo, muçarela e molho verde.</p>
-          <div class="product-footer">
-            <strong>R$ 24,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('x-bacon-artesanal','X Bacon Artesanal',24.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="pizzas" data-name="pizza muçarela" data-produto-id="pizza-mucarela">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/mussarela.jpg" alt="Pizza Muçarela" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Pizza</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Pizza Muçarela</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'pizza-mucarela')">♡</button>
-          </div>
-          <p>Molho, muçarela, tomate e orégano.</p>
-          <div class="product-footer">
-            <strong>R$ 38,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('pizza-mucarela','Pizza Muçarela',38.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="pizzas" data-name="pizza calabresa" data-produto-id="pizza-calabresa">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/calabresa.jpg" alt="Pizza Calabresa" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Pizza</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Pizza Calabresa</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'pizza-calabresa')">♡</button>
-          </div>
-          <p>Molho, calabresa, cebola e orégano.</p>
-          <div class="product-footer">
-            <strong>R$ 38,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('pizza-calabresa','Pizza Calabresa',38.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="pizzas" data-name="pizza de frango" data-produto-id="pizza-frango">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/frango.jpg" alt="Pizza de Frango" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Pizza</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Pizza de Frango</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'pizza-frango')">♡</button>
-          </div>
-          <p>Molho, frango, muçarela, catupiry e orégano.</p>
-          <div class="product-footer">
-            <strong>R$ 40,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('pizza-frango','Pizza de Frango',40.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="pizzas" data-name="pizza portuguesa" data-produto-id="pizza-portuguesa">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/portuguesa.png" alt="Pizza Portuguesa" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Pizza</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Pizza Portuguesa</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'pizza-portuguesa')">♡</button>
-          </div>
-          <p>Molho, presunto, muçarela, ovo, milho, tomate e orégano.</p>
-          <div class="product-footer">
-            <strong>R$ 40,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('pizza-portuguesa','Pizza Portuguesa',40.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="pizzas" data-name="pizza baiana" data-produto-id="pizza-baiana">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/baiana.jpg" alt="Pizza Baiana" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Pizza</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Pizza Baiana</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'pizza-baiana')">♡</button>
-          </div>
-          <p>Molho, muçarela, calabresa, cebola, pimenta e orégano.</p>
-          <div class="product-footer">
-            <strong>R$ 38,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('pizza-baiana','Pizza Baiana',38.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="pizzas" data-name="pizza de milho" data-produto-id="pizza-milho">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/milho.jpg" alt="Pizza de Milho" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Pizza</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Pizza de Milho</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'pizza-milho')">♡</button>
-          </div>
-          <p>Muçarela, milho, tomate e orégano.</p>
-          <div class="product-footer">
-            <strong>R$ 38,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('pizza-milho','Pizza de Milho',38.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="calzones" data-name="calzone de calabresa" data-produto-id="calzone-calabresa">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/calzone.jpg" alt="Calzone de Calabresa" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Calzone</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Calzone de Calabresa</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'calzone-calabresa')">♡</button>
-          </div>
-          <p>Calabresa com muçarela.</p>
-          <div class="product-footer">
-            <strong>R$ 24,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('calzone-calabresa','Calzone de Calabresa',24.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="calzones" data-name="calzone de frango" data-produto-id="calzone-frango">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/calzone.jpg" alt="Calzone de Frango" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Calzone</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Calzone de Frango</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'calzone-frango')">♡</button>
-          </div>
-          <p>Frango com catupiry.</p>
-          <div class="product-footer">
-            <strong>R$ 24,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('calzone-frango','Calzone de Frango',24.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="calzones" data-name="calzone de presunto" data-produto-id="calzone-presunto">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/calzone.jpg" alt="Calzone de Presunto" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Calzone</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Calzone de Presunto</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'calzone-presunto')">♡</button>
-          </div>
-          <p>Presunto com muçarela.</p>
-          <div class="product-footer">
-            <strong>R$ 24,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('calzone-presunto','Calzone de Presunto',24.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="bebidas" data-name="coca-cola lata sem açúcar" data-produto-id="coca-lata-zero">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/cocalata.png" alt="Coca-Cola Lata Sem Açúcar" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Gelada</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Coca-Cola Lata Sem Açúcar</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'coca-lata-zero')">♡</button>
-          </div>
-          <p>Coca-Cola lata sem açúcar, bem gelada.</p>
-          <div class="product-footer">
-            <strong>R$ 6,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('coca-lata-zero','Coca-Cola Lata Sem Açúcar',6.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="bebidas" data-name="coca-cola 2l" data-produto-id="coca-2l">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/cocacola.jpg" alt="Coca-Cola 2L" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">2 litros</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Coca-Cola 2L</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'coca-2l')">♡</button>
-          </div>
-          <p>Coca-Cola 2 litros.</p>
-          <div class="product-footer">
-            <strong>R$ 14,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('coca-2l','Coca-Cola 2L',14.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="bebidas" data-name="coca-cola sem açúcar 2l" data-produto-id="coca-zero-2l">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/cocasema%C3%A7ucar2l.jpg" alt="Coca-Cola Sem Açúcar 2L" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">2 litros</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Coca-Cola Sem Açúcar 2L</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'coca-zero-2l')">♡</button>
-          </div>
-          <p>Coca-Cola sem açúcar 2 litros.</p>
-          <div class="product-footer">
-            <strong>R$ 14,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('coca-zero-2l','Coca-Cola Sem Açúcar 2L',14.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="bebidas" data-name="guaraná antarctica 1l" data-produto-id="guarana-1l">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/guarana1l.jpg" alt="Guaraná Antarctica 1L" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">1 litro</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Guaraná Antarctica 1L</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'guarana-1l')">♡</button>
-          </div>
-          <p>Guaraná Antarctica 1 litro.</p>
-          <div class="product-footer">
-            <strong>R$ 8,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('guarana-1l','Guaraná Antarctica 1L',8.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="bebidas" data-name="pepsi 1l" data-produto-id="pepsi-1l">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/pepis1ll.jpg" alt="Pepsi 1L" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">1 litro</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Pepsi 1L</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'pepsi-1l')">♡</button>
-          </div>
-          <p>Pepsi 1 litro.</p>
-          <div class="product-footer">
-            <strong>R$ 8,00</strong>
-            <button class="add-btn" onclick="adicionarProduto('pepsi-1l','Pepsi 1L',8.0)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="bebidas" data-name="refri guaraná" data-produto-id="refri-guarana">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/refri.jpg" alt="Refri Guaraná" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Refri</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Refri Guaraná</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'refri-guarana')">♡</button>
-          </div>
-          <p>Refrigerante sabor guaraná.</p>
-          <div class="product-footer">
-            <strong>R$ 7,50</strong>
-            <button class="add-btn" onclick="adicionarProduto('refri-guarana','Refri Guaraná',7.5)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="bebidas" data-name="refri laranja" data-produto-id="refri-laranja">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/refrigeranteindaialaranja2litros1.jpg" alt="Refri Laranja" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Refri</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Refri Laranja</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'refri-laranja')">♡</button>
-          </div>
-          <p>Refrigerante sabor laranja.</p>
-          <div class="product-footer">
-            <strong>R$ 7,50</strong>
-            <button class="add-btn" onclick="adicionarProduto('refri-laranja','Refri Laranja',7.5)">+</button>
-          </div>
-        </div>
-      </article>
-    
-      <article class="product-card" data-category="bebidas" data-name="refri cola" data-produto-id="refri-cola">
-        <div class="product-image">
-          <img src="https://hamburgueria-jet-chi.vercel.app/imagens/refricola.jpg" alt="Refri Cola" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4f4f4/777?text=Produto';">
-          <span class="product-tag subtle">Refri</span>
-          <span class="sold-out-badge">ESGOTADO</span>
-        </div>
-        <div class="product-body">
-          <div class="product-title-row">
-            <h3>Refri Cola</h3>
-            <button class="favorite-btn" type="button" onclick="toggleFavorito(this,'refri-cola')">♡</button>
-          </div>
-          <p>Refrigerante sabor cola.</p>
-          <div class="product-footer">
-            <strong>R$ 7,50</strong>
-            <button class="add-btn" onclick="adicionarProduto('refri-cola','Refri Cola',7.5)">+</button>
-          </div>
-        </div>
-      </article>
-    
-    </div>
-    <div id="nenhumResultado" class="empty hidden"><span>🔎</span><strong>Nenhum produto encontrado</strong><p>Tente outro termo ou categoria.</p></div>
-  </section>
-
-  <section class="checkout-preview">
-    <div class="checkout-copy">
-      <span>TAXAS DE ENTREGA</span>
-      <h2>Entrega calculada automaticamente.</h2>
-      <p>Escolha a região no checkout e a taxa entra no total do pedido.</p>
-    </div>
-    <div class="checkout-card">
-      <div class="checkout-row"><span>N1</span><strong>R$ 4,00</strong></div>
-      <div class="checkout-row"><span>N3</span><strong>R$ 3,00</strong></div>
-      <div class="checkout-row"><span>N5</span><strong>R$ 5,00</strong></div>
-      <div class="checkout-row"><span>C2</span><strong>R$ 6,00</strong></div>
-      <div class="checkout-divider"></div>
-      <button type="button" onclick="abrirCarrinho()">Revisar meu pedido</button>
+  <section class="how-it-works">
+    <div class="how-head"><span>COMO FUNCIONA</span><h2>Pedido em 3 passos</h2></div>
+    <div class="steps">
+      <article><b>1</b><div><strong>Escolha os produtos</strong><p>Use busca, categorias e favoritos.</p></div></article>
+      <article><b>2</b><div><strong>Informe entrega e pagamento</strong><p>A taxa é calculada automaticamente.</p></div></article>
+      <article><b>3</b><div><strong>Envie pelo WhatsApp</strong><p>O pedido chega pronto para conferência.</p></div></article>
     </div>
   </section>
 </main>
 
-<div class="cart-fab" id="cartFab" onclick="abrirCarrinho()">
-  <div class="cart-fab-icon">🛒 <span id="cartCount">0</span></div>
-  <div class="cart-fab-copy"><span>Ver pedido</span><strong id="cartTotal">R$ 0,00</strong></div>
-  <div class="cart-fab-arrow">→</div>
-</div>
+<div class="floating-cart" onclick="abrirCarrinho()"><div class="floating-count">🛒 <span id="floatingCartCount">0</span></div><div class="floating-copy"><small>Meu pedido</small><strong id="floatingCartTotal">R$ 0,00</strong></div><div class="floating-arrow">→</div></div>
 
-<div class="drawer" id="drawer">
-  <div class="drawer-overlay" onclick="fecharCarrinho()"></div>
-  <aside class="drawer-panel">
-    <div class="drawer-head">
-      <div>
-        <small>SEU PEDIDO</small>
-        <h2>Meu carrinho</h2>
-      </div>
-      <button onclick="fecharCarrinho()">✕</button>
-    </div>
-
-    <div class="drawer-body" id="cartItems">
-      <div class="empty">
-        <span>🛒</span>
-        <strong>Seu carrinho está vazio</strong>
-        <p>Adicione alguns itens para testar o fluxo.</p>
-      </div>
-    </div>
-
-    <div class="drawer-footer">
-      <div class="drawer-total"><span>Subtotal</span><strong id="drawerTotal">R$ 0,00</strong></div>
-      <button class="checkout-btn" type="button" onclick="abrirCheckout()">Continuar</button>
-    </div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="drawer-backdrop" onclick="fecharCarrinho()"></div>
+  <aside class="cart-panel">
+    <div class="panel-header"><div><small>SEU PEDIDO</small><h2>Carrinho</h2></div><button onclick="fecharCarrinho()">✕</button></div>
+    <div id="cartList" class="cart-list"></div>
+    <div class="panel-footer"><div class="subtotal-row"><span>Subtotal</span><strong id="cartSubtotal">R$ 0,00</strong></div><button onclick="abrirCheckout()">Continuar</button></div>
   </aside>
 </div>
 
 <div class="checkout-modal" id="checkoutModal">
-  <div class="checkout-overlay" onclick="fecharCheckout()"></div>
-  <div class="checkout-sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head">
-      <div><small>FINALIZAÇÃO</small><h2>Finalizar pedido</h2></div>
-      <button onclick="fecharCheckout()">✕</button>
+  <div class="checkout-backdrop" onclick="fecharCheckout()"></div>
+  <section class="checkout-card">
+    <div class="checkout-topbar"><div><small>FINALIZAR PEDIDO</small><h2>Confira os dados</h2></div><button onclick="fecharCheckout()">✕</button></div>
+    <div class="checkout-progress"><span class="active">1. Entrega</span><span>2. Pagamento</span><span>3. WhatsApp</span></div>
+    <div class="receive-switch"><button id="deliveryBtn" class="active" onclick="selecionarTipo('Entrega')">🛵 Entrega</button><button id="pickupBtn" onclick="selecionarTipo('Retirada')">🏪 Retirada</button></div>
+
+    <div class="checkout-grid">
+      <label><span>Nome</span><input id="customerName" type="text" placeholder="Seu nome"></label>
+      <label><span>Telefone</span><input id="customerPhone" type="tel" placeholder="(00) 00000-0000"></label>
+      <label id="regionField"><span>Região de entrega</span><select id="region"><option value="">Selecione</option><option value="N1">N1 — R$ 4,00</option><option value="N3">N3 — R$ 3,00</option><option value="N5">N5 — R$ 5,00</option><option value="C2">C2 — R$ 6,00</option></select></label>
+      <label id="addressField"><span>Endereço</span><input id="address" type="text" placeholder="Rua, número, bairro e referência"></label>
+      <label><span>Pagamento</span><select id="payment"><option value="">Selecione</option><option value="Pix">Pix</option><option value="Cartão">Cartão</option><option value="Dinheiro">Dinheiro</option></select></label>
+      <label id="changeField" class="hidden"><span>Troco para</span><input id="changeFor" type="text" placeholder="Ex: R$ 50,00"></label>
+      <label class="full"><span>Observações</span><textarea id="notes" placeholder="Ex: sem cebola, retirar tomate, etc."></textarea></label>
     </div>
 
-    <div class="delivery-switch">
-      <button id="btnEntrega" class="active" onclick="selecionarTipo('Entrega')">🛵 Entrega</button>
-      <button id="btnRetirada" onclick="selecionarTipo('Retirada')">🏪 Retirada</button>
-    </div>
-
-    <div class="checkout-form">
-      <label class="field"><span>Nome</span><input id="nome" placeholder="Seu nome"></label>
-      <label class="field"><span>Telefone</span><input id="telefone" placeholder="(00) 00000-0000"></label>
-      <label class="field" id="campoRegiao"><span>Região</span>
-        <select id="regiao">
-          <option value="">Selecione</option>
-          <option value="N1">N1 — R$ 4,00</option>
-          <option value="N3">N3 — R$ 3,00</option>
-          <option value="N5">N5 — R$ 5,00</option>
-          <option value="C2">C2 — R$ 6,00</option>
-        </select>
-      </label>
-      <label class="field" id="campoEndereco"><span>Endereço</span><input id="endereco" placeholder="Rua, número, bairro e referência"></label>
-      <label class="field"><span>Pagamento</span>
-        <select id="pagamento">
-          <option value="">Selecione</option>
-          <option value="Pix">Pix</option>
-          <option value="Cartão">Cartão</option>
-          <option value="Dinheiro">Dinheiro</option>
-        </select>
-      </label>
-      <label class="field hidden" id="campoTroco"><span>Troco para</span><input id="troco" placeholder="Ex: R$ 50,00"></label>
-      <label class="field field-full"><span>Observações</span><textarea id="observacoes" placeholder="Ex: sem cebola..."></textarea></label>
-    </div>
-
-    <div class="order-summary">
+    <div class="checkout-summary">
       <div><span>Subtotal</span><strong id="checkoutSubtotal">R$ 0,00</strong></div>
-      <div><span>Taxa</span><strong id="checkoutTaxa">R$ 0,00</strong></div>
-      <div class="summary-total"><span>Total</span><strong id="checkoutTotal">R$ 0,00</strong></div>
+      <div><span>Taxa de entrega</span><strong id="checkoutFee">R$ 0,00</strong></div>
+      <div class="grand-total"><span>Total</span><strong id="checkoutTotal">R$ 0,00</strong></div>
     </div>
 
-    <button id="finalizarBtn" class="demo-order-btn" onclick="finalizarPedido()">💬 Finalizar pelo WhatsApp</button>
-  </div>
+    <button id="sendWhatsApp" class="send-button" onclick="finalizarPedido()">💬 Enviar pedido pelo WhatsApp</button>
+  </section>
 </div>
 
-<nav class="mobile-nav">
-  <a class="active" href="#">⌂<span>Início</span></a>
-  <a href="#categorias">⌕<span>Buscar</span></a>
+<div id="toast" class="toast"></div>
+
+<nav class="mobile-bottom-nav">
+  <a href="#inicio" class="active">⌂<span>Início</span></a>
+  <a href="#cardapio">⌕<span>Cardápio</span></a>
   <button onclick="mostrarFavoritos()">♡<span>Favoritos</span></button>
   <button onclick="abrirCarrinho()">🛒<span>Pedido</span></button>
 </nav>

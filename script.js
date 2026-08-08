@@ -18,7 +18,7 @@
 */
 
 const NUMERO_WHATSAPP =
-  "5587991532323";
+  "5587991110264";
 
 
 /* HORÁRIOS */

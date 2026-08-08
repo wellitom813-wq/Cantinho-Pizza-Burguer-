@@ -449,4 +449,155 @@ body{
 ::-webkit-scrollbar-thumb{
   background:#333333;
   border-radius:10px;
+
+   /* =========================================
+   LETRAS MAIORES — CANTINHO PIZZA BURGUER
+   ========================================= */
+
+body{
+  font-size:17px !important;
+}
+
+/* Nome da loja */
+.brand-copy strong{
+  font-size:20px !important;
+}
+
+.brand-copy small{
+  font-size:14px !important;
+}
+
+/* Título principal */
+.store-title-row h2{
+  font-size:30px !important;
+  font-weight:900 !important;
+}
+
+/* Informações da loja */
+.store-details{
+  font-size:16px !important;
+}
+
+/* Categorias */
+.category{
+  font-size:16px !important;
+  font-weight:800 !important;
+}
+
+/* Títulos das seções */
+.catalog-header h2,
+.fees-head h2,
+.how-head h2{
+  font-size:27px !important;
+  font-weight:900 !important;
+}
+
+/* Nome dos produtos */
+.title-line h3{
+  font-size:19px !important;
+  font-weight:900 !important;
+  line-height:1.25 !important;
+}
+
+/* Descrição dos produtos */
+.product-info p{
+  font-size:15px !important;
+  line-height:1.5 !important;
+}
+
+/* Preços */
+.price{
+  font-size:20px !important;
+  font-weight:900 !important;
+}
+
+/* Informações menores */
+.product-meta > span{
+  font-size:14px !important;
+}
+
+/* Botão adicionar */
+.add-button{
+  font-size:16px !important;
+  font-weight:900 !important;
+}
+
+/* Taxas de entrega */
+.fee-cards strong{
+  font-size:19px !important;
+}
+
+.fee-cards small{
+  font-size:14px !important;
+}
+
+/* Como funciona */
+.steps strong{
+  font-size:17px !important;
+}
+
+.steps p{
+  font-size:15px !important;
+}
+
+/* Carrinho */
+.floating-cart{
+  font-size:16px !important;
+}
+
+.cart-item h4{
+  font-size:17px !important;
+}
+
+.item-price{
+  font-size:17px !important;
+}
+
+/* Checkout */
+.checkout-grid label > span{
+  font-size:16px !important;
+  font-weight:800 !important;
+}
+
+.checkout-grid input,
+.checkout-grid select,
+.checkout-grid textarea{
+  font-size:16px !important;
+}
+
+/* Celular */
+@media(max-width:600px){
+
+  body{
+    font-size:16px !important;
+  }
+
+  .store-title-row h2{
+    font-size:25px !important;
+  }
+
+  .catalog-header h2{
+    font-size:23px !important;
+  }
+
+  .title-line h3{
+    font-size:18px !important;
+  }
+
+  .product-info p{
+    font-size:15px !important;
+  }
+
+  .price{
+    font-size:19px !important;
+  }
+
+  .add-button{
+    font-size:16px !important;
+  }
+
+  .category{
+    font-size:15px !important;
+  }
+}
 }

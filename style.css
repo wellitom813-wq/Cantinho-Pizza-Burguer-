@@ -972,3 +972,18 @@ footer small {
     font-size: 37px;
   }
 }
+
+/* =========================
+   LOJA FECHADA
+========================= */
+
+.status-loja.fechado {
+  background: rgba(255, 60, 60, 0.10);
+  border-color: rgba(255, 60, 60, 0.25);
+  color: #ff7373;
+}
+
+.status-loja.fechado .status-bolinha {
+  background: #ff4040;
+  box-shadow: 0 0 12px rgba(255, 64, 64, 0.8);
+}

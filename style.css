@@ -738,3 +738,26 @@ main{
   .mobile-nav span{font-size:8px}
   .mobile-nav .active{color:var(--red)}
 }
+
+/* ===== FUNCIONALIDADES DA VERSÃO OFICIAL ===== */
+.status-circle{font-size:14px;color:#22945a}.status-box.closed .status-circle{color:#ea1d2c}
+.favorite-btn{border:0!important;background:transparent!important;color:#aaa!important;font-size:18px!important;box-shadow:none!important;width:auto!important;height:auto!important}
+.favorite-btn.active{color:#ea1d2c!important}
+.sold-out-badge{display:none;position:absolute;left:9px;right:9px;bottom:9px;padding:8px;border-radius:9px;background:rgba(187,28,36,.94);color:#fff;text-align:center;font-size:8px;font-weight:900;letter-spacing:1px}
+.product-card.sold-out .sold-out-badge{display:block}
+.product-card.sold-out .product-image img{filter:grayscale(.8) brightness(.6)}
+.add-btn:disabled{background:#ddd!important;color:#999!important;box-shadow:none!important;cursor:not-allowed}
+.sync-notice{margin-bottom:12px;padding:10px 12px;border-radius:12px;background:#fff5e7;border:1px solid #f1ddbb;color:#85602b;font-size:9px}
+.sync-notice.error{background:#fff0f0;border-color:#f2c9c9;color:#a43c3c}
+.hidden{display:none!important}
+.checkout-form{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.field-full{grid-column:1/-1}
+.field textarea{width:100%;min-height:78px;padding:12px;border:1px solid var(--line);border-radius:11px;resize:vertical;font:inherit}
+.order-summary{margin:15px 0;padding:13px;border-radius:13px;background:#fafafa;border:1px solid var(--line)}
+.order-summary>div{display:flex;justify-content:space-between;padding:6px 0;font-size:10px}
+.order-summary span{color:var(--muted)}
+.summary-total{border-top:1px solid var(--line);margin-top:6px;padding-top:12px!important}
+.summary-total strong{color:#ea1d2c;font-size:14px}
+.demo-order-btn:disabled{background:#ccc!important;cursor:not-allowed}
+.cart-item .warn{color:#ea1d2c;font-size:8px;font-weight:900;margin-top:4px}
+@media(max-width:640px){.checkout-form{grid-template-columns:1fr}.field-full{grid-column:auto}}

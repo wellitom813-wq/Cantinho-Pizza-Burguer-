@@ -599,3 +599,73 @@ atualizarCarrinho();
 
 troco.disabled = true;
 troco.style.opacity = "0.45";
+
+/* =========================
+   STATUS AUTOMÁTICO DA LOJA
+========================= */
+
+function atualizarStatusLoja() {
+
+  const agora = new Date();
+
+  const dia = agora.getDay();
+  const hora = agora.getHours();
+  const minutos = agora.getMinutes();
+
+  /*
+    Dias:
+    0 = Domingo
+    1 = Segunda
+    2 = Terça
+    3 = Quarta
+    4 = Quinta
+    5 = Sexta
+    6 = Sábado
+  */
+
+  const diasAbertos = [0, 2, 3, 5, 6];
+
+  const horarioAtual =
+    hora * 60 + minutos;
+
+  const abertura = 18 * 60;
+  const fechamento = 22 * 60;
+
+  const estaAberto =
+    diasAbertos.includes(dia) &&
+    horarioAtual >= abertura &&
+    horarioAtual < fechamento;
+
+  const status =
+    document.querySelector(".status-loja");
+
+  if (!status) return;
+
+  if (estaAberto) {
+
+    status.innerHTML = `
+      <span class="status-bolinha"></span>
+      <span>Aberto • Fecha às 22h</span>
+    `;
+
+    status.classList.remove("fechado");
+
+  } else {
+
+    status.innerHTML = `
+      <span class="status-bolinha"></span>
+      <span>Fechado</span>
+    `;
+
+    status.classList.add("fechado");
+  }
+}
+
+atualizarStatusLoja();
+
+/* Atualiza automaticamente a cada minuto */
+
+setInterval(
+  atualizarStatusLoja,
+  60000
+);

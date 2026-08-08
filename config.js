@@ -10,5 +10,6 @@
    NÃO coloque service_role aqui.
 ========================================================= */
 
-const SUPABASE_URL = "COLE_AQUI_SUA_PROJECT_URL";
-const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_ANON_KEY";
+const SUPABASE_URL = "https://ksfmcoukkuglqjtxrebu.supabase.co";
+
+const SUPABASE_ANON_KEY = "sb_publishable_sxX321Q2mbCh8zXF7w9d8A_ZOaPp_yp";

@@ -601,3 +601,143 @@ body{
   }
 }
 }
+
+
+/* =========================================
+   TEXTO EXTRA GRANDE E LEGÍVEL
+   ========================================= */
+
+/* Nome da loja */
+.brand-copy strong{
+  font-size:23px !important;
+}
+
+/* Informações da loja */
+.store-title-row h2{
+  font-size:34px !important;
+}
+
+.store-details{
+  font-size:18px !important;
+}
+
+/* Categorias */
+.category{
+  font-size:18px !important;
+  padding:13px 18px !important;
+}
+
+/* Títulos */
+.catalog-header h2,
+.fees-head h2,
+.how-head h2{
+  font-size:31px !important;
+}
+
+/* NOME DO PRODUTO */
+.title-line h3{
+  font-size:22px !important;
+  line-height:1.25 !important;
+  font-weight:900 !important;
+}
+
+/* DESCRIÇÃO */
+.product-info p{
+  font-size:17px !important;
+  line-height:1.5 !important;
+  min-height:auto !important;
+}
+
+/* PREÇO */
+.price{
+  font-size:22px !important;
+  font-weight:900 !important;
+}
+
+/* Botão adicionar */
+.add-button{
+  font-size:18px !important;
+  padding:12px 15px !important;
+}
+
+/* Informações pequenas */
+.product-meta > span{
+  font-size:15px !important;
+}
+
+/* Carrinho */
+.cart-item h4{
+  font-size:19px !important;
+}
+
+.item-price{
+  font-size:19px !important;
+}
+
+/* Checkout */
+.checkout-grid label > span{
+  font-size:17px !important;
+}
+
+.checkout-grid input,
+.checkout-grid select,
+.checkout-grid textarea{
+  font-size:17px !important;
+}
+
+/* =========================
+   CELULAR
+   ========================= */
+
+@media(max-width:600px){
+
+  .brand-copy strong{
+    font-size:18px !important;
+  }
+
+  .store-title-row h2{
+    font-size:27px !important;
+  }
+
+  .store-details{
+    font-size:16px !important;
+  }
+
+  .category{
+    font-size:17px !important;
+    padding:12px 16px !important;
+  }
+
+  .catalog-header h2{
+    font-size:26px !important;
+  }
+
+  /* Produto */
+  .title-line h3{
+    font-size:21px !important;
+  }
+
+  .product-info p{
+    font-size:17px !important;
+    line-height:1.45 !important;
+  }
+
+  .price{
+    font-size:22px !important;
+    margin-top:7px !important;
+  }
+
+  .add-button{
+    font-size:18px !important;
+    padding:13px 10px !important;
+  }
+
+  /* Taxas */
+  .fee-cards strong{
+    font-size:20px !important;
+  }
+
+  .fee-cards span{
+    font-size:17px !important;
+  }
+}

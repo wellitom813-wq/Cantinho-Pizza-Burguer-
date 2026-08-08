@@ -28,3 +28,425 @@ main{width:min(1240px,94%);margin:auto}.store-hero{margin-top:20px;background:#f
 .toast{position:fixed;z-index:2000;left:50%;top:86px;transform:translate(-50%,-8px);padding:10px 14px;border-radius:999px;background:#252222;color:#fff;font-size:8px;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 9px 24px rgba(0,0,0,.2)}.toast.active{opacity:1;transform:translate(-50%,0)}.mobile-bottom-nav{display:none}
 @media(max-width:1000px){.header-inner{grid-template-columns:auto 1fr auto}.header-search{display:none}.products-grid{grid-template-columns:repeat(3,1fr)}.delivery-fees{grid-template-columns:1fr}.fee-cards{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:760px){body{padding-bottom:130px}.header-inner{height:64px;width:94%;grid-template-columns:1fr auto}.header-actions .status-button,.header-actions .round-button{display:none}.brand-copy strong{font-size:12px}.brand-copy small{display:none}main{width:94%}.store-hero{margin-top:12px;border-radius:20px}.hero-visual{min-height:255px}.hero-copy{padding:23px;max-width:74%}.hero-copy h1{font-size:35px}.hero-copy p{font-size:9px}.hero-food{right:20px;bottom:45px;font-size:63px}.hero-food.two{right:5px;bottom:5px;font-size:46px}.store-panel{align-items:flex-start;padding:15px}.store-logo{width:56px;height:56px;border-radius:17px;font-size:27px}.store-title-row h2{font-size:15px}.quick-info{grid-template-columns:repeat(2,1fr)}.featured-row{grid-template-columns:1fr}.feature-banner{min-height:130px;padding:16px}.feature-banner h3{font-size:18px}.feature-emoji{font-size:45px}.sticky-tools{top:64px;padding-top:8px}.mobile-search{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:0 12px;background:#eee;border-radius:12px}.mobile-search span{color:#888;font-size:18px}.mobile-search input{width:100%;padding:10px 0;border:0;background:transparent;outline:none;font-size:10px}.catalog-header h2,.fees-head h2,.how-head h2{font-size:20px}.catalog-actions{display:none}.products-grid{grid-template-columns:repeat(2,1fr);gap:8px}.product-card{border-radius:14px}.product-info{padding:10px}.title-line{display:block}.title-line h3{font-size:10px}.price{display:block;margin-top:4px;font-size:10px;color:var(--red)}.product-info p{min-height:38px;font-size:7px}.product-meta>span{display:none}.add-button{width:100%;padding:8px;font-size:7px}.delivery-fees{padding:18px}.fee-cards{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:1fr}.how-it-works{padding:18px}.checkout-grid{grid-template-columns:1fr}.checkout-grid label.full{grid-column:auto}.floating-cart{bottom:73px}.mobile-bottom-nav{position:fixed;z-index:1000;left:0;right:0;bottom:0;height:64px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:rgba(255,255,255,.96);backdrop-filter:blur(15px)}.mobile-bottom-nav a,.mobile-bottom-nav button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#777;font-size:17px}.mobile-bottom-nav span{font-size:7px}.mobile-bottom-nav .active{color:var(--red)}}
+/* =========================================
+   TEMA BLACK PREMIUM — CANTINHO PIZZA BURGUER
+   ========================================= */
+
+:root{
+  --red:#ea1d2c;
+  --red-dark:#c91826;
+  --ink:#ffffff;
+  --muted:#d0d0d0;
+  --line:#292929;
+  --bg:#050505;
+  --white:#0d0d0d;
+  --green:#35d078;
+  --shadow:0 18px 50px rgba(0,0,0,.65);
+}
+
+html,
+body{
+  background:#050505 !important;
+  color:#ffffff !important;
+}
+
+/* TOPO */
+.desktop-header{
+  background:rgba(5,5,5,.96) !important;
+  border-bottom:1px solid #292929 !important;
+}
+
+.brand-copy strong,
+.brand-copy small{
+  color:#ffffff !important;
+}
+
+.header-search{
+  background:#161616 !important;
+}
+
+.header-search input{
+  color:#ffffff !important;
+}
+
+.header-search input::placeholder{
+  color:#aaaaaa !important;
+}
+
+.status-button,
+.round-button,
+.order-button{
+  background:#111111 !important;
+  border-color:#292929 !important;
+  color:#ffffff !important;
+}
+
+/* ÁREA DA LOJA */
+.store-hero,
+.store-panel{
+  background:#0d0d0d !important;
+  border-color:#292929 !important;
+}
+
+.store-title-row h2,
+.store-details,
+.store-features span{
+  color:#ffffff !important;
+}
+
+.store-features span{
+  background:#191919 !important;
+  border:1px solid #292929;
+}
+
+.store-logo{
+  background:#181818 !important;
+  border-color:#303030 !important;
+}
+
+.store-heart{
+  background:#151515 !important;
+  border-color:#303030 !important;
+  color:#ffffff !important;
+}
+
+/* INFORMAÇÕES RÁPIDAS */
+.quick-info article{
+  background:#0d0d0d !important;
+  border-color:#292929 !important;
+}
+
+.quick-icon{
+  background:#191919 !important;
+}
+
+.quick-info small{
+  color:#bdbdbd !important;
+}
+
+.quick-info strong{
+  color:#ffffff !important;
+}
+
+/* BANNERS */
+.feature-dark,
+.feature-red{
+  background:linear-gradient(135deg,#101010,#1c1c1c) !important;
+  color:#ffffff !important;
+  border:1px solid #292929;
+}
+
+.feature-banner h3{
+  color:#ffffff !important;
+}
+
+.feature-banner p{
+  color:#c8c8c8 !important;
+}
+
+/* CATEGORIAS */
+.sticky-tools{
+  background:rgba(5,5,5,.96) !important;
+}
+
+.category{
+  background:#111111 !important;
+  border-color:#292929 !important;
+  color:#ffffff !important;
+}
+
+.category.active{
+  background:#ea1d2c !important;
+  border-color:#ea1d2c !important;
+  color:#ffffff !important;
+}
+
+.mobile-search{
+  background:#151515 !important;
+}
+
+.mobile-search input{
+  color:#ffffff !important;
+}
+
+.mobile-search input::placeholder{
+  color:#aaaaaa !important;
+}
+
+/* TÍTULOS */
+.catalog-header h2,
+.fees-head h2,
+.how-head h2{
+  color:#ffffff !important;
+}
+
+.catalog-actions button{
+  background:#111111 !important;
+  border-color:#292929 !important;
+  color:#ffffff !important;
+}
+
+/* CARDS DOS PRODUTOS */
+.product-card{
+  background:#0d0d0d !important;
+  border-color:#292929 !important;
+  color:#ffffff !important;
+}
+
+.product-card:hover{
+  border-color:#444444 !important;
+}
+
+.product-image{
+  background:#161616 !important;
+}
+
+.badge-label{
+  background:rgba(10,10,10,.92) !important;
+  color:#ffffff !important;
+}
+
+.heart{
+  background:rgba(10,10,10,.92) !important;
+  color:#ffffff !important;
+}
+
+.heart.active{
+  color:#ff3342 !important;
+}
+
+.title-line h3{
+  color:#ffffff !important;
+  font-weight:800 !important;
+}
+
+.price{
+  color:#ffffff !important;
+  font-weight:900 !important;
+}
+
+.product-info p{
+  color:#d0d0d0 !important;
+}
+
+.product-meta > span{
+  color:#aaaaaa !important;
+}
+
+.add-button{
+  background:#ea1d2c !important;
+  color:#ffffff !important;
+}
+
+.add-button:disabled{
+  background:#242424 !important;
+  color:#777777 !important;
+}
+
+/* ESGOTADO */
+.product-card.sold-out{
+  border-color:#4a1d20 !important;
+}
+
+.sold-overlay{
+  background:rgba(0,0,0,.78) !important;
+}
+
+.sold-overlay span{
+  color:#ffffff !important;
+}
+
+/* TAXAS */
+.delivery-fees{
+  background:#0d0d0d !important;
+  border-color:#292929 !important;
+}
+
+.fees-head p{
+  color:#cccccc !important;
+}
+
+.fee-cards article{
+  background:#161616 !important;
+  border-color:#292929 !important;
+}
+
+.fee-cards small{
+  color:#aaaaaa !important;
+}
+
+.fee-cards strong{
+  color:#ffffff !important;
+}
+
+/* COMO FUNCIONA */
+.how-it-works{
+  background:#0d0d0d !important;
+  border:1px solid #292929;
+}
+
+.steps article{
+  background:#151515 !important;
+  border-color:#292929 !important;
+}
+
+.steps strong{
+  color:#ffffff !important;
+}
+
+.steps p{
+  color:#cccccc !important;
+}
+
+/* CARRINHO */
+.floating-cart{
+  background:#111111 !important;
+  border:1px solid #333333;
+  color:#ffffff !important;
+}
+
+.floating-count{
+  background:#202020 !important;
+}
+
+.cart-panel{
+  background:#080808 !important;
+  color:#ffffff !important;
+}
+
+.panel-header,
+.panel-footer{
+  border-color:#292929 !important;
+}
+
+.panel-header button{
+  background:#191919 !important;
+  color:#ffffff !important;
+}
+
+.cart-item{
+  border-color:#292929 !important;
+}
+
+.cart-item h4,
+.item-price{
+  color:#ffffff !important;
+}
+
+.cart-item small{
+  color:#bdbdbd !important;
+}
+
+.qty-controls button{
+  background:#181818 !important;
+  border-color:#333333 !important;
+  color:#ffffff !important;
+}
+
+/* CHECKOUT */
+.checkout-card{
+  background:#080808 !important;
+  color:#ffffff !important;
+}
+
+.checkout-topbar button{
+  background:#191919 !important;
+  color:#ffffff !important;
+}
+
+.checkout-progress span{
+  background:#181818 !important;
+  color:#aaaaaa !important;
+}
+
+.checkout-progress .active{
+  background:#3b1115 !important;
+  color:#ffffff !important;
+}
+
+.receive-switch{
+  background:#151515 !important;
+}
+
+.receive-switch button{
+  color:#bdbdbd !important;
+}
+
+.receive-switch button.active{
+  background:#292929 !important;
+  color:#ffffff !important;
+}
+
+.checkout-grid label > span{
+  color:#ffffff !important;
+}
+
+.checkout-grid input,
+.checkout-grid select,
+.checkout-grid textarea{
+  background:#111111 !important;
+  border-color:#333333 !important;
+  color:#ffffff !important;
+}
+
+.checkout-grid input::placeholder,
+.checkout-grid textarea::placeholder{
+  color:#888888 !important;
+}
+
+.checkout-summary{
+  background:#111111 !important;
+  border-color:#292929 !important;
+}
+
+.checkout-summary span{
+  color:#cccccc !important;
+}
+
+.checkout-summary strong{
+  color:#ffffff !important;
+}
+
+/* MENU INFERIOR CELULAR */
+.mobile-bottom-nav{
+  background:rgba(5,5,5,.97) !important;
+  border-color:#292929 !important;
+}
+
+.mobile-bottom-nav a,
+.mobile-bottom-nav button{
+  color:#cccccc !important;
+}
+
+.mobile-bottom-nav .active{
+  color:#ffffff !important;
+}
+
+/* BUSCA SEM RESULTADOS */
+.empty-search{
+  background:#0d0d0d !important;
+  border-color:#333333 !important;
+}
+
+.empty-search strong{
+  color:#ffffff !important;
+}
+
+.empty-search span{
+  color:#bbbbbb !important;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{
+  width:8px;
+  height:8px;
+}
+
+::-webkit-scrollbar-track{
+  background:#050505;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#333333;
+  border-radius:10px;
+}

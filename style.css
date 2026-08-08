@@ -1,3 +1,13 @@
+/* =========================================================
+   CANTINHO PIZZA BURGUER
+   STYLE.CSS COMPLETO
+========================================================= */
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
 * {
   margin: 0;
   padding: 0;
@@ -38,41 +48,59 @@ img {
 }
 
 
-/* =========================
+/* =========================================================
    TOPO
-========================= */
+========================================================= */
 
 .topo {
   position: sticky;
   top: 0;
   z-index: 1000;
+
   background: rgba(10, 10, 10, 0.96);
+
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 95, 31, 0.2);
+
+  border-bottom:
+    1px solid rgba(255, 95, 31, 0.2);
 }
 
 .topo-conteudo {
   width: min(1180px, 92%);
+
   margin: auto;
+
   padding: 14px 0;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 20px;
 }
 
+
+/* =========================================================
+   LOGO
+========================================================= */
+
 .logo-area {
   display: flex;
+
   align-items: center;
+
   gap: 12px;
 }
 
 .logo-icone {
   width: 48px;
+
   height: 48px;
 
   display: grid;
+
   place-items: center;
 
   border-radius: 15px;
@@ -93,18 +121,28 @@ img {
 
 .logo-area h1 {
   font-size: 18px;
+
   line-height: 1.1;
 }
 
 .logo-area p {
   margin-top: 3px;
+
   color: #9f9f9f;
+
   font-size: 12px;
 }
 
+
+/* =========================================================
+   STATUS ABERTO
+========================================================= */
+
 .status-loja {
   display: flex;
+
   align-items: center;
+
   gap: 7px;
 
   padding: 9px 13px;
@@ -121,12 +159,16 @@ img {
   color: #6be19d;
 
   font-size: 13px;
+
   font-weight: 700;
 }
 
 .status-bolinha {
   width: 8px;
+
   height: 8px;
+
+  flex-shrink: 0;
 
   border-radius: 50%;
 
@@ -136,6 +178,11 @@ img {
     0 0 12px
     rgba(35, 193, 107, 0.9);
 }
+
+
+/* =========================================================
+   STATUS FECHADO
+========================================================= */
 
 .status-loja.fechado {
   background:
@@ -147,8 +194,7 @@ img {
   color: #ff7373;
 }
 
-.status-loja.fechado
-.status-bolinha {
+.status-loja.fechado .status-bolinha {
   background: #ff4040;
 
   box-shadow:
@@ -157,9 +203,9 @@ img {
 }
 
 
-/* =========================
+/* =========================================================
    BANNER
-========================= */
+========================================================= */
 
 .banner {
   min-height: 470px;
@@ -167,7 +213,10 @@ img {
   position: relative;
 
   display: flex;
+
   align-items: center;
+
+  overflow: hidden;
 
   background:
     linear-gradient(
@@ -182,8 +231,6 @@ img {
       transparent 35%
     ),
     #111111;
-
-  overflow: hidden;
 }
 
 .banner::after {
@@ -192,6 +239,7 @@ img {
   position: absolute;
 
   right: 7%;
+
   top: 50%;
 
   transform:
@@ -202,18 +250,34 @@ img {
     clamp(150px, 22vw, 310px);
 
   opacity: 0.88;
+
+  filter:
+    drop-shadow(
+      0 30px 35px
+      rgba(0, 0, 0, 0.45)
+    );
 }
 
 .banner-overlay {
   position: absolute;
+
   inset: 0;
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent,
+      rgba(11, 11, 11, 0.15)
+    );
 }
 
 .banner-conteudo {
   width: min(1180px, 92%);
+
   margin: auto;
 
   position: relative;
+
   z-index: 2;
 }
 
@@ -236,6 +300,7 @@ img {
     rgba(255, 138, 0, 0.18);
 
   font-weight: 800;
+
   font-size: 12px;
 
   letter-spacing: 1px;
@@ -269,6 +334,10 @@ img {
 .btn-banner {
   display: inline-flex;
 
+  align-items: center;
+
+  justify-content: center;
+
   margin-top: 28px;
 
   padding: 15px 24px;
@@ -287,12 +356,22 @@ img {
   box-shadow:
     0 10px 30px
     rgba(255, 69, 0, 0.28);
+
+  transition: 0.25s ease;
+}
+
+.btn-banner:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 35px
+    rgba(255, 69, 0, 0.38);
 }
 
 
-/* =========================
+/* =========================================================
    INFORMAÇÕES
-========================= */
+========================================================= */
 
 .informacoes {
   width: min(1180px, 92%);
@@ -301,6 +380,7 @@ img {
     -32px auto 28px;
 
   position: relative;
+
   z-index: 10;
 
   display: grid;
@@ -313,7 +393,9 @@ img {
 
 .info-item {
   display: flex;
+
   align-items: center;
+
   gap: 12px;
 
   padding: 18px;
@@ -324,6 +406,10 @@ img {
 
   border:
     1px solid #232323;
+
+  box-shadow:
+    0 12px 30px
+    rgba(0, 0, 0, 0.22);
 }
 
 .info-item > span {
@@ -332,18 +418,22 @@ img {
 
 .info-item strong {
   display: block;
+
   font-size: 14px;
 }
 
 .info-item p {
+  margin-top: 2px;
+
   color: #8f8f8f;
+
   font-size: 12px;
 }
 
 
-/* =========================
-   CATEGORIAS
-========================= */
+/* =========================================================
+   MENU DE CATEGORIAS
+========================================================= */
 
 .categorias {
   position: sticky;
@@ -370,8 +460,7 @@ img {
   background:
     rgba(15, 15, 15, 0.92);
 
-  backdrop-filter:
-    blur(12px);
+  backdrop-filter: blur(12px);
 
   border:
     1px solid #202020;
@@ -384,6 +473,8 @@ img {
 }
 
 .categorias a {
+  flex-shrink: 0;
+
   white-space: nowrap;
 
   padding: 11px 15px;
@@ -397,26 +488,37 @@ img {
   font-size: 13px;
 
   font-weight: 700;
+
+  transition: 0.2s ease;
 }
 
 .categorias a:hover {
   background: #ff4e0d;
+
+  color: #ffffff;
 }
 
 
-/* =========================
+/* =========================================================
    CARDÁPIO
-========================= */
+========================================================= */
 
 .cardapio {
   width: min(1180px, 92%);
+
   margin: auto;
 }
 
 .secao-cardapio {
   scroll-margin-top: 155px;
+
   margin-bottom: 60px;
 }
+
+
+/* =========================================================
+   TÍTULOS
+========================================================= */
 
 .titulo-secao {
   margin-bottom: 24px;
@@ -445,6 +547,7 @@ img {
   display: block;
 
   width: 62px;
+
   height: 4px;
 
   border-radius: 10px;
@@ -459,6 +562,11 @@ img {
     );
 }
 
+
+/* =========================================================
+   GRID DOS PRODUTOS
+========================================================= */
+
 .produtos-grid {
   display: grid;
 
@@ -469,9 +577,9 @@ img {
 }
 
 
-/* =========================
-   PRODUTOS
-========================= */
+/* =========================================================
+   PRODUTO
+========================================================= */
 
 .produto {
   overflow: hidden;
@@ -483,7 +591,10 @@ img {
   border:
     1px solid #222222;
 
-  transition: 0.25s;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .produto:hover {
@@ -492,10 +603,21 @@ img {
 
   border-color:
     rgba(255, 96, 20, 0.5);
+
+  box-shadow:
+    0 18px 40px
+    rgba(0, 0, 0, 0.3);
 }
+
+
+/* =========================================================
+   IMAGENS DOS PRODUTOS
+========================================================= */
 
 .produto-imagem {
   position: relative;
+
+  width: 100%;
 
   aspect-ratio: 16 / 11;
 
@@ -506,21 +628,59 @@ img {
 
 .produto-imagem img {
   width: 100%;
+
   height: 100%;
 
   object-fit: cover;
+
+  object-position: center;
+
+  transition:
+    transform 0.35s ease;
+}
+
+.produto:hover
+.produto-imagem img {
+  transform: scale(1.045);
+}
+
+
+/* =========================================================
+   IMAGENS DAS BEBIDAS
+   AGORA PREENCHEM TODO O ESPAÇO
+========================================================= */
+
+.bebida-imagem {
+  width: 100%;
+
+  overflow: hidden;
 }
 
 .bebida-imagem img {
-  object-fit: contain;
-  padding: 16px;
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  padding: 0;
 }
+
+
+/* =========================================================
+   SELOS
+========================================================= */
 
 .selo-produto {
   position: absolute;
 
   left: 12px;
+
   top: 12px;
+
+  z-index: 2;
 
   padding: 6px 9px;
 
@@ -529,10 +689,17 @@ img {
   background:
     rgba(8, 8, 8, 0.86);
 
+  backdrop-filter: blur(8px);
+
   font-size: 11px;
 
   font-weight: 800;
 }
+
+
+/* =========================================================
+   CONTEÚDO DOS CARDS
+========================================================= */
 
 .produto-conteudo {
   padding: 16px;
@@ -559,8 +726,7 @@ img {
 
   align-items: center;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   gap: 12px;
 }
@@ -569,6 +735,8 @@ img {
   color: #ff8b21;
 
   font-size: 19px;
+
+  white-space: nowrap;
 }
 
 .btn-adicionar {
@@ -585,10 +753,14 @@ img {
   font-weight: 800;
 
   font-size: 12px;
+
+  transition: 0.2s ease;
 }
 
 .btn-adicionar:hover {
   background: #ff4b0a;
+
+  transform: scale(1.02);
 }
 
 .destaque-produto {
@@ -597,9 +769,9 @@ img {
 }
 
 
-/* =========================
-   CARRINHO
-========================= */
+/* =========================================================
+   CARRINHO FLUTUANTE
+========================================================= */
 
 .carrinho-flutuante {
   position: fixed;
@@ -607,6 +779,7 @@ img {
   z-index: 1200;
 
   left: 50%;
+
   bottom: 18px;
 
   transform:
@@ -624,8 +797,7 @@ img {
 
   align-items: center;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   gap: 14px;
 
@@ -657,7 +829,7 @@ img {
   place-items: center;
 
   background:
-    rgba(255,255,255,0.12);
+    rgba(255, 255, 255, 0.12);
 
   font-size: 19px;
 }
@@ -666,6 +838,7 @@ img {
   position: absolute;
 
   top: -8px;
+
   right: -8px;
 
   min-width: 21px;
@@ -692,8 +865,7 @@ img {
 
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   align-items: center;
 
@@ -702,17 +874,20 @@ img {
 
 .carrinho-texto span {
   font-size: 13px;
+
   font-weight: 700;
 }
 
 .carrinho-texto strong {
   font-size: 16px;
+
+  white-space: nowrap;
 }
 
 
-/* =========================
-   MODAL
-========================= */
+/* =========================================================
+   MODAL DO CARRINHO
+========================================================= */
 
 .modal-carrinho {
   position: fixed;
@@ -730,16 +905,20 @@ img {
 
 .modal-overlay {
   position: absolute;
+
   inset: 0;
 
   background:
-    rgba(0,0,0,0.72);
+    rgba(0, 0, 0, 0.72);
+
+  backdrop-filter: blur(4px);
 }
 
 .carrinho-painel {
   position: absolute;
 
   top: 0;
+
   right: 0;
 
   width: min(430px, 100%);
@@ -756,15 +935,38 @@ img {
   display: flex;
 
   flex-direction: column;
+
+  animation:
+    abrirCarrinho 0.3s ease;
 }
+
+@keyframes abrirCarrinho {
+
+  from {
+    transform:
+      translateX(100%);
+  }
+
+  to {
+    transform:
+      translateX(0);
+  }
+
+}
+
+
+/* =========================================================
+   CABEÇALHO DO CARRINHO
+========================================================= */
 
 .carrinho-cabecalho {
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   align-items: center;
+
+  gap: 15px;
 
   padding-bottom: 18px;
 
@@ -778,6 +980,8 @@ img {
   font-size: 10px;
 
   font-weight: 900;
+
+  letter-spacing: 1.4px;
 }
 
 .carrinho-cabecalho h2 {
@@ -788,7 +992,10 @@ img {
 
 .btn-fechar {
   width: 38px;
+
   height: 38px;
+
+  flex-shrink: 0;
 
   border: 0;
 
@@ -797,7 +1004,18 @@ img {
   background: #242424;
 
   color: white;
+
+  transition: 0.2s;
 }
+
+.btn-fechar:hover {
+  background: #333333;
+}
+
+
+/* =========================================================
+   LISTA DO CARRINHO
+========================================================= */
 
 .lista-carrinho {
   flex: 1;
@@ -825,11 +1043,18 @@ img {
 
 .carrinho-vazio span {
   font-size: 42px;
+
+  margin-bottom: 8px;
 }
 
 .carrinho-vazio strong {
   color: #ffffff;
 }
+
+
+/* =========================================================
+   RESUMO CARRINHO
+========================================================= */
 
 .carrinho-resumo {
   border-top:
@@ -841,8 +1066,11 @@ img {
 .linha-total {
   display: flex;
 
-  justify-content:
-    space-between;
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
 
   margin-bottom: 14px;
 }
@@ -864,8 +1092,9 @@ img {
 
   display: flex;
 
-  justify-content:
-    space-between;
+  align-items: center;
+
+  justify-content: space-between;
 
   background:
     linear-gradient(
@@ -877,12 +1106,19 @@ img {
   color: white;
 
   font-weight: 900;
+
+  transition: 0.2s;
+}
+
+.btn-finalizar:hover {
+  transform:
+    translateY(-1px);
 }
 
 
-/* =========================
+/* =========================================================
    FINALIZAÇÃO
-========================= */
+========================================================= */
 
 .finalizacao {
   display: none;
@@ -930,6 +1166,11 @@ img {
 
   margin-top: 6px;
 }
+
+
+/* =========================================================
+   FORMULÁRIO
+========================================================= */
 
 .formulario-pedido {
   display: grid;
@@ -987,22 +1228,50 @@ img {
   background: #0e0e0e;
 
   color: #ffffff;
+
+  transition: 0.2s;
+}
+
+.campo input::placeholder,
+.campo textarea::placeholder {
+  color: #686868;
 }
 
 .campo input:focus,
 .campo select:focus,
 .campo textarea:focus {
   border-color: #ff5a15;
+
+  box-shadow:
+    0 0 0 2px
+    rgba(255, 90, 21, 0.08);
 }
 
 .campo textarea {
   resize: vertical;
+
+  min-height: 110px;
 }
 
 
-/* =========================
-   RESUMO ENTREGA
-========================= */
+/* =========================================================
+   SELECT
+========================================================= */
+
+.campo select {
+  cursor: pointer;
+}
+
+.campo select option {
+  background: #111111;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   RESUMO DO PEDIDO
+========================================================= */
 
 .resumo-entrega {
   margin-top: 8px;
@@ -1026,10 +1295,11 @@ img {
 .linha-resumo {
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   align-items: center;
+
+  gap: 10px;
 
   padding: 7px 0;
 
@@ -1038,6 +1308,8 @@ img {
 
 .linha-resumo strong {
   color: #ffffff;
+
+  white-space: nowrap;
 }
 
 .total-final {
@@ -1058,13 +1330,15 @@ img {
 }
 
 
-/* =========================
+/* =========================================================
    WHATSAPP
-========================= */
+========================================================= */
 
 .btn-whatsapp {
   grid-column:
     1 / -1;
+
+  width: 100%;
 
   border: 0;
 
@@ -1079,12 +1353,21 @@ img {
   font-weight: 900;
 
   font-size: 15px;
+
+  transition: 0.2s ease;
+}
+
+.btn-whatsapp:hover {
+  background: #1ea351;
+
+  transform:
+    translateY(-1px);
 }
 
 
-/* =========================
+/* =========================================================
    RODAPÉ
-========================= */
+========================================================= */
 
 footer {
   text-align: center;
@@ -1100,6 +1383,8 @@ footer {
 
 .rodape-logo {
   font-size: 38px;
+
+  margin-bottom: 8px;
 }
 
 footer h2 {
@@ -1116,6 +1401,7 @@ footer p {
 
 .rodape-linha {
   width: 55px;
+
   height: 3px;
 
   margin:
@@ -1131,9 +1417,9 @@ footer small {
 }
 
 
-/* =========================
-   NOTIFICAÇÃO
-========================= */
+/* =========================================================
+   TOAST / NOTIFICAÇÃO
+========================================================= */
 
 .toast {
   position: fixed;
@@ -1141,10 +1427,15 @@ footer small {
   z-index: 2000;
 
   left: 50%;
+
   top: 100px;
 
   transform:
     translate(-50%, -15px);
+
+  width: max-content;
+
+  max-width: 90%;
 
   padding: 12px 17px;
 
@@ -1155,11 +1446,19 @@ footer small {
   border:
     1px solid #303030;
 
+  box-shadow:
+    0 12px 35px
+    rgba(0, 0, 0, 0.35);
+
   opacity: 0;
 
   pointer-events: none;
 
   transition: 0.25s;
+
+  font-size: 13px;
+
+  text-align: center;
 }
 
 .toast.ativo {
@@ -1170,9 +1469,9 @@ footer small {
 }
 
 
-/* =========================
+/* =========================================================
    TABLET
-========================= */
+========================================================= */
 
 @media (max-width: 900px) {
 
@@ -1181,18 +1480,27 @@ footer small {
       repeat(2, 1fr);
   }
 
+  .banner::after {
+    opacity: 0.45;
+
+    right: -3%;
+  }
+
 }
 
 
-/* =========================
+/* =========================================================
    CELULAR
-========================= */
+========================================================= */
 
 @media (max-width: 650px) {
 
   body {
     padding-bottom: 88px;
   }
+
+
+  /* TOPO */
 
   .topo-conteudo {
     width: 94%;
@@ -1202,7 +1510,14 @@ footer small {
 
   .logo-icone {
     width: 42px;
+
     height: 42px;
+
+    border-radius: 12px;
+  }
+
+  .logo-area {
+    gap: 9px;
   }
 
   .logo-area h1 {
@@ -1214,10 +1529,17 @@ footer small {
   }
 
   .status-loja {
+    max-width: 145px;
+
+    padding: 8px 10px;
+
     font-size: 10px;
 
-    padding: 8px;
+    line-height: 1.2;
   }
+
+
+  /* BANNER */
 
   .banner {
     min-height: 410px;
@@ -1230,6 +1552,8 @@ footer small {
   .banner::after {
     right: -15%;
 
+    top: 34%;
+
     font-size: 190px;
 
     opacity: 0.38;
@@ -1237,6 +1561,8 @@ footer small {
 
   .banner h2 {
     font-size: 42px;
+
+    letter-spacing: -1.5px;
   }
 
   .banner p {
@@ -1244,6 +1570,9 @@ footer small {
 
     font-size: 14px;
   }
+
+
+  /* INFORMAÇÕES */
 
   .informacoes {
     grid-template-columns: 1fr;
@@ -1253,11 +1582,21 @@ footer small {
     width: 94%;
   }
 
+
+  /* CATEGORIAS */
+
   .categorias {
     width: 94%;
 
     top: 66px;
+
+    border-radius: 13px;
+
+    padding: 8px;
   }
+
+
+  /* CARDÁPIO */
 
   .cardapio {
     width: 94%;
@@ -1265,7 +1604,12 @@ footer small {
 
   .produtos-grid {
     grid-template-columns: 1fr;
+
+    gap: 14px;
   }
+
+
+  /* CARD DO PRODUTO */
 
   .produto {
     display: grid;
@@ -1279,21 +1623,69 @@ footer small {
   .produto-imagem {
     height: 100%;
 
+    min-height: 140px;
+
     aspect-ratio: auto;
   }
 
+  .produto-imagem img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center;
+  }
+
+
+  /* BEBIDAS NO CELULAR */
+
+  .bebida-imagem {
+    height: 100%;
+
+    min-height: 140px;
+  }
+
+  .bebida-imagem img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    padding: 0;
+  }
+
+
   .produto-conteudo {
     padding: 14px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
   }
 
   .produto-conteudo h3 {
     font-size: 16px;
+
+    line-height: 1.2;
   }
 
   .produto-conteudo p {
     min-height: auto;
 
     font-size: 12px;
+  }
+
+  .produto-rodape {
+    align-items: flex-end;
+
+    margin-top: 12px;
   }
 
   .preco {
@@ -1306,11 +1698,25 @@ footer small {
     font-size: 11px;
   }
 
-  .carrinho-flutuante {
-    width: 94%;
+  .selo-produto {
+    left: 7px;
 
-    bottom: 12px;
+    top: 7px;
+
+    font-size: 9px;
   }
+
+
+  /* CARRINHO */
+
+  .carrinho-flutuante {
+    bottom: 12px;
+
+    width: 94%;
+  }
+
+
+  /* FINALIZAÇÃO */
 
   .formulario-pedido {
     grid-template-columns: 1fr;
@@ -1330,7 +1736,9 @@ footer small {
 }
 
 
-/* CELULAR PEQUENO */
+/* =========================================================
+   CELULAR PEQUENO
+========================================================= */
 
 @media (max-width: 390px) {
 
@@ -1339,8 +1747,31 @@ footer small {
       112px 1fr;
   }
 
+  .produto-imagem,
+  .bebida-imagem {
+    min-height: 135px;
+  }
+
+  .produto-conteudo {
+    padding: 12px;
+  }
+
+  .produto-rodape {
+    gap: 7px;
+  }
+
+  .btn-adicionar {
+    padding: 8px;
+  }
+
   .banner h2 {
     font-size: 37px;
+  }
+
+  .status-loja {
+    max-width: 120px;
+
+    font-size: 9px;
   }
 
 }

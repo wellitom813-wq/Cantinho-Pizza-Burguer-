@@ -1,0 +1,17 @@
+let produtosAdmin=[],filtroStatus="todos";
+const cfg=window.SUPABASE_CONFIG||{},sb=cfg.url&&cfg.key?window.supabase.createClient(cfg.url,cfg.key):null;
+const loginArea=document.getElementById("loginArea"),adminArea=document.getElementById("adminArea"),lista=document.getElementById("listaProdutos"),msg=document.getElementById("loginMsg");
+function toast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("active");clearTimeout(window._t);window._t=setTimeout(()=>e.classList.remove("active"),1500)}
+function stats(){totalProdutos.textContent=produtosAdmin.length;totalDisponiveis.textContent=produtosAdmin.filter(p=>p.disponivel!==false).length;totalEsgotados.textContent=produtosAdmin.filter(p=>p.disponivel===false).length}
+function render(){const termo=buscaAdmin.value.toLowerCase().trim();const dados=produtosAdmin.filter(p=>{const n=String(p.nome||p.produto_id||"").toLowerCase();const t=!termo||n.includes(termo);const s=filtroStatus==="todos"||(filtroStatus==="disponiveis"&&p.disponivel!==false)||(filtroStatus==="esgotados"&&p.disponivel===false);return t&&s});emptyAdmin.hidden=dados.length!==0;lista.innerHTML=dados.map(p=>{const ok=p.disponivel!==false;return `<article class="product ${ok?"":"esgotado"}"><div><strong>${p.nome||p.produto_id}</strong><div class="status ${ok?"ok":"no"}">${ok?"Disponível":"ESGOTADO"}</div></div><button class="toggle" onclick="alterarStatus('${p.produto_id}',${ok?"false":"true"})">${ok?"Marcar esgotado":"Disponibilizar"}</button></article>`}).join("")}
+async function carregar(){const {data,error}=await sb.from("produtos_estoque").select("produto_id,nome,disponivel").order("nome");if(error){lista.innerHTML=`<p>${error.message}</p>`;return}produtosAdmin=data||[];stats();render()}
+async function alterarStatus(id,disponivel){const {error}=await sb.from("produtos_estoque").update({disponivel}).eq("produto_id",id);if(error)return alert(error.message);toast(disponivel?"Produto disponível":"Produto esgotado");carregar()}
+async function alterarTodos(disponivel){if(!confirm(disponivel?"Marcar todos disponíveis?":"Marcar todos esgotados?"))return;for(const p of produtosAdmin){const {error}=await sb.from("produtos_estoque").update({disponivel}).eq("produto_id",p.produto_id);if(error)return alert(error.message)}toast("Estoque atualizado");carregar()}
+async function mostrarSessao(){if(!sb){msg.textContent="Supabase não configurado.";return}const {data}=await sb.auth.getSession();const logado=!!data.session;loginArea.hidden=logado;adminArea.hidden=!logado;if(logado)carregar()}
+btnEntrar.onclick=async()=>{msg.textContent="";const email=document.getElementById("email").value.trim(),password=document.getElementById("senha").value;if(!email||!password){msg.textContent="Preencha e-mail e senha.";return}const {error}=await sb.auth.signInWithPassword({email,password});if(error){msg.textContent="Não foi possível entrar: "+error.message;return}mostrarSessao()};
+btnSair.onclick=async()=>{await sb.auth.signOut();mostrarSessao()};
+buscaAdmin.addEventListener("input",render);
+document.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>{filtroStatus=b.dataset.status;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");render()}));
+btnTodosDisponiveis.onclick=()=>alterarTodos(true);
+btnTodosEsgotados.onclick=()=>alterarTodos(false);
+mostrarSessao();

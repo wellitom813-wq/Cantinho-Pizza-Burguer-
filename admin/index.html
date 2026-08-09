@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#050505">
+  <title>Painel Administrativo | Cantinho Pizza Burguer</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<section id="loginArea" class="login-wrap">
+  <div class="login-card">
+    <div class="brand">🍕</div>
+    <span>ACESSO RESTRITO</span>
+    <h1>Painel Administrativo</h1>
+    <p>Controle quais produtos aparecem como disponíveis ou esgotados.</p>
+    <label>E-mail<input id="email" type="email" placeholder="Seu e-mail"></label>
+    <label>Senha<input id="senha" type="password" placeholder="Sua senha"></label>
+    <button id="btnEntrar">Entrar</button>
+    <p id="loginMsg" class="msg"></p>
+    <a href="../">← Voltar para a loja</a>
+  </div>
+</section>
+
+<section id="adminArea" class="dashboard" hidden>
+  <header>
+    <div>
+      <span>CANTINHO PIZZA BURGUER</span>
+      <h1>Controle de Estoque</h1>
+    </div>
+    <div class="header-actions">
+      <a href="../">Ver loja</a>
+      <button id="btnSair">Sair</button>
+    </div>
+  </header>
+
+  <div class="stats">
+    <article><span>Produtos</span><strong id="totalProdutos">0</strong></article>
+    <article><span>Disponíveis</span><strong id="totalDisponiveis">0</strong></article>
+    <article><span>Esgotados</span><strong id="totalEsgotados">0</strong></article>
+  </div>
+
+  <div class="toolbar">
+    <input id="buscaAdmin" type="search" placeholder="Buscar produto">
+    <div class="filters">
+      <button class="filter active" data-status="todos">Todos</button>
+      <button class="filter" data-status="disponiveis">Disponíveis</button>
+      <button class="filter" data-status="esgotados">Esgotados</button>
+    </div>
+  </div>
+
+  <div class="bulk">
+    <button id="btnTodosDisponiveis">Todos disponíveis</button>
+    <button id="btnTodosEsgotados">Todos esgotados</button>
+  </div>
+
+  <div id="listaProdutos" class="products"></div>
+  <p id="emptyAdmin" class="empty" hidden>Nenhum produto encontrado.</p>
+</section>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

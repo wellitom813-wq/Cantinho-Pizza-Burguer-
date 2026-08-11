@@ -1,4 +1,4 @@
-const NUMERO_WHATSAPP = "5587991532323";
+const NUMERO_WHATSAPP = "COLOQUE_SEU_NUMERO_AQUI";
 
 const DIAS_ABERTOS = [0, 2, 3, 5, 6];
 const HORA_ABERTURA = 18;
@@ -16,6 +16,7 @@ let carrinho = JSON.parse(
 );
 
 let estoque = {};
+let catalogoProdutos = {};
 let tipoPedido = "Entrega";
 let filtroAtual = "todos";
 let somenteFavoritos = false;
@@ -165,29 +166,163 @@ function disponivel(id) {
   return !(id in estoque) || estoque[id] !== false;
 }
 
+function dadosProduto(id, nomeFallback = "", precoFallback = 0) {
+  const banco = catalogoProdutos[id];
+
+  if (!banco) {
+    return {
+      nome: nomeFallback,
+      preco: Number(precoFallback || 0)
+    };
+  }
+
+  return {
+    nome:
+      String(banco.nome || "").trim() ||
+      nomeFallback,
+
+    preco:
+      banco.preco === null ||
+      banco.preco === undefined
+        ? Number(precoFallback || 0)
+        : Number(banco.preco)
+  };
+}
+
+function sincronizarCarrinhoComCatalogo() {
+  let alterou = false;
+
+  carrinho.forEach(item => {
+    const banco = catalogoProdutos[item.id];
+
+    if (!banco) return;
+
+    const novoNome =
+      String(banco.nome || "").trim();
+
+    const novoPreco =
+      Number(banco.preco);
+
+    if (
+      novoNome &&
+      item.nome !== novoNome
+    ) {
+      item.nome = novoNome;
+      alterou = true;
+    }
+
+    if (
+      Number.isFinite(novoPreco) &&
+      item.preco !== novoPreco
+    ) {
+      item.preco = novoPreco;
+      alterou = true;
+    }
+  });
+
+  if (alterou) {
+    salvar();
+  }
+}
+
 async function carregarEstoque() {
   if (!sb) return false;
 
   const { data, error } = await sb
     .from("produtos_estoque")
-    .select("produto_id,disponivel");
+    .select(
+      "produto_id,nome,preco,disponivel"
+    );
 
   if (error) {
-    console.error("Erro ao carregar estoque:", error);
+    console.error(
+      "Erro ao carregar produtos:",
+      error
+    );
     return false;
   }
 
   estoque = {};
+  catalogoProdutos = {};
 
   (data || []).forEach(item => {
-    estoque[item.produto_id] =
+    const id = item.produto_id;
+
+    estoque[id] =
       item.disponivel !== false;
+
+    catalogoProdutos[id] = {
+      nome: item.nome,
+      preco:
+        item.preco === null
+          ? null
+          : Number(item.preco),
+      disponivel:
+        item.disponivel !== false
+    };
   });
 
+  sincronizarCarrinhoComCatalogo();
   atualizarProdutos();
   atualizarCarrinho();
+  aplicarFiltro();
 
   return true;
+}
+
+function iniciarRealtimeProdutos() {
+  if (!sb) return;
+
+  sb
+    .channel("cantinho-produtos-publico")
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "produtos_estoque"
+      },
+      payload => {
+        if (
+          payload.eventType === "DELETE" &&
+          payload.old?.produto_id
+        ) {
+          delete estoque[
+            payload.old.produto_id
+          ];
+
+          delete catalogoProdutos[
+            payload.old.produto_id
+          ];
+        }
+
+        if (
+          payload.new?.produto_id
+        ) {
+          const item = payload.new;
+          const id = item.produto_id;
+
+          estoque[id] =
+            item.disponivel !== false;
+
+          catalogoProdutos[id] = {
+            nome: item.nome,
+            preco:
+              item.preco === null
+                ? null
+                : Number(item.preco),
+            disponivel:
+              item.disponivel !== false
+          };
+        }
+
+        sincronizarCarrinhoComCatalogo();
+        atualizarProdutos();
+        atualizarCarrinho();
+        aplicarFiltro();
+      }
+    )
+    .subscribe();
 }
 
 function produtosEsgotadosNoCarrinho() {
@@ -204,9 +339,53 @@ function atualizarProdutos() {
     .forEach(card => {
       const id = card.dataset.produtoId;
       const ok = disponivel(id);
-      const botao = card.querySelector(".add-button");
+      const botao =
+        card.querySelector(".add-button");
 
-      card.classList.toggle("sold-out", !ok);
+      const titulo =
+        card.querySelector(".product-info h3");
+
+      const precoEl =
+        card.querySelector(".price");
+
+      const fallbackNome =
+        titulo?.textContent?.trim() || "";
+
+      const precoTexto =
+        precoEl?.textContent || "0";
+
+      const fallbackPreco =
+        Number(
+          precoTexto
+            .replace(/[R$\s.]/g, "")
+            .replace(",", ".")
+        ) || 0;
+
+      const dados =
+        dadosProduto(
+          id,
+          fallbackNome,
+          fallbackPreco
+        );
+
+      if (titulo && dados.nome) {
+        titulo.textContent = dados.nome;
+      }
+
+      if (precoEl) {
+        precoEl.textContent =
+          moeda(dados.preco);
+      }
+
+      if (dados.nome) {
+        card.dataset.name =
+          dados.nome.toLowerCase();
+      }
+
+      card.classList.toggle(
+        "sold-out",
+        !ok
+      );
 
       if (!botao) return;
 
@@ -218,12 +397,14 @@ function atualizarProdutos() {
 
       if (!aberta) {
         botao.disabled = true;
-        botao.textContent = "Loja fechada";
+        botao.textContent =
+          "Loja fechada";
         return;
       }
 
       botao.disabled = false;
-      botao.textContent = "Adicionar";
+      botao.textContent =
+        "Adicionar";
     });
 }
 
@@ -244,17 +425,32 @@ function adicionarProduto(id, nome, preco) {
     return;
   }
 
+  const dados =
+    dadosProduto(
+      id,
+      nome,
+      preco
+    );
+
+  const nomeAtual =
+    dados.nome || nome;
+
+  const precoAtual =
+    Number(dados.preco);
+
   const item = carrinho.find(
     produto => produto.id === id
   );
 
   if (item) {
+    item.nome = nomeAtual;
+    item.preco = precoAtual;
     item.qtd++;
   } else {
     carrinho.push({
       id,
-      nome,
-      preco: Number(preco),
+      nome: nomeAtual,
+      preco: precoAtual,
       qtd: 1
     });
   }
@@ -891,6 +1087,7 @@ document.addEventListener(
 
     atualizarStatus();
     iniciarRealtimeStatusLoja();
+    iniciarRealtimeProdutos();
 
     setInterval(
       () =>

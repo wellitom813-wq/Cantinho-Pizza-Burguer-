@@ -1,73 +1,147 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="theme-color" content="#050505">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0b0b">
   <title>Painel Administrativo | Cantinho Pizza Burguer</title>
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-<section id="loginArea" class="login-wrap">
-  <div class="login-card">
-    <div class="brand">🍕</div>
-    <span>ACESSO RESTRITO</span>
-    <h1>Painel Administrativo</h1>
-    <p>Controle quais produtos aparecem como disponíveis ou esgotados.</p>
-    <label>E-mail<input id="email" type="email" placeholder="Seu e-mail"></label>
-    <label>Senha<input id="senha" type="password" placeholder="Sua senha"></label>
-    <button id="btnEntrar">Entrar</button>
-    <p id="loginMsg" class="msg"></p>
-    <a href="../">← Voltar para a loja</a>
-  </div>
-</section>
+  <main class="page-shell">
+    <section id="loginView" class="auth-card">
+      <div class="brand-icon">🍕</div>
+      <span class="eyebrow">ACESSO RESTRITO</span>
+      <h1>Painel Administrativo</h1>
+      <p>Controle completo do cardápio, fotos, preços, estoque, categorias, taxas, horários e status da loja.</p>
 
-<section id="adminArea" class="dashboard" hidden>
-  <header>
-    <div>
-      <span>CANTINHO PIZZA BURGUER</span>
-      <h1>Controle de Estoque</h1>
+      <form id="loginForm" class="stack">
+        <label>
+          <span>E-mail</span>
+          <input id="email" type="email" autocomplete="username" placeholder="Seu e-mail" required>
+        </label>
+        <label>
+          <span>Senha</span>
+          <input id="senha" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+        </label>
+        <button id="btnEntrar" class="btn primary" type="submit">Entrar</button>
+        <p id="loginMsg" class="msg"></p>
+      </form>
+      <a class="back-link" href="../">← Voltar para a loja</a>
+    </section>
+
+    <section id="dashboardView" class="dashboard hidden">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">CANTINHO PIZZA BURGUER</span>
+          <h1>Painel Administrativo</h1>
+          <p id="adminEmail" class="muted"></p>
+        </div>
+        <button id="btnSair" class="btn ghost" type="button">Sair</button>
+      </header>
+
+      <section class="card store-card">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">STATUS DA LOJA</span>
+            <h2>Controle de abertura</h2>
+          </div>
+          <span id="storeBadge" class="status-badge">Carregando...</span>
+        </div>
+        <p id="storeHelp" class="muted"></p>
+        <div class="status-actions">
+          <button class="btn success" type="button" data-store-mode="aberta">ABRIR LOJA AGORA</button>
+          <button class="btn danger" type="button" data-store-mode="fechada">FECHAR LOJA AGORA</button>
+          <button class="btn secondary" type="button" data-store-mode="automatico">VOLTAR AO HORÁRIO AUTOMÁTICO</button>
+        </div>
+        <p id="storeMsg" class="msg"></p>
+      </section>
+
+      <section class="card">
+        <div class="section-head wrap-head">
+          <div>
+            <span class="eyebrow">GERENCIAR CARDÁPIO</span>
+            <h2>Controle total</h2>
+          </div>
+          <button id="btnNovoProduto" class="btn primary" type="button">+ Novo produto</button>
+        </div>
+
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="produtos" type="button">🍔 Produtos</button>
+          <button class="tab" data-tab="categorias" type="button">🗂️ Categorias</button>
+          <button class="tab" data-tab="config" type="button">⚙️ Configurações</button>
+        </div>
+
+        <div id="tabProdutos" class="tab-panel">
+          <div class="stats-grid">
+            <div class="stat"><span>Total</span><strong id="statTotal">0</strong></div>
+            <div class="stat"><span>Disponíveis</span><strong id="statDisponiveis">0</strong></div>
+            <div class="stat"><span>Esgotados</span><strong id="statEsgotados">0</strong></div>
+            <div class="stat"><span>Ocultos</span><strong id="statOcultos">0</strong></div>
+          </div>
+
+          <div class="toolbar">
+            <input id="buscaProduto" type="search" placeholder="Buscar produto...">
+            <select id="filtroCategoria"><option value="todos">Todas as categorias</option></select>
+            <button id="btnTodosDisponiveis" class="btn success" type="button">Todos disponíveis</button>
+            <button id="btnTodosEsgotados" class="btn danger" type="button">Todos esgotados</button>
+          </div>
+          <p id="produtoMsg" class="msg"></p>
+          <div id="listaProdutos" class="product-list"></div>
+        </div>
+
+        <div id="tabCategorias" class="tab-panel hidden">
+          <div class="section-head wrap-head inner-head">
+            <div><h3>Categorias</h3><p class="muted">Crie, edite, oculte e organize as categorias.</p></div>
+            <button id="btnNovaCategoria" class="btn primary" type="button">+ Nova categoria</button>
+          </div>
+          <p id="categoriaMsg" class="msg"></p>
+          <div id="listaCategorias" class="category-list"></div>
+        </div>
+
+        <div id="tabConfig" class="tab-panel hidden">
+          <form id="configForm" class="config-form">
+            <label class="full"><span>WhatsApp dos pedidos</span><input id="cfgWhatsapp" placeholder="5587999999999"></label>
+            <label><span>Horário de abertura</span><input id="cfgAbertura" type="time"></label>
+            <label><span>Horário de fechamento</span><input id="cfgFechamento" type="time"></label>
+
+            <fieldset class="full">
+              <legend>Dias de funcionamento automático</legend>
+              <div class="days-grid">
+                <label><input type="checkbox" name="dia" value="0"> Domingo</label>
+                <label><input type="checkbox" name="dia" value="1"> Segunda</label>
+                <label><input type="checkbox" name="dia" value="2"> Terça</label>
+                <label><input type="checkbox" name="dia" value="3"> Quarta</label>
+                <label><input type="checkbox" name="dia" value="4"> Quinta</label>
+                <label><input type="checkbox" name="dia" value="5"> Sexta</label>
+                <label><input type="checkbox" name="dia" value="6"> Sábado</label>
+              </div>
+            </fieldset>
+
+            <label><span>Taxa N1</span><input id="cfgN1" type="number" min="0" step="0.01"></label>
+            <label><span>Taxa N3</span><input id="cfgN3" type="number" min="0" step="0.01"></label>
+            <label><span>Taxa N5</span><input id="cfgN5" type="number" min="0" step="0.01"></label>
+            <label><span>Taxa C2</span><input id="cfgC2" type="number" min="0" step="0.01"></label>
+            <div class="full"><button class="btn primary" type="submit">Salvar configurações</button></div>
+            <p id="configMsg" class="msg full"></p>
+          </form>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="modalTitle">Editar</h2>
+        <button id="btnFecharModal" class="icon-btn" type="button" aria-label="Fechar">✕</button>
+      </div>
+      <div id="modalBody"></div>
     </div>
-    <div class="header-actions">
-      <a href="../">Ver loja</a>
-      <button id="btnSair">Sair</button>
-    </div>
-  </header>
-
-  <div class="stats">
-    <article><span>Produtos</span><strong id="totalProdutos">0</strong></article>
-    <article><span>Disponíveis</span><strong id="totalDisponiveis">0</strong></article>
-    <article><span>Esgotados</span><strong id="totalEsgotados">0</strong></article>
   </div>
 
-  <div class="toolbar">
-    <input id="buscaAdmin" type="search" placeholder="Buscar produto">
-    <div class="filters">
-      <button class="filter active" data-status="todos">Todos</button>
-      <button class="filter" data-status="disponiveis">Disponíveis</button>
-      <button class="filter" data-status="esgotados">Esgotados</button>
-    </div>
-  </div>
-
-  <div class="bulk">
-    <button id="btnTodosDisponiveis">Todos disponíveis</button>
-    <button id="btnTodosEsgotados">Todos esgotados</button>
-  </div>
-
-  <div id="listaProdutos" class="products"></div>
-  <p id="emptyAdmin" class="empty" hidden>Nenhum produto encontrado.</p>
-</section>
-
-<div id="toast" class="toast"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../config.js"></script>
-<script src="admin.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../config.js"></script>
-<script src="admin.js"></script>
-<script src="loja-status-admin.js"></script>
-<script src="produto-editor-admin.js"></script>
-  <!-- atualizar administrador -->
+  <script src="admin.js"></script>
 </body>
 </html>

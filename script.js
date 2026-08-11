@@ -1,28 +1,30 @@
 /* ============================================================
    CANTINHO PIZZA BURGUER
    SCRIPT.JS COMPLETO
-   CARDÁPIO + SUPABASE + CARRINHO + STATUS DA LOJA
 
-   VERSÃO:
-   - TEXTO MAIOR
+   VERSÃO NOVA
+   - PREÇOS VERDES
    - DESCRIÇÃO COMPLETA
-   - SEM "..."
-   - CARDÁPIO RESPONSIVO
+   - LETRAS MAIORES
+   - CARRINHO MODERNO
+   - BOTÕES: − | QTD | + | ×
+   - SUPABASE
+   - STATUS DA LOJA
+   - FAVORITOS
+   - CHECKOUT
 ============================================================ */
 
 
 /* ============================================================
-   CONFIGURAÇÕES PADRÃO
+   CONFIGURAÇÃO PADRÃO
 ============================================================ */
 
 const PADRAO_DIAS_ABERTOS = [0, 2, 3, 5, 6];
 
 let configCardapio = {
   whatsapp: "COLOQUE_SEU_NUMERO_AQUI",
-
   hora_abertura: "18:00:00",
   hora_fechamento: "22:00:00",
-
   dias_abertos: PADRAO_DIAS_ABERTOS,
 
   taxa_n1: 4,
@@ -35,17 +37,12 @@ let configCardapio = {
 
 
 /* ============================================================
-   DADOS DO CARDÁPIO
+   VARIÁVEIS
 ============================================================ */
 
 let categoriasCardapio = [];
 let produtosCardapio = [];
 let produtosPorId = {};
-
-
-/* ============================================================
-   CARRINHO
-============================================================ */
 
 let carrinho = JSON.parse(
   localStorage.getItem("cantinho_carrinho") || "[]"
@@ -58,7 +55,7 @@ let modoLoja = "automatico";
 
 
 /* ============================================================
-   CONEXÃO SUPABASE
+   SUPABASE
 ============================================================ */
 
 const cfg =
@@ -122,24 +119,19 @@ function escaparJs(texto) {
 
 function minutosDeHora(hora) {
   const partes =
-    String(hora || "00:00")
-      .split(":");
+    String(hora || "00:00").split(":");
 
-  const horas =
+  const h =
     Number(partes[0] || 0);
 
-  const minutos =
+  const m =
     Number(partes[1] || 0);
 
-  return (
-    horas * 60 +
-    minutos
-  );
+  return h * 60 + m;
 }
 
 function horaCurta(hora) {
-  return String(hora || "")
-    .slice(0, 5);
+  return String(hora || "").slice(0, 5);
 }
 
 function salvarCarrinho() {
@@ -151,13 +143,7 @@ function salvarCarrinho() {
 
 
 /* ============================================================
-   CSS DO CARDÁPIO
-
-   IMPORTANTE:
-   - DESCRIÇÃO NÃO É CORTADA
-   - NÃO USA LINE-CLAMP
-   - NÃO COLOCA ...
-   - LETRAS MAIORES
+   CSS COMPLETO DO CARDÁPIO + CARRINHO
 ============================================================ */
 
 function instalarCssCardapio() {
@@ -172,14 +158,13 @@ function instalarCssCardapio() {
   const style =
     document.createElement("style");
 
-  style.id =
-    "cantinho-cardapio-fix";
+  style.id = "cantinho-cardapio-fix";
 
   style.textContent = `
 
-    /* =========================================
-       CONTAINER PRINCIPAL
-    ========================================= */
+    /* =====================================================
+       CARDÁPIO
+    ===================================================== */
 
     #sectionsContainer {
       width: 100%;
@@ -187,32 +172,24 @@ function instalarCssCardapio() {
       margin: 0 auto;
     }
 
-
-    /* =========================================
-       SEÇÕES
-    ========================================= */
-
     .category-section {
       width: 100%;
-      margin: 0 0 32px;
+      margin: 0 0 34px;
     }
 
     .section-title {
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-
       gap: 12px;
-
       margin: 28px 2px 15px;
     }
 
     .section-title > div > span {
       display: block;
-
       margin-bottom: 5px;
 
-      color: #9d9d9d;
+      color: #9f9f9f;
 
       font-size: 12px;
       font-weight: 800;
@@ -236,9 +213,9 @@ function instalarCssCardapio() {
     }
 
 
-    /* =========================================
-       GRADE DOS PRODUTOS
-    ========================================= */
+    /* =====================================================
+       GRADE
+    ===================================================== */
 
     .category-grid {
       display: grid !important;
@@ -252,9 +229,9 @@ function instalarCssCardapio() {
     }
 
 
-    /* =========================================
-       CARD DO PRODUTO
-    ========================================= */
+    /* =====================================================
+       CARD PRODUTO
+    ===================================================== */
 
     .product-card {
       position: relative;
@@ -268,18 +245,24 @@ function instalarCssCardapio() {
 
       border:
         1px solid
-        rgba(255,255,255,.10);
+        rgba(255,255,255,.09);
 
       border-radius: 18px;
 
-      background: #151515;
-      color: #ffffff;
+      background:
+        linear-gradient(
+          180deg,
+          #171717,
+          #121212
+        );
+
+      color: #fff;
     }
 
 
-    /* =========================================
+    /* =====================================================
        FOTO
-    ========================================= */
+    ===================================================== */
 
     .product-image {
       position: relative;
@@ -306,9 +289,9 @@ function instalarCssCardapio() {
     }
 
 
-    /* =========================================
-       INFORMAÇÕES
-    ========================================= */
+    /* =====================================================
+       INFO
+    ===================================================== */
 
     .product-info {
       display: flex;
@@ -319,37 +302,36 @@ function instalarCssCardapio() {
     }
 
 
-    /* =========================================
-       NOME DO PRODUTO
-    ========================================= */
+    /* =====================================================
+       NOME
+    ===================================================== */
 
     .product-info h3 {
       display: block;
 
-      width: 100%;
-
       margin: 0 0 8px;
 
-      overflow: visible;
-
-      color: #ffffff;
+      color: #fff;
 
       font-size: 17px;
       font-weight: 900;
 
-      line-height: 1.25;
+      line-height: 1.3;
 
       white-space: normal;
+
+      overflow: visible;
 
       text-overflow: unset;
     }
 
 
-    /* =========================================
-       DESCRIÇÃO
+    /* =====================================================
+       DESCRIÇÃO COMPLETA
 
-       NUNCA CORTAR TEXTO
-    ========================================= */
+       SEM ...
+       SEM CORTAR LINHAS
+    ===================================================== */
 
     .product-info p {
       display: block !important;
@@ -357,12 +339,11 @@ function instalarCssCardapio() {
       width: 100%;
 
       height: auto !important;
+
       min-height: 0 !important;
       max-height: none !important;
 
-      margin: 0 0 14px;
-
-      padding: 0;
+      margin: 0 0 15px;
 
       overflow: visible !important;
 
@@ -377,7 +358,6 @@ function instalarCssCardapio() {
 
       text-overflow: unset !important;
 
-      word-break: normal;
       overflow-wrap: break-word;
 
       -webkit-line-clamp: unset !important;
@@ -385,9 +365,9 @@ function instalarCssCardapio() {
     }
 
 
-    /* =========================================
-       PREÇO + BOTÃO
-    ========================================= */
+    /* =====================================================
+       PREÇO + ADICIONAR
+    ===================================================== */
 
     .product-bottom {
       display: flex;
@@ -395,59 +375,62 @@ function instalarCssCardapio() {
       align-items: center;
       justify-content: space-between;
 
-      gap: 8px;
+      gap: 9px;
 
       width: 100%;
 
       margin-top: auto;
     }
 
+
+    /* PREÇO VERDE */
+
     .product-bottom .price {
-      display: block;
+      color: #31d56f !important;
 
-      color: #ff6a32;
-
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 900;
 
       white-space: nowrap;
     }
 
+
+    /* BOTÃO ADICIONAR */
+
     .product-bottom .add-button {
-      min-width: 0;
+      padding: 10px 12px;
 
-      padding: 10px 11px;
+      border: none;
 
-      border: 0;
       border-radius: 10px;
 
-      background: #e54125;
-      color: #ffffff;
+      background: #e74627;
+
+      color: white;
 
       font-size: 12px;
       font-weight: 900;
-
-      line-height: 1.2;
 
       cursor: pointer;
     }
 
     .product-bottom .add-button:disabled {
       background: #303030;
-      color: #9a9a9a;
+
+      color: #999;
 
       cursor: not-allowed;
     }
 
 
-    /* =========================================
-       FAVORITO
-    ========================================= */
+    /* =====================================================
+       FAVORITOS
+    ===================================================== */
 
     .heart {
       position: absolute;
 
-      z-index: 4;
+      z-index: 5;
 
       top: 9px;
       right: 9px;
@@ -457,18 +440,19 @@ function instalarCssCardapio() {
       align-items: center;
       justify-content: center;
 
-      width: 34px;
-      height: 34px;
+      width: 35px;
+      height: 35px;
 
       padding: 0;
 
-      border: 0;
+      border: none;
+
       border-radius: 50%;
 
       background:
-        rgba(0,0,0,.68);
+        rgba(0,0,0,.7);
 
-      color: #ffffff;
+      color: white;
 
       font-size: 20px;
 
@@ -476,20 +460,20 @@ function instalarCssCardapio() {
     }
 
     .heart.active {
-      color: #ff4545;
+      color: #ff4c4c;
     }
 
 
-    /* =========================================
+    /* =====================================================
        ESGOTADO
-    ========================================= */
+    ===================================================== */
 
     .sold-overlay {
       display: none;
 
       position: absolute;
 
-      z-index: 3;
+      z-index: 4;
 
       inset: 0;
 
@@ -501,24 +485,24 @@ function instalarCssCardapio() {
       padding: 12px;
 
       background:
-        rgba(0,0,0,.70);
+        rgba(0,0,0,.72);
 
       text-align: center;
     }
 
     .sold-overlay strong {
-      color: #ffffff;
-
       font-size: 18px;
       font-weight: 900;
+
+      color: white;
     }
 
     .sold-overlay span {
       margin-top: 4px;
 
-      color: #dddddd;
-
       font-size: 12px;
+
+      color: #ddd;
     }
 
     .product-card.sold-out
@@ -527,20 +511,246 @@ function instalarCssCardapio() {
     }
 
 
-    /* =========================================
-       FILTROS
-    ========================================= */
+    /* =====================================================
+       FILTRO
+    ===================================================== */
 
     .filtered-out {
       display: none !important;
     }
 
 
-    /* =========================================
-       CELULARES MUITO PEQUENOS
-    ========================================= */
+    /* =====================================================
+       MEU PEDIDO / CARRINHO
 
-    @media(max-width: 380px) {
+       NOVO VISUAL
+    ===================================================== */
+
+    #cartList {
+      display: flex;
+      flex-direction: column;
+
+      gap: 12px;
+
+      padding-top: 8px;
+    }
+
+
+    /* ITEM */
+
+    .cart-item {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 14px;
+
+      width: 100%;
+
+      padding: 14px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.09);
+
+      border-radius: 16px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #1b1b1b,
+          #111111
+        );
+    }
+
+
+    /* INFORMAÇÕES DO ITEM */
+
+    .cart-item-info {
+      flex: 1;
+
+      min-width: 0;
+    }
+
+    .cart-item-info strong {
+      display: block;
+
+      margin: 0 0 5px;
+
+      color: #ffffff;
+
+      font-size: 15px;
+      font-weight: 800;
+
+      line-height: 1.3;
+    }
+
+
+    /* PREÇO NO CARRINHO */
+
+    .cart-item-price {
+      display: block;
+
+      color: #31d56f !important;
+
+      font-size: 14px;
+
+      font-weight: 900;
+    }
+
+
+    /* CONTROLES */
+
+    .cart-item-actions {
+      display: flex;
+
+      align-items: center;
+
+      gap: 5px;
+
+      flex-shrink: 0;
+
+      padding: 4px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+      border-radius: 13px;
+
+      background: #0c0c0c;
+    }
+
+
+    /* MENOS / MAIS */
+
+    .cart-qty-btn {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      width: 32px;
+      height: 32px;
+
+      padding: 0;
+
+      border: none;
+
+      border-radius: 9px;
+
+      background: #232323;
+
+      color: white;
+
+      font-size: 19px;
+      font-weight: 800;
+
+      cursor: pointer;
+    }
+
+    .cart-qty-btn:active {
+      transform: scale(.94);
+    }
+
+
+    /* QUANTIDADE */
+
+    .cart-item-qty {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      min-width: 27px;
+
+      color: white;
+
+      font-size: 15px;
+      font-weight: 900;
+
+      text-align: center;
+    }
+
+
+    /* EXCLUIR */
+
+    .cart-remove-btn {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      width: 32px;
+      height: 32px;
+
+      margin-left: 3px;
+
+      padding: 0;
+
+      border: none;
+
+      border-radius: 9px;
+
+      background:
+        rgba(255,65,65,.13);
+
+      color: #ff5a5a;
+
+      font-size: 17px;
+      font-weight: 900;
+
+      cursor: pointer;
+    }
+
+    .cart-remove-btn:active {
+      transform: scale(.94);
+    }
+
+
+    /* CARRINHO VAZIO */
+
+    .cart-empty {
+      width: 100%;
+
+      padding: 26px 16px;
+
+      border:
+        1px dashed
+        rgba(255,255,255,.13);
+
+      border-radius: 16px;
+
+      color: #aaa;
+
+      text-align: center;
+
+      font-size: 14px;
+    }
+
+
+    /* =====================================================
+       SUBTOTAL DO CARRINHO
+    ===================================================== */
+
+    #cartSubtotal,
+    #checkoutSubtotal,
+    #checkoutTotal {
+      font-weight: 900;
+    }
+
+    #cartSubtotal,
+    #checkoutTotal {
+      color: #31d56f;
+    }
+
+
+    /* =====================================================
+       CELULAR PEQUENO
+    ===================================================== */
+
+    @media(max-width:380px) {
 
       .category-grid {
         gap: 9px;
@@ -560,37 +770,55 @@ function instalarCssCardapio() {
 
       .product-info p {
         font-size: 13px;
-        line-height: 1.45;
+
+        line-height: 1.5;
       }
 
       .product-bottom {
         flex-direction: column;
+
         align-items: stretch;
       }
 
       .product-bottom .price {
-        font-size: 16px;
+        font-size: 17px;
       }
 
-      .product-bottom .add-button {
+      .product-bottom
+      .add-button {
         width: 100%;
+      }
 
-        padding: 10px;
 
-        font-size: 12px;
+      /* MEU PEDIDO NO CELULAR */
+
+      .cart-item {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        padding: 13px;
+      }
+
+      .cart-item-actions {
+        align-self: flex-start;
+      }
+
+      .cart-item-info strong {
+        font-size: 15px;
       }
     }
 
 
-    /* =========================================
+    /* =====================================================
        TABLET
-    ========================================= */
+    ===================================================== */
 
-    @media(min-width: 760px) {
+    @media(min-width:760px) {
 
       .category-grid {
         grid-template-columns:
-          repeat(3, minmax(0, 1fr));
+          repeat(3,minmax(0,1fr));
 
         gap: 16px;
       }
@@ -610,30 +838,31 @@ function instalarCssCardapio() {
       .product-info p {
         font-size: 15px;
 
-        line-height: 1.5;
+        line-height: 1.55;
       }
 
       .product-bottom .price {
-        font-size: 18px;
+        font-size: 19px;
       }
 
-      .product-bottom .add-button {
-        padding: 11px 14px;
+      .product-bottom
+      .add-button {
+        padding: 11px 15px;
 
         font-size: 13px;
       }
     }
 
 
-    /* =========================================
+    /* =====================================================
        COMPUTADOR
-    ========================================= */
+    ===================================================== */
 
-    @media(min-width: 1050px) {
+    @media(min-width:1050px) {
 
       .category-grid {
         grid-template-columns:
-          repeat(4, minmax(0, 1fr));
+          repeat(4,minmax(0,1fr));
       }
 
       .product-image {
@@ -642,9 +871,7 @@ function instalarCssCardapio() {
     }
   `;
 
-  document.head.appendChild(
-    style
-  );
+  document.head.appendChild(style);
 }
 
 
@@ -687,35 +914,27 @@ function atualizarTaxasNoHtml() {
     .querySelectorAll(
       ".fee-grid article"
     )
-    .forEach(
-      card => {
+    .forEach(card => {
 
-        const codigo =
-          card
-            .querySelector(
-              "strong"
-            )
-            ?.textContent
-            ?.trim();
+      const codigo =
+        card
+          .querySelector("strong")
+          ?.textContent
+          ?.trim();
 
-        const span =
-          card.querySelector(
-            "span"
-          );
+      const span =
+        card.querySelector("span");
 
-        if (
-          codigo &&
-          span &&
-          codigo in taxas
-        ) {
+      if (
+        codigo &&
+        span &&
+        codigo in taxas
+      ) {
 
-          span.textContent =
-            moeda(
-              taxas[codigo]
-            );
-        }
+        span.textContent =
+          moeda(taxas[codigo]);
       }
-    );
+    });
 
 
   const select =
@@ -724,32 +943,26 @@ function atualizarTaxasNoHtml() {
   if (select) {
 
     Array
-      .from(
-        select.options
-      )
-      .forEach(
-        option => {
+      .from(select.options)
+      .forEach(option => {
 
-          if (
-            option.value &&
-            option.value in taxas
-          ) {
+        if (
+          option.value &&
+          option.value in taxas
+        ) {
 
-            option.textContent =
-              `${option.value} — ${moeda(
-                taxas[
-                  option.value
-                ]
-              )}`;
-          }
+          option.textContent =
+            `${option.value} — ${moeda(
+              taxas[option.value]
+            )}`;
         }
-      );
+      });
   }
 }
 
 
 /* ============================================================
-   CARREGAR CONFIGURAÇÃO DO SUPABASE
+   CONFIGURAÇÕES
 ============================================================ */
 
 async function carregarConfigCardapio({
@@ -765,16 +978,11 @@ async function carregarConfigCardapio({
     error
   } =
     await sb
-      .from(
-        "config_cardapio"
-      )
+      .from("config_cardapio")
       .select(
         "whatsapp,hora_abertura,hora_fechamento,dias_abertos,taxa_n1,taxa_n3,taxa_n5,taxa_c2,modo_loja"
       )
-      .eq(
-        "id",
-        1
-      )
+      .eq("id", 1)
       .single();
 
 
@@ -800,10 +1008,7 @@ async function carregarConfigCardapio({
         Array.isArray(
           data.dias_abertos
         )
-          ? data
-              .dias_abertos
-              .map(Number)
-
+          ? data.dias_abertos.map(Number)
           : PADRAO_DIAS_ABERTOS
     };
 
@@ -813,9 +1018,7 @@ async function carregarConfigCardapio({
         "automatico",
         "aberta",
         "fechada"
-      ].includes(
-        data.modo_loja
-      )
+      ].includes(data.modo_loja)
     ) {
 
       modoLoja =
@@ -840,7 +1043,7 @@ async function carregarConfigCardapio({
 
 
 /* ============================================================
-   STATUS DA LOJA
+   STATUS
 ============================================================ */
 
 async function carregarStatusLoja({
@@ -853,7 +1056,6 @@ async function carregarStatusLoja({
       "automatico";
 
     if (atualizar) {
-
       atualizarStatus();
     }
 
@@ -866,16 +1068,9 @@ async function carregarStatusLoja({
     error
   } =
     await sb
-      .from(
-        "config_cardapio"
-      )
-      .select(
-        "modo_loja"
-      )
-      .eq(
-        "id",
-        1
-      )
+      .from("config_cardapio")
+      .select("modo_loja")
+      .eq("id", 1)
       .single();
 
 
@@ -887,7 +1082,6 @@ async function carregarStatusLoja({
     );
 
     if (atualizar) {
-
       atualizarStatus();
     }
 
@@ -900,9 +1094,7 @@ async function carregarStatusLoja({
       "automatico",
       "aberta",
       "fechada"
-    ].includes(
-      data?.modo_loja
-    )
+    ].includes(data?.modo_loja)
   ) {
 
     modoLoja =
@@ -914,7 +1106,6 @@ async function carregarStatusLoja({
 
 
   if (atualizar) {
-
     atualizarStatus();
   }
 
@@ -924,7 +1115,7 @@ async function carregarStatusLoja({
 
 
 /* ============================================================
-   HORÁRIO AUTOMÁTICO
+   HORÁRIO
 ============================================================ */
 
 function lojaAbertaNoAutomatico() {
@@ -953,9 +1144,7 @@ function lojaAbertaNoAutomatico() {
     Array.isArray(
       configCardapio.dias_abertos
     )
-
       ? configCardapio.dias_abertos
-
       : PADRAO_DIAS_ABERTOS;
 
 
@@ -969,29 +1158,23 @@ function lojaAbertaNoAutomatico() {
 function lojaAberta() {
 
   if (
-    modoLoja ===
-    "aberta"
+    modoLoja === "aberta"
   ) {
-
     return true;
   }
 
-
   if (
-    modoLoja ===
-    "fechada"
+    modoLoja === "fechada"
   ) {
-
     return false;
   }
-
 
   return lojaAbertaNoAutomatico();
 }
 
 
 /* ============================================================
-   ATUALIZAR STATUS VISUAL
+   STATUS VISUAL
 ============================================================ */
 
 function atualizarStatus() {
@@ -1002,7 +1185,6 @@ function atualizarStatus() {
 
   const status =
     el("statusLoja") ||
-
     document.querySelector(
       ".status-loja"
     );
@@ -1010,36 +1192,29 @@ function atualizarStatus() {
 
   const texto =
     el("statusTexto") ||
-
-    status
-      ?.querySelector(
-        "span:last-child"
-      );
+    status?.querySelector(
+      "span:last-child"
+    );
 
 
   if (status) {
 
-    status
-      .classList
-      .toggle(
-        "closed",
-        !aberta
-      );
+    status.classList.toggle(
+      "closed",
+      !aberta
+    );
 
-    status
-      .classList
-      .toggle(
-        "fechado",
-        !aberta
-      );
+    status.classList.toggle(
+      "fechado",
+      !aberta
+    );
   }
 
 
   if (texto) {
 
     if (
-      modoLoja ===
-      "aberta"
+      modoLoja === "aberta"
     ) {
 
       texto.textContent =
@@ -1047,8 +1222,7 @@ function atualizarStatus() {
     }
 
     else if (
-      modoLoja ===
-      "fechada"
+      modoLoja === "fechada"
     ) {
 
       texto.textContent =
@@ -1078,7 +1252,7 @@ function atualizarStatus() {
 
 
 /* ============================================================
-   CARREGAR CARDÁPIO DO SUPABASE
+   CARREGAR CARDÁPIO
 ============================================================ */
 
 async function carregarCardapio({
@@ -1086,11 +1260,6 @@ async function carregarCardapio({
 } = {}) {
 
   if (!sb) {
-
-    console.error(
-      "Supabase não configurado."
-    );
-
     return false;
   }
 
@@ -1102,9 +1271,7 @@ async function carregarCardapio({
     await Promise.all([
 
       sb
-        .from(
-          "categorias_cardapio"
-        )
+        .from("categorias_cardapio")
         .select(
           "slug,nome,emoji,ordem,ativo"
         )
@@ -1123,9 +1290,7 @@ async function carregarCardapio({
 
 
       sb
-        .from(
-          "produtos_estoque"
-        )
+        .from("produtos_estoque")
         .select(
           "produto_id,nome,preco,descricao,categoria,imagem_url,disponivel,ativo,destaque,ordem"
         )
@@ -1165,8 +1330,8 @@ async function carregarCardapio({
       []
     )
       .filter(
-        categoria =>
-          categoria.ativo !== false
+        item =>
+          item.ativo !== false
       );
 
 
@@ -1176,26 +1341,21 @@ async function carregarCardapio({
       []
     )
       .filter(
-        produto =>
-          produto.ativo !== false
+        item =>
+          item.ativo !== false
       )
       .map(
-        produto => ({
+        item => ({
 
-          ...produto,
+          ...item,
 
           preco:
             Number(
-              produto.preco || 0
+              item.preco || 0
             ),
 
           disponivel:
-            produto.disponivel !==
-            false,
-
-          destaque:
-            produto.destaque ===
-            true
+            item.disponivel !== false
         })
       );
 
@@ -1204,15 +1364,13 @@ async function carregarCardapio({
 
 
   produtosCardapio
-    .forEach(
-      produto => {
+    .forEach(produto => {
 
-        produtosPorId[
-          produto.produto_id
-        ] =
-          produto;
-      }
-    );
+      produtosPorId[
+        produto.produto_id
+      ] =
+        produto;
+    });
 
 
   sincronizarCarrinhoComCardapio();
@@ -1247,62 +1405,48 @@ function sincronizarCarrinhoComCardapio() {
 
 
   carrinho =
-    carrinho.filter(
-      item => {
+    carrinho.filter(item => {
 
-        const atual =
-          produtosPorId[
-            item.id
-          ];
+      const atual =
+        produtosPorId[item.id];
 
 
-        if (
-          !atual ||
-          atual.ativo === false
-        ) {
+      if (
+        !atual ||
+        atual.ativo === false
+      ) {
 
-          mudou =
-            true;
+        mudou = true;
 
-          return false;
-        }
-
-
-        if (
-          item.nome !==
-          atual.nome
-        ) {
-
-          item.nome =
-            atual.nome;
-
-          mudou =
-            true;
-        }
-
-
-        if (
-          Number(
-            item.preco
-          ) !==
-          Number(
-            atual.preco
-          )
-        ) {
-
-          item.preco =
-            Number(
-              atual.preco
-            );
-
-          mudou =
-            true;
-        }
-
-
-        return true;
+        return false;
       }
-    );
+
+
+      if (
+        item.nome !== atual.nome
+      ) {
+
+        item.nome =
+          atual.nome;
+
+        mudou = true;
+      }
+
+
+      if (
+        Number(item.preco) !==
+        Number(atual.preco)
+      ) {
+
+        item.preco =
+          Number(atual.preco);
+
+        mudou = true;
+      }
+
+
+      return true;
+    });
 
 
   if (mudou) {
@@ -1313,7 +1457,7 @@ function sincronizarCarrinhoComCardapio() {
 
 
 /* ============================================================
-   RENDERIZAR CARDÁPIO
+   RENDER CARDÁPIO
 ============================================================ */
 
 function renderizarCardapio() {
@@ -1328,19 +1472,13 @@ function renderizarCardapio() {
 
 
   const container =
-    el(
-      "sectionsContainer"
-    );
+    el("sectionsContainer");
 
 
   if (
     !nav ||
     !container
   ) {
-
-    console.warn(
-      "Não encontrei .category-nav ou #sectionsContainer no index.html."
-    );
 
     return;
   }
@@ -1350,8 +1488,7 @@ function renderizarCardapio() {
     `
       <button
         class="${
-          filtroAtual ===
-          "todos"
+          filtroAtual === "todos"
             ? "active"
             : ""
         }"
@@ -1360,7 +1497,6 @@ function renderizarCardapio() {
       >
         ✨ Todos
       </button>
-
 
       ${
         categoriasCardapio
@@ -1402,106 +1538,101 @@ function renderizarCardapio() {
     .querySelectorAll(
       "button[data-cat]"
     )
-    .forEach(
-      botao => {
+    .forEach(botao => {
 
-        botao.addEventListener(
-          "click",
-          () => {
+      botao.addEventListener(
+        "click",
+        () => {
 
-            filtrarCategoria(
-              botao.dataset.cat
-            );
-          }
-        );
-      }
-    );
+          filtrarCategoria(
+            botao.dataset.cat
+          );
+        }
+      );
+    });
 
 
   const html =
     categoriasCardapio
-      .map(
-        categoria => {
+      .map(categoria => {
 
-          const produtos =
-            produtosCardapio
-              .filter(
-                produto =>
-                  produto.categoria ===
-                  categoria.slug
-              );
-
-
-          if (
-            !produtos.length
-          ) {
-
-            return "";
-          }
-
-
-          return `
-
-            <section
-              class="category-section"
-
-              data-section-category="${escaparHtml(
+        const produtos =
+          produtosCardapio
+            .filter(
+              produto =>
+                produto.categoria ===
                 categoria.slug
-              )}"
+            );
+
+
+        if (
+          !produtos.length
+        ) {
+
+          return "";
+        }
+
+
+        return `
+
+          <section
+            class="category-section"
+
+            data-section-category="${escaparHtml(
+              categoria.slug
+            )}"
+          >
+
+            <div
+              class="section-title"
             >
 
-              <div
-                class="section-title"
-              >
+              <div>
 
-                <div>
+                <span>
+                  CARDÁPIO
+                </span>
 
-                  <span>
-                    CARDÁPIO
-                  </span>
+                <h2>
 
-                  <h2>
+                  ${escaparHtml(
+                    categoria.emoji ||
+                    "🍽️"
+                  )}
 
-                    ${escaparHtml(
-                      categoria.emoji ||
-                      "🍽️"
-                    )}
+                  ${escaparHtml(
+                    categoria.nome
+                  )}
 
-                    ${escaparHtml(
-                      categoria.nome
-                    )}
-
-                  </h2>
-
-                </div>
+                </h2>
 
               </div>
 
+            </div>
 
-              <div
-                class="category-grid"
-              >
 
-                ${
-                  produtos
-                    .map(
-                      renderizarProduto
-                    )
-                    .join("")
-                }
+            <div
+              class="category-grid"
+            >
 
-              </div>
+              ${
+                produtos
+                  .map(
+                    renderizarProduto
+                  )
+                  .join("")
+              }
 
-            </section>
-          `;
-        }
-      )
+            </div>
+
+          </section>
+        `;
+      })
       .join("");
 
 
   container.innerHTML =
     html ||
-
     `
       <div
         class="empty-search"
@@ -1524,9 +1655,7 @@ function renderizarCardapio() {
 
 
 /* ============================================================
-   RENDERIZAR PRODUTO
-
-   A DESCRIÇÃO É COLOCADA COMPLETA.
+   RENDER PRODUTO
 ============================================================ */
 
 function renderizarProduto(
@@ -1535,13 +1664,11 @@ function renderizarProduto(
 
   const imagem =
     produto.imagem_url ||
-
     "https://placehold.co/800x600/171717/ffffff?text=Produto";
 
 
   const descricao =
-    produto.descricao ||
-    "";
+    produto.descricao || "";
 
 
   return `
@@ -1561,7 +1688,8 @@ function renderizarProduto(
       data-name="${escaparHtml(
         String(
           produto.nome || ""
-        ).toLowerCase()
+        )
+          .toLowerCase()
       )}"
     >
 
@@ -1630,16 +1758,20 @@ function renderizarProduto(
       >
 
         <h3>
+
           ${escaparHtml(
             produto.nome
           )}
+
         </h3>
 
 
         <p>
+
           ${escaparHtml(
             descricao
           )}
+
         </p>
 
 
@@ -1670,9 +1802,7 @@ function renderizarProduto(
               )
             "
           >
-
             Adicionar
-
           </button>
 
         </div>
@@ -1685,7 +1815,7 @@ function renderizarProduto(
 
 
 /* ============================================================
-   ESTADO VISUAL DOS PRODUTOS
+   VISUAL PRODUTOS
 ============================================================ */
 
 function atualizarProdutosVisual() {
@@ -1698,99 +1828,71 @@ function atualizarProdutosVisual() {
     .querySelectorAll(
       ".product-card"
     )
-    .forEach(
-      card => {
+    .forEach(card => {
 
-        const id =
-          card.dataset.produtoId;
-
-
-        const produto =
-          produtosPorId[id];
+      const produto =
+        produtosPorId[
+          card.dataset.produtoId
+        ];
 
 
-        const botao =
-          card.querySelector(
-            ".add-button"
-          );
+      const botao =
+        card.querySelector(
+          ".add-button"
+        );
 
 
-        if (
-          !produto ||
-          !botao
-        ) {
+      if (
+        !produto ||
+        !botao
+      ) {
 
-          return;
-        }
-
-
-        const disponivel =
-          produto.disponivel !==
-          false;
+        return;
+      }
 
 
-        card
-          .classList
-          .toggle(
-            "sold-out",
-            !disponivel
-          );
+      const disponivel =
+        produto.disponivel !== false;
 
 
-        if (!disponivel) {
-
-          botao.disabled =
-            true;
-
-          botao.textContent =
-            "Esgotado";
-
-          return;
-        }
+      card.classList.toggle(
+        "sold-out",
+        !disponivel
+      );
 
 
-        if (!aberta) {
+      if (!disponivel) {
 
-          botao.disabled =
-            true;
-
-          botao.textContent =
-            "Loja fechada";
-
-          return;
-        }
-
-
-        botao.disabled =
-          false;
+        botao.disabled = true;
 
         botao.textContent =
-          "Adicionar";
+          "Esgotado";
+
+        return;
       }
-    );
+
+
+      if (!aberta) {
+
+        botao.disabled = true;
+
+        botao.textContent =
+          "Loja fechada";
+
+        return;
+      }
+
+
+      botao.disabled = false;
+
+      botao.textContent =
+        "Adicionar";
+    });
 }
 
 
 /* ============================================================
-   PRODUTO DISPONÍVEL
-============================================================ */
-
-function produtoDisponivel(id) {
-
-  const produto =
-    produtosPorId[id];
-
-
-  return (
-    !!produto &&
-    produto.disponivel !== false &&
-    produto.ativo !== false
-  );
-}
-
-
-/* ============================================================
-   ADICIONAR AO CARRINHO
+   ADICIONAR
 ============================================================ */
 
 function adicionarProduto(
@@ -1842,8 +1944,8 @@ function adicionarProduto(
 
   const item =
     carrinho.find(
-      produtoCarrinho =>
-        produtoCarrinho.id === id
+      item =>
+        item.id === id
     );
 
 
@@ -1874,7 +1976,7 @@ function adicionarProduto(
 
 
 /* ============================================================
-   REDUZIR PRODUTO
+   MENOS
 ============================================================ */
 
 function reduzirProduto(id) {
@@ -1898,11 +2000,9 @@ function reduzirProduto(id) {
     item.qtd <= 0
   ) {
 
-    carrinho =
-      carrinho.filter(
-        produto =>
-          produto.id !== id
-      );
+    removerProduto(id);
+
+    return;
   }
 
 
@@ -1913,7 +2013,7 @@ function reduzirProduto(id) {
 
 
 /* ============================================================
-   REMOVER PRODUTO
+   EXCLUIR
 ============================================================ */
 
 function removerProduto(id) {
@@ -1928,11 +2028,16 @@ function removerProduto(id) {
   salvarCarrinho();
 
   atualizarCarrinho();
+
+
+  toast(
+    "Produto removido"
+  );
 }
 
 
 /* ============================================================
-   CÁLCULOS
+   TOTAL
 ============================================================ */
 
 function subtotal() {
@@ -1942,7 +2047,6 @@ function subtotal() {
       soma,
       item
     ) =>
-
       soma +
       Number(item.preco) *
       Number(item.qtd),
@@ -1958,7 +2062,6 @@ function quantidade() {
       soma,
       item
     ) =>
-
       soma +
       Number(item.qtd),
 
@@ -1993,7 +2096,7 @@ function taxa() {
 
 
 /* ============================================================
-   ATUALIZAR CARRINHO
+   CARRINHO MODERNO
 ============================================================ */
 
 function atualizarCarrinho() {
@@ -2014,16 +2117,14 @@ function atualizarCarrinho() {
     el("headerCartCount"),
     el("floatingCartCount")
   ]
-    .forEach(
-      contador => {
+    .forEach(contador => {
 
-        if (contador) {
+      if (contador) {
 
-          contador.textContent =
-            qtd;
-        }
+        contador.textContent =
+          qtd;
       }
-    );
+    });
 
 
   if (
@@ -2048,106 +2149,146 @@ function atualizarCarrinho() {
   }
 
 
-  if (lista) {
+  if (!lista) {
 
-    if (
-      !carrinho.length
-    ) {
+    atualizarResumo();
 
-      lista.innerHTML =
-        `
+    return;
+  }
+
+
+  if (
+    !carrinho.length
+  ) {
+
+    lista.innerHTML =
+      `
+        <div
+          class="cart-empty"
+        >
+          🛒 Seu pedido está vazio.
+        </div>
+      `;
+
+
+    atualizarResumo();
+
+    return;
+  }
+
+
+  lista.innerHTML =
+    carrinho
+      .map(
+        item => `
+
           <div
-            class="cart-empty"
+            class="cart-item"
           >
-            Seu carrinho está vazio.
-          </div>
-        `;
-    }
 
-    else {
 
-      lista.innerHTML =
-        carrinho
-          .map(
-            item => `
+            <div
+              class="cart-item-info"
+            >
 
-              <div
-                class="cart-item"
+              <strong>
+
+                ${escaparHtml(
+                  item.nome
+                )}
+
+              </strong>
+
+
+              <span
+                class="cart-item-price"
               >
 
-                <div>
+                ${moeda(
+                  Number(item.preco) *
+                  Number(item.qtd)
+                )}
 
-                  <strong>
-                    ${escaparHtml(
-                      item.nome
-                    )}
-                  </strong>
+              </span>
 
-                  <span>
-                    ${moeda(
-                      Number(item.preco) *
-                      Number(item.qtd)
-                    )}
-                  </span>
-
-                </div>
+            </div>
 
 
-                <div
-                  class="cart-item-actions"
-                >
-
-                  <button
-                    onclick="
-                      reduzirProduto(
-                        '${escaparJs(
-                          item.id
-                        )}'
-                      )
-                    "
-                  >
-                    −
-                  </button>
+            <div
+              class="cart-item-actions"
+            >
 
 
-                  <b>
-                    ${item.qtd}
-                  </b>
+              <button
+
+                class="cart-qty-btn"
+
+                onclick="
+                  reduzirProduto(
+                    '${escaparJs(
+                      item.id
+                    )}'
+                  )
+                "
+
+                aria-label="Diminuir quantidade"
+              >
+                −
+              </button>
 
 
-                  <button
-                    onclick="
-                      adicionarProduto(
-                        '${escaparJs(
-                          item.id
-                        )}'
-                      )
-                    "
-                  >
-                    +
-                  </button>
+              <span
+                class="cart-item-qty"
+              >
+
+                ${item.qtd}
+
+              </span>
 
 
-                  <button
-                    onclick="
-                      removerProduto(
-                        '${escaparJs(
-                          item.id
-                        )}'
-                      )
-                    "
-                  >
-                    ×
-                  </button>
+              <button
 
-                </div>
+                class="cart-qty-btn"
 
-              </div>
-            `
-          )
-          .join("");
-    }
-  }
+                onclick="
+                  adicionarProduto(
+                    '${escaparJs(
+                      item.id
+                    )}'
+                  )
+                "
+
+                aria-label="Aumentar quantidade"
+              >
+                +
+              </button>
+
+
+              <button
+
+                class="cart-remove-btn"
+
+                onclick="
+                  removerProduto(
+                    '${escaparJs(
+                      item.id
+                    )}'
+                  )
+                "
+
+                aria-label="Excluir produto"
+              >
+                ×
+              </button>
+
+
+            </div>
+
+
+          </div>
+        `
+      )
+      .join("");
 
 
   atualizarResumo();
@@ -2155,7 +2296,7 @@ function atualizarCarrinho() {
 
 
 /* ============================================================
-   ABRIR / FECHAR CARRINHO
+   ABRIR CARRINHO
 ============================================================ */
 
 function abrirCarrinho() {
@@ -2168,6 +2309,11 @@ function abrirCarrinho() {
   document.body.style.overflow =
     "hidden";
 }
+
+
+/* ============================================================
+   FECHAR CARRINHO
+============================================================ */
 
 function fecharCarrinho() {
 
@@ -2199,11 +2345,8 @@ function itensInvalidosCarrinho() {
       return (
         produto &&
         (
-          produto.disponivel ===
-            false ||
-
-          produto.ativo ===
-            false
+          produto.disponivel === false ||
+          produto.ativo === false
         )
       );
     }
@@ -2212,7 +2355,7 @@ function itensInvalidosCarrinho() {
 
 
 /* ============================================================
-   ABRIR CHECKOUT
+   CHECKOUT
 ============================================================ */
 
 async function abrirCheckout() {
@@ -2222,7 +2365,7 @@ async function abrirCheckout() {
   ) {
 
     toast(
-      "Seu carrinho está vazio"
+      "Seu pedido está vazio"
     );
 
     return;
@@ -2265,7 +2408,7 @@ async function abrirCheckout() {
 
     alert(
 
-      "Alguns itens estão esgotados ou indisponíveis:\n\n" +
+      "Alguns produtos ficaram indisponíveis:\n\n" +
 
       invalidos
         .map(
@@ -2361,7 +2504,7 @@ function selecionarTipo(tipo) {
 
 
 /* ============================================================
-   RESUMO CHECKOUT
+   RESUMO
 ============================================================ */
 
 function atualizarResumo() {
@@ -2464,12 +2607,10 @@ function toggleFavorito(
 
   lista =
     lista.includes(id)
-
       ? lista.filter(
           item =>
             item !== id
         )
-
       : [
           ...lista,
           id
@@ -2497,40 +2638,36 @@ function restaurarFavoritos() {
     .querySelectorAll(
       ".product-card"
     )
-    .forEach(
-      card => {
+    .forEach(card => {
 
-        const botao =
-          card.querySelector(
-            ".heart"
-          );
-
-
-        if (!botao) {
-          return;
-        }
+      const botao =
+        card.querySelector(
+          ".heart"
+        );
 
 
-        const ativo =
-          lista.includes(
-            card.dataset.produtoId
-          );
-
-
-        botao
-          .classList
-          .toggle(
-            "active",
-            ativo
-          );
-
-
-        botao.textContent =
-          ativo
-            ? "♥"
-            : "♡";
+      if (!botao) {
+        return;
       }
-    );
+
+
+      const ativo =
+        lista.includes(
+          card.dataset.produtoId
+        );
+
+
+      botao.classList.toggle(
+        "active",
+        ativo
+      );
+
+
+      botao.textContent =
+        ativo
+          ? "♥"
+          : "♡";
+    });
 }
 
 function mostrarFavoritos() {
@@ -2544,7 +2681,7 @@ function mostrarFavoritos() {
 
 
 /* ============================================================
-   FILTRO DE CATEGORIA
+   FILTROS
 ============================================================ */
 
 function filtrarCategoria(
@@ -2559,28 +2696,19 @@ function filtrarCategoria(
     .querySelectorAll(
       ".category-nav button"
     )
-    .forEach(
-      botao => {
+    .forEach(botao => {
 
-        botao
-          .classList
-          .toggle(
-            "active",
+      botao.classList.toggle(
+        "active",
 
-            botao.dataset.cat ===
-            categoria
-          );
-      }
-    );
+        botao.dataset.cat ===
+        categoria
+      );
+    });
 
 
   aplicarFiltro();
 }
-
-
-/* ============================================================
-   FILTRO DE PESQUISA
-============================================================ */
 
 function aplicarFiltro() {
 
@@ -2610,87 +2738,77 @@ function aplicarFiltro() {
     .querySelectorAll(
       ".category-section"
     )
-    .forEach(
-      secao => {
+    .forEach(secao => {
 
-        let encontradosSecao =
-          0;
-
-
-        secao
-          .querySelectorAll(
-            ".product-card"
-          )
-          .forEach(
-            card => {
-
-              const categoriaOk =
-                filtroAtual ===
-                  "todos" ||
-
-                card.dataset.category ===
-                  filtroAtual;
+      let encontradosSecao =
+        0;
 
 
-              const pesquisaOk =
-                !termo ||
+      secao
+        .querySelectorAll(
+          ".product-card"
+        )
+        .forEach(card => {
 
-                (
-                  (
-                    card.dataset.name ||
-                    ""
-                  ) +
+          const categoriaOk =
+            filtroAtual ===
+              "todos" ||
 
-                  " " +
-
-                  card.innerText
-                )
-                  .toLowerCase()
-                  .includes(termo);
+            card.dataset.category ===
+              filtroAtual;
 
 
-              const favoritoOk =
-                !somenteFavoritos ||
+          const pesquisaOk =
+            !termo ||
 
-                favs.includes(
-                  card.dataset.produtoId
-                );
+            (
+              (
+                card.dataset.name ||
+                ""
+              ) +
 
+              " " +
 
-              const mostrar =
-                categoriaOk &&
-                pesquisaOk &&
-                favoritoOk;
-
-
-              card
-                .classList
-                .toggle(
-                  "filtered-out",
-                  !mostrar
-                );
+              card.innerText
+            )
+              .toLowerCase()
+              .includes(termo);
 
 
-              if (mostrar) {
+          const favoritoOk =
+            !somenteFavoritos ||
 
-                encontrados += 1;
-
-                encontradosSecao += 1;
-              }
-            }
-          );
+            favs.includes(
+              card.dataset.produtoId
+            );
 
 
-        secao
-          .classList
-          .toggle(
+          const mostrar =
+            categoriaOk &&
+            pesquisaOk &&
+            favoritoOk;
+
+
+          card.classList.toggle(
             "filtered-out",
-
-            encontradosSecao ===
-            0
+            !mostrar
           );
-      }
-    );
+
+
+          if (mostrar) {
+
+            encontrados++;
+
+            encontradosSecao++;
+          }
+        });
+
+
+      secao.classList.toggle(
+        "filtered-out",
+        encontradosSecao === 0
+      );
+    });
 
 
   el("emptySearch")
@@ -2701,24 +2819,13 @@ function aplicarFiltro() {
     );
 }
 
-
-/* ============================================================
-   SINCRONIZAR CAMPO DE PESQUISA
-============================================================ */
-
 function syncSearch(origem) {
 
   const destino =
     origem.id ===
       "searchDesktop"
-
-      ? el(
-          "searchMobile"
-        )
-
-      : el(
-          "searchDesktop"
-        );
+      ? el("searchMobile")
+      : el("searchDesktop");
 
 
   if (destino) {
@@ -2733,7 +2840,7 @@ function syncSearch(origem) {
 
 
 /* ============================================================
-   ROLAR PARA CARDÁPIO
+   INTERFACE
 ============================================================ */
 
 function rolarCardapio() {
@@ -2743,11 +2850,6 @@ function rolarCardapio() {
       behavior: "smooth"
     });
 }
-
-
-/* ============================================================
-   TOAST
-============================================================ */
 
 function toast(texto) {
 
@@ -2764,9 +2866,9 @@ function toast(texto) {
     texto;
 
 
-  elemento
-    .classList
-    .add("active");
+  elemento.classList.add(
+    "active"
+  );
 
 
   clearTimeout(
@@ -2778,9 +2880,9 @@ function toast(texto) {
     setTimeout(
       () => {
 
-        elemento
-          .classList
-          .remove("active");
+        elemento.classList.remove(
+          "active"
+        );
 
       },
       1600
@@ -2825,7 +2927,7 @@ async function finalizarPedido() {
   ) {
 
     alert(
-      "Não foi possível confirmar o pedido agora. Tente novamente em alguns segundos."
+      "Não foi possível confirmar o pedido agora. Tente novamente."
     );
 
     return;
@@ -2842,42 +2944,12 @@ async function finalizarPedido() {
   }
 
 
-  const invalidos =
-    itensInvalidosCarrinho();
-
-
-  if (
-    invalidos.length
-  ) {
-
-    alert(
-
-      "Alguns itens estão esgotados ou indisponíveis:\n\n" +
-
-      invalidos
-        .map(
-          item =>
-            "• " +
-            item.nome
-        )
-        .join("\n") +
-
-      "\n\nRemova esses itens para continuar."
-    );
-
-
-    atualizarCarrinho();
-
-    return;
-  }
-
-
   if (
     !carrinho.length
   ) {
 
     alert(
-      "Seu carrinho está vazio."
+      "Seu pedido está vazio."
     );
 
     return;
@@ -2902,7 +2974,7 @@ async function finalizarPedido() {
   ) {
 
     alert(
-      "Configure o número do WhatsApp no painel administrador."
+      "Configure o WhatsApp no painel administrador."
     );
 
     return;
@@ -2966,7 +3038,6 @@ async function finalizarPedido() {
   if (
     tipoPedido ===
       "Entrega" &&
-
     (
       !regiao ||
       !endereco
@@ -2988,10 +3059,8 @@ async function finalizarPedido() {
   mensagem +=
     `👤 *Cliente:* ${nome}\n`;
 
-
   mensagem +=
     `📱 *Telefone:* ${telefone}\n`;
-
 
   mensagem +=
     `📦 *Recebimento:* ${tipoPedido}\n`;
@@ -3015,17 +3084,14 @@ async function finalizarPedido() {
 
 
   carrinho
-    .forEach(
-      item => {
+    .forEach(item => {
 
-        mensagem +=
-
-          `${item.qtd}x ${item.nome} — ${moeda(
-            Number(item.preco) *
-            Number(item.qtd)
-          )}\n`;
-      }
-    );
+      mensagem +=
+        `${item.qtd}x ${item.nome} — ${moeda(
+          Number(item.preco) *
+          Number(item.qtd)
+        )}\n`;
+    });
 
 
   mensagem +=
@@ -3099,16 +3165,12 @@ function iniciarRealtime() {
     )
 
 
-    /* PRODUTOS */
-
     .on(
       "postgres_changes",
 
       {
         event: "*",
-
         schema: "public",
-
         table:
           "produtos_estoque"
       },
@@ -3120,16 +3182,12 @@ function iniciarRealtime() {
     )
 
 
-    /* CATEGORIAS */
-
     .on(
       "postgres_changes",
 
       {
         event: "*",
-
         schema: "public",
-
         table:
           "categorias_cardapio"
       },
@@ -3141,16 +3199,12 @@ function iniciarRealtime() {
     )
 
 
-    /* CONFIGURAÇÕES */
-
     .on(
       "postgres_changes",
 
       {
         event: "*",
-
         schema: "public",
-
         table:
           "config_cardapio",
 
@@ -3191,9 +3245,7 @@ function iniciarRealtime() {
 
 
 /* ============================================================
-   FUNÇÕES GLOBAIS
-
-   NECESSÁRIAS PARA OS BOTÕES DO HTML
+   FUNÇÕES DOS BOTÕES
 ============================================================ */
 
 window.adicionarProduto =
@@ -3240,7 +3292,7 @@ window.finalizarPedido =
 
 
 /* ============================================================
-   INICIAR SITE
+   INICIAR
 ============================================================ */
 
 document.addEventListener(
@@ -3249,12 +3301,8 @@ document.addEventListener(
   async () => {
 
 
-    /* INSTALAR CSS */
-
     instalarCssCardapio();
 
-
-    /* PESQUISA DESKTOP */
 
     el("searchDesktop")
       ?.addEventListener(
@@ -3269,8 +3317,6 @@ document.addEventListener(
       );
 
 
-    /* PESQUISA CELULAR */
-
     el("searchMobile")
       ?.addEventListener(
         "input",
@@ -3284,8 +3330,6 @@ document.addEventListener(
       );
 
 
-    /* REGIÃO */
-
     el("region")
       ?.addEventListener(
         "change",
@@ -3293,53 +3337,40 @@ document.addEventListener(
       );
 
 
-    /* PAGAMENTO */
-
     el("payment")
       ?.addEventListener(
         "change",
 
         () => {
 
-          const pagamento =
-            el("payment")
-              ?.value;
-
-
           el("changeField")
             ?.classList
             .toggle(
+
               "hidden",
 
-              pagamento !==
+              el("payment")
+                ?.value !==
                 "Dinheiro"
             );
         }
       );
 
 
-    /* CARRINHO */
-
     atualizarCarrinho();
 
-
-    /* SUPABASE NÃO CONFIGURADO */
 
     if (!sb) {
 
       console.error(
-
-        "Supabase não configurado. Verifique config.js e a biblioteca @supabase/supabase-js."
+        "Supabase não configurado. Verifique config.js."
       );
-
 
       atualizarStatus();
 
       return;
     }
 
-
-    /* CARREGAR DADOS */
 
     await Promise.all([
 
@@ -3357,8 +3388,6 @@ document.addEventListener(
     ]);
 
 
-    /* ATUALIZAR TELA */
-
     atualizarTaxasNoHtml();
 
     atualizarStatus();
@@ -3367,13 +3396,8 @@ document.addEventListener(
 
     restaurarFavoritos();
 
-
-    /* REALTIME */
-
     iniciarRealtime();
 
-
-    /* VERIFICAR STATUS A CADA 15 SEGUNDOS */
 
     setInterval(
       () => {
@@ -3385,8 +3409,6 @@ document.addEventListener(
     );
 
 
-    /* ATUALIZAR CARDÁPIO A CADA 60 SEGUNDOS */
-
     setInterval(
       () => {
 
@@ -3397,8 +3419,6 @@ document.addEventListener(
     );
 
 
-    /* ATUALIZAR CONFIGURAÇÕES */
-
     setInterval(
       () => {
 
@@ -3408,8 +3428,6 @@ document.addEventListener(
       60000
     );
 
-
-    /* QUANDO CLIENTE VOLTAR PARA A PÁGINA */
 
     document.addEventListener(
       "visibilitychange",

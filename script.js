@@ -1,25 +1,51 @@
 /* ============================================================
    CANTINHO PIZZA BURGUER
-   SCRIPT.JS COMPLETO — CARDÁPIO + SUPABASE + CARRINHO
+   SCRIPT.JS COMPLETO
+   CARDÁPIO + SUPABASE + CARRINHO + STATUS DA LOJA
+
+   VERSÃO:
+   - TEXTO MAIOR
+   - DESCRIÇÃO COMPLETA
+   - SEM "..."
+   - CARDÁPIO RESPONSIVO
+============================================================ */
+
+
+/* ============================================================
+   CONFIGURAÇÕES PADRÃO
 ============================================================ */
 
 const PADRAO_DIAS_ABERTOS = [0, 2, 3, 5, 6];
 
 let configCardapio = {
   whatsapp: "COLOQUE_SEU_NUMERO_AQUI",
+
   hora_abertura: "18:00:00",
   hora_fechamento: "22:00:00",
+
   dias_abertos: PADRAO_DIAS_ABERTOS,
+
   taxa_n1: 4,
   taxa_n3: 3,
   taxa_n5: 5,
   taxa_c2: 6,
+
   modo_loja: "automatico"
 };
+
+
+/* ============================================================
+   DADOS DO CARDÁPIO
+============================================================ */
 
 let categoriasCardapio = [];
 let produtosCardapio = [];
 let produtosPorId = {};
+
+
+/* ============================================================
+   CARRINHO
+============================================================ */
 
 let carrinho = JSON.parse(
   localStorage.getItem("cantinho_carrinho") || "[]"
@@ -29,6 +55,11 @@ let tipoPedido = "Entrega";
 let filtroAtual = "todos";
 let somenteFavoritos = false;
 let modoLoja = "automatico";
+
+
+/* ============================================================
+   CONEXÃO SUPABASE
+============================================================ */
 
 const cfg =
   window.SUPABASE_CONFIG ||
@@ -54,6 +85,11 @@ const sb =
         SUPABASE_KEY
       )
     : null;
+
+
+/* ============================================================
+   UTILIDADES
+============================================================ */
 
 function el(id) {
   return document.getElementById(id);
@@ -85,16 +121,25 @@ function escaparJs(texto) {
 }
 
 function minutosDeHora(hora) {
-  const [h, m] =
+  const partes =
     String(hora || "00:00")
-      .split(":")
-      .map(Number);
+      .split(":");
 
-  return (h || 0) * 60 + (m || 0);
+  const horas =
+    Number(partes[0] || 0);
+
+  const minutos =
+    Number(partes[1] || 0);
+
+  return (
+    horas * 60 +
+    minutos
+  );
 }
 
 function horaCurta(hora) {
-  return String(hora || "").slice(0, 5);
+  return String(hora || "")
+    .slice(0, 5);
 }
 
 function salvarCarrinho() {
@@ -106,14 +151,22 @@ function salvarCarrinho() {
 
 
 /* ============================================================
-   CORREÇÃO DO VISUAL DOS PRODUTOS
+   CSS DO CARDÁPIO
+
+   IMPORTANTE:
+   - DESCRIÇÃO NÃO É CORTADA
+   - NÃO USA LINE-CLAMP
+   - NÃO COLOCA ...
+   - LETRAS MAIORES
 ============================================================ */
 
 function instalarCssCardapio() {
-  if (
-    el("cantinho-cardapio-fix")
-  ) {
-    return;
+
+  const antigo =
+    el("cantinho-cardapio-fix");
+
+  if (antigo) {
+    antigo.remove();
   }
 
   const style =
@@ -123,263 +176,468 @@ function instalarCssCardapio() {
     "cantinho-cardapio-fix";
 
   style.textContent = `
-    #sectionsContainer{
-      width:100%;
-      max-width:1180px;
-      margin:0 auto;
+
+    /* =========================================
+       CONTAINER PRINCIPAL
+    ========================================= */
+
+    #sectionsContainer {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
     }
 
-    .category-section{
-      width:100%;
-      margin:0 0 28px;
+
+    /* =========================================
+       SEÇÕES
+    ========================================= */
+
+    .category-section {
+      width: 100%;
+      margin: 0 0 32px;
     }
 
-    .section-title{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:12px;
-      margin:24px 0 12px;
+    .section-title {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+
+      gap: 12px;
+
+      margin: 28px 2px 15px;
     }
 
-    .section-title>div>span{
-      display:block;
-      color:#8e8e8e;
-      font-size:10px;
-      font-weight:800;
-      letter-spacing:.08em;
-      margin-bottom:4px;
+    .section-title > div > span {
+      display: block;
+
+      margin-bottom: 5px;
+
+      color: #9d9d9d;
+
+      font-size: 12px;
+      font-weight: 800;
+
+      letter-spacing: .08em;
     }
 
-    .section-title h2{
-      margin:0;
-      color:#fff;
-      font-size:19px;
-      line-height:1.2;
+    .section-title h2 {
+      margin: 0;
+
+      color: #ffffff;
+
+      font-size: 22px;
+      font-weight: 900;
+
+      line-height: 1.25;
     }
 
-    .section-title>button{
-      display:none;
+    .section-title > button {
+      display: none;
     }
 
-    .category-grid{
-      display:grid!important;
+
+    /* =========================================
+       GRADE DOS PRODUTOS
+    ========================================= */
+
+    .category-grid {
+      display: grid !important;
+
       grid-template-columns:
-        repeat(2,minmax(0,1fr));
-      gap:10px;
-      width:100%;
+        repeat(2, minmax(0, 1fr));
+
+      gap: 12px;
+
+      width: 100%;
     }
 
-    .product-card{
-      position:relative;
-      min-width:0;
-      overflow:hidden;
+
+    /* =========================================
+       CARD DO PRODUTO
+    ========================================= */
+
+    .product-card {
+      position: relative;
+
+      display: flex;
+      flex-direction: column;
+
+      min-width: 0;
+
+      overflow: hidden;
 
       border:
         1px solid
-        rgba(255,255,255,.08);
+        rgba(255,255,255,.10);
 
-      border-radius:16px;
+      border-radius: 18px;
 
-      background:#121212;
-      color:#fff;
+      background: #151515;
+      color: #ffffff;
     }
 
-    .product-image{
-      position:relative;
 
-      width:100%;
-      height:145px;
+    /* =========================================
+       FOTO
+    ========================================= */
 
-      overflow:hidden;
+    .product-image {
+      position: relative;
 
-      background:#1b1b1b;
+      width: 100%;
+      height: 155px;
+
+      overflow: hidden;
+
+      background: #202020;
     }
 
-    .product-image img{
-      display:block!important;
+    .product-image img {
+      display: block !important;
 
-      width:100%!important;
-      height:100%!important;
+      width: 100% !important;
+      height: 100% !important;
 
-      max-width:100%!important;
+      max-width: 100% !important;
 
-      object-fit:cover!important;
+      object-fit: cover !important;
+
+      margin: 0 !important;
     }
 
-    .product-info{
-      padding:10px;
+
+    /* =========================================
+       INFORMAÇÕES
+    ========================================= */
+
+    .product-info {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+
+      padding: 13px;
     }
 
-    .product-info h3{
-      margin:0 0 5px;
 
-      color:#fff;
+    /* =========================================
+       NOME DO PRODUTO
+    ========================================= */
 
-      font-size:14px;
-      line-height:1.2;
+    .product-info h3 {
+      display: block;
+
+      width: 100%;
+
+      margin: 0 0 8px;
+
+      overflow: visible;
+
+      color: #ffffff;
+
+      font-size: 17px;
+      font-weight: 900;
+
+      line-height: 1.25;
+
+      white-space: normal;
+
+      text-overflow: unset;
     }
 
-    .product-info p{
-      display:-webkit-box;
 
-      min-height:34px;
+    /* =========================================
+       DESCRIÇÃO
 
-      margin:0 0 9px;
+       NUNCA CORTAR TEXTO
+    ========================================= */
 
-      overflow:hidden;
+    .product-info p {
+      display: block !important;
 
-      color:#aaa;
+      width: 100%;
 
-      font-size:11px;
-      line-height:1.4;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
 
-      -webkit-box-orient:vertical;
-      -webkit-line-clamp:2;
+      margin: 0 0 14px;
+
+      padding: 0;
+
+      overflow: visible !important;
+
+      color: #c7c7c7;
+
+      font-size: 14px;
+      font-weight: 400;
+
+      line-height: 1.5;
+
+      white-space: normal !important;
+
+      text-overflow: unset !important;
+
+      word-break: normal;
+      overflow-wrap: break-word;
+
+      -webkit-line-clamp: unset !important;
+      -webkit-box-orient: initial !important;
     }
 
-    .product-bottom{
-      display:flex;
 
-      align-items:center;
-      justify-content:space-between;
+    /* =========================================
+       PREÇO + BOTÃO
+    ========================================= */
 
-      gap:7px;
+    .product-bottom {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 8px;
+
+      width: 100%;
+
+      margin-top: auto;
     }
 
-    .product-bottom .price{
-      color:#ff6534;
+    .product-bottom .price {
+      display: block;
 
-      font-size:13px;
-      font-weight:900;
+      color: #ff6a32;
 
-      white-space:nowrap;
+      font-size: 16px;
+      font-weight: 900;
+
+      white-space: nowrap;
     }
 
-    .product-bottom .add-button{
-      min-width:0;
+    .product-bottom .add-button {
+      min-width: 0;
 
-      padding:8px 9px;
+      padding: 10px 11px;
 
-      border:0;
-      border-radius:9px;
+      border: 0;
+      border-radius: 10px;
 
-      background:#e43b20;
-      color:#fff;
+      background: #e54125;
+      color: #ffffff;
 
-      font-size:10px;
-      font-weight:900;
+      font-size: 12px;
+      font-weight: 900;
 
-      line-height:1.1;
+      line-height: 1.2;
+
+      cursor: pointer;
     }
 
-    .product-bottom
-    .add-button:disabled{
-      background:#292929;
-      color:#888;
+    .product-bottom .add-button:disabled {
+      background: #303030;
+      color: #9a9a9a;
+
+      cursor: not-allowed;
     }
 
-    .heart{
-      position:absolute;
 
-      z-index:3;
+    /* =========================================
+       FAVORITO
+    ========================================= */
 
-      top:8px;
-      right:8px;
+    .heart {
+      position: absolute;
 
-      width:31px;
-      height:31px;
+      z-index: 4;
 
-      padding:0;
+      top: 9px;
+      right: 9px;
 
-      border:0;
-      border-radius:50%;
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      width: 34px;
+      height: 34px;
+
+      padding: 0;
+
+      border: 0;
+      border-radius: 50%;
 
       background:
-        rgba(0,0,0,.62);
+        rgba(0,0,0,.68);
 
-      color:#fff;
+      color: #ffffff;
 
-      font-size:17px;
+      font-size: 20px;
+
+      cursor: pointer;
     }
 
-    .heart.active{
-      color:#ff4747;
+    .heart.active {
+      color: #ff4545;
     }
 
-    .sold-overlay{
-      display:none;
 
-      position:absolute;
+    /* =========================================
+       ESGOTADO
+    ========================================= */
 
-      z-index:2;
+    .sold-overlay {
+      display: none;
 
-      inset:0;
+      position: absolute;
 
-      align-items:center;
-      justify-content:center;
+      z-index: 3;
 
-      flex-direction:column;
+      inset: 0;
+
+      align-items: center;
+      justify-content: center;
+
+      flex-direction: column;
+
+      padding: 12px;
 
       background:
-        rgba(0,0,0,.64);
+        rgba(0,0,0,.70);
 
-      text-align:center;
+      text-align: center;
     }
 
-    .sold-overlay strong{
-      font-size:16px;
-      color:#fff;
+    .sold-overlay strong {
+      color: #ffffff;
+
+      font-size: 18px;
+      font-weight: 900;
     }
 
-    .sold-overlay span{
-      font-size:10px;
-      color:#ddd;
-      margin-top:3px;
+    .sold-overlay span {
+      margin-top: 4px;
+
+      color: #dddddd;
+
+      font-size: 12px;
     }
 
     .product-card.sold-out
-    .sold-overlay{
-      display:flex;
+    .sold-overlay {
+      display: flex;
     }
 
-    .filtered-out{
-      display:none!important;
+
+    /* =========================================
+       FILTROS
+    ========================================= */
+
+    .filtered-out {
+      display: none !important;
     }
 
-    @media(min-width:760px){
 
-      .category-grid{
+    /* =========================================
+       CELULARES MUITO PEQUENOS
+    ========================================= */
+
+    @media(max-width: 380px) {
+
+      .category-grid {
+        gap: 9px;
+      }
+
+      .product-image {
+        height: 140px;
+      }
+
+      .product-info {
+        padding: 11px;
+      }
+
+      .product-info h3 {
+        font-size: 16px;
+      }
+
+      .product-info p {
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .product-bottom {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .product-bottom .price {
+        font-size: 16px;
+      }
+
+      .product-bottom .add-button {
+        width: 100%;
+
+        padding: 10px;
+
+        font-size: 12px;
+      }
+    }
+
+
+    /* =========================================
+       TABLET
+    ========================================= */
+
+    @media(min-width: 760px) {
+
+      .category-grid {
         grid-template-columns:
-          repeat(3,minmax(0,1fr));
+          repeat(3, minmax(0, 1fr));
 
-        gap:14px;
+        gap: 16px;
       }
 
-      .product-image{
-        height:190px;
+      .product-image {
+        height: 200px;
       }
 
-      .product-info{
-        padding:13px;
+      .product-info {
+        padding: 15px;
       }
 
-      .product-info h3{
-        font-size:16px;
+      .product-info h3 {
+        font-size: 19px;
       }
 
-      .product-info p{
-        font-size:12px;
+      .product-info p {
+        font-size: 15px;
+
+        line-height: 1.5;
       }
 
-      .product-bottom .price{
-        font-size:15px;
+      .product-bottom .price {
+        font-size: 18px;
       }
 
-      .product-bottom
-      .add-button{
-        font-size:12px;
-        padding:10px 12px;
+      .product-bottom .add-button {
+        padding: 11px 14px;
+
+        font-size: 13px;
+      }
+    }
+
+
+    /* =========================================
+       COMPUTADOR
+    ========================================= */
+
+    @media(min-width: 1050px) {
+
+      .category-grid {
+        grid-template-columns:
+          repeat(4, minmax(0, 1fr));
+      }
+
+      .product-image {
+        height: 210px;
       }
     }
   `;
@@ -391,11 +649,13 @@ function instalarCssCardapio() {
 
 
 /* ============================================================
-   CONFIGURAÇÕES
+   TAXAS
 ============================================================ */
 
 function taxasAtuais() {
+
   return {
+
     N1:
       Number(
         configCardapio.taxa_n1 || 0
@@ -448,6 +708,7 @@ function atualizarTaxasNoHtml() {
           span &&
           codigo in taxas
         ) {
+
           span.textContent =
             moeda(
               taxas[codigo]
@@ -455,6 +716,7 @@ function atualizarTaxasNoHtml() {
         }
       }
     );
+
 
   const select =
     el("region");
@@ -472,6 +734,7 @@ function atualizarTaxasNoHtml() {
             option.value &&
             option.value in taxas
           ) {
+
             option.textContent =
               `${option.value} — ${moeda(
                 taxas[
@@ -483,6 +746,11 @@ function atualizarTaxasNoHtml() {
       );
   }
 }
+
+
+/* ============================================================
+   CARREGAR CONFIGURAÇÃO DO SUPABASE
+============================================================ */
 
 async function carregarConfigCardapio({
   atualizar = true
@@ -509,6 +777,7 @@ async function carregarConfigCardapio({
       )
       .single();
 
+
   if (error) {
 
     console.error(
@@ -519,9 +788,11 @@ async function carregarConfigCardapio({
     return false;
   }
 
+
   if (data) {
 
     configCardapio = {
+
       ...configCardapio,
       ...data,
 
@@ -531,11 +802,11 @@ async function carregarConfigCardapio({
         )
           ? data
               .dias_abertos
-              .map(
-                Number
-              )
+              .map(Number)
+
           : PADRAO_DIAS_ABERTOS
     };
+
 
     if (
       [
@@ -546,12 +817,15 @@ async function carregarConfigCardapio({
         data.modo_loja
       )
     ) {
+
       modoLoja =
         data.modo_loja;
     }
   }
 
+
   atualizarTaxasNoHtml();
+
 
   if (atualizar) {
 
@@ -559,6 +833,7 @@ async function carregarConfigCardapio({
 
     atualizarResumo();
   }
+
 
   return true;
 }
@@ -578,11 +853,13 @@ async function carregarStatusLoja({
       "automatico";
 
     if (atualizar) {
+
       atualizarStatus();
     }
 
     return false;
   }
+
 
   const {
     data,
@@ -601,6 +878,7 @@ async function carregarStatusLoja({
       )
       .single();
 
+
   if (error) {
 
     console.error(
@@ -609,11 +887,13 @@ async function carregarStatusLoja({
     );
 
     if (atualizar) {
+
       atualizarStatus();
     }
 
     return false;
   }
+
 
   if (
     [
@@ -628,17 +908,24 @@ async function carregarStatusLoja({
     modoLoja =
       data.modo_loja;
 
-    configCardapio
-      .modo_loja =
+    configCardapio.modo_loja =
       data.modo_loja;
   }
 
+
   if (atualizar) {
+
     atualizarStatus();
   }
 
+
   return true;
 }
+
+
+/* ============================================================
+   HORÁRIO AUTOMÁTICO
+============================================================ */
 
 function lojaAbertaNoAutomatico() {
 
@@ -649,35 +936,31 @@ function lojaAbertaNoAutomatico() {
     agora.getDay();
 
   const minutos =
-    agora.getHours() *
-      60 +
+    agora.getHours() * 60 +
     agora.getMinutes();
 
   const inicio =
     minutosDeHora(
-      configCardapio
-        .hora_abertura
+      configCardapio.hora_abertura
     );
 
   const fim =
     minutosDeHora(
-      configCardapio
-        .hora_fechamento
+      configCardapio.hora_fechamento
     );
 
   const dias =
     Array.isArray(
-      configCardapio
-        .dias_abertos
+      configCardapio.dias_abertos
     )
-      ? configCardapio
-          .dias_abertos
+
+      ? configCardapio.dias_abertos
+
       : PADRAO_DIAS_ABERTOS;
 
+
   return (
-    dias.includes(
-      dia
-    ) &&
+    dias.includes(dia) &&
     minutos >= inicio &&
     minutos < fim
   );
@@ -687,62 +970,76 @@ function lojaAberta() {
 
   if (
     modoLoja ===
-      "aberta"
+    "aberta"
   ) {
+
     return true;
   }
 
+
   if (
     modoLoja ===
-      "fechada"
+    "fechada"
   ) {
+
     return false;
   }
 
+
   return lojaAbertaNoAutomatico();
 }
+
+
+/* ============================================================
+   ATUALIZAR STATUS VISUAL
+============================================================ */
 
 function atualizarStatus() {
 
   const aberta =
     lojaAberta();
 
+
   const status =
-    el(
-      "statusLoja"
-    ) ||
+    el("statusLoja") ||
+
     document.querySelector(
       ".status-loja"
     );
 
+
   const texto =
-    el(
-      "statusTexto"
-    ) ||
+    el("statusTexto") ||
+
     status
       ?.querySelector(
         "span:last-child"
       );
 
-  status
-    ?.classList
-    .toggle(
-      "closed",
-      !aberta
-    );
 
-  status
-    ?.classList
-    .toggle(
-      "fechado",
-      !aberta
-    );
+  if (status) {
+
+    status
+      .classList
+      .toggle(
+        "closed",
+        !aberta
+      );
+
+    status
+      .classList
+      .toggle(
+        "fechado",
+        !aberta
+      );
+  }
+
 
   if (texto) {
 
     if (
       modoLoja ===
-        "aberta"
+      "aberta"
     ) {
 
       texto.textContent =
@@ -751,21 +1048,18 @@ function atualizarStatus() {
 
     else if (
       modoLoja ===
-        "fechada"
+      "fechada"
     ) {
 
       texto.textContent =
         "Fechado • manual";
     }
 
-    else if (
-      aberta
-    ) {
+    else if (aberta) {
 
       texto.textContent =
         `Aberto • fecha às ${horaCurta(
-          configCardapio
-            .hora_fechamento
+          configCardapio.hora_fechamento
         )}`;
     }
 
@@ -776,6 +1070,7 @@ function atualizarStatus() {
     }
   }
 
+
   atualizarProdutosVisual();
 
   atualizarBotaoWhatsApp();
@@ -783,7 +1078,7 @@ function atualizarStatus() {
 
 
 /* ============================================================
-   CARREGAR PRODUTOS DO SUPABASE
+   CARREGAR CARDÁPIO DO SUPABASE
 ============================================================ */
 
 async function carregarCardapio({
@@ -791,14 +1086,21 @@ async function carregarCardapio({
 } = {}) {
 
   if (!sb) {
+
+    console.error(
+      "Supabase não configurado."
+    );
+
     return false;
   }
+
 
   const [
     categoriasResp,
     produtosResp
   ] =
     await Promise.all([
+
       sb
         .from(
           "categorias_cardapio"
@@ -818,6 +1120,7 @@ async function carregarCardapio({
             ascending: true
           }
         ),
+
 
       sb
         .from(
@@ -840,6 +1143,7 @@ async function carregarCardapio({
         )
     ]);
 
+
   if (
     categoriasResp.error ||
     produtosResp.error
@@ -854,6 +1158,7 @@ async function carregarCardapio({
     return false;
   }
 
+
   categoriasCardapio =
     (
       categoriasResp.data ||
@@ -861,9 +1166,9 @@ async function carregarCardapio({
     )
       .filter(
         categoria =>
-          categoria.ativo !==
-          false
+          categoria.ativo !== false
       );
+
 
   produtosCardapio =
     (
@@ -872,32 +1177,31 @@ async function carregarCardapio({
     )
       .filter(
         produto =>
-          produto.ativo !==
-          false
+          produto.ativo !== false
       )
       .map(
         produto => ({
+
           ...produto,
 
           preco:
             Number(
-              produto.preco ||
-              0
+              produto.preco || 0
             ),
 
           disponivel:
-            produto
-              .disponivel !==
+            produto.disponivel !==
             false,
 
           destaque:
-            produto
-              .destaque ===
+            produto.destaque ===
             true
         })
       );
 
+
   produtosPorId = {};
+
 
   produtosCardapio
     .forEach(
@@ -910,7 +1214,9 @@ async function carregarCardapio({
       }
     );
 
+
   sincronizarCarrinhoComCardapio();
+
 
   if (renderizar) {
 
@@ -925,13 +1231,20 @@ async function carregarCardapio({
     atualizarStatus();
   }
 
+
   return true;
 }
+
+
+/* ============================================================
+   SINCRONIZAR CARRINHO
+============================================================ */
 
 function sincronizarCarrinhoComCardapio() {
 
   let mudou =
     false;
+
 
   carrinho =
     carrinho.filter(
@@ -942,10 +1255,10 @@ function sincronizarCarrinhoComCardapio() {
             item.id
           ];
 
+
         if (
           !atual ||
-          atual.ativo ===
-            false
+          atual.ativo === false
         ) {
 
           mudou =
@@ -953,6 +1266,7 @@ function sincronizarCarrinhoComCardapio() {
 
           return false;
         }
+
 
         if (
           item.nome !==
@@ -965,6 +1279,7 @@ function sincronizarCarrinhoComCardapio() {
           mudou =
             true;
         }
+
 
         if (
           Number(
@@ -984,33 +1299,39 @@ function sincronizarCarrinhoComCardapio() {
             true;
         }
 
+
         return true;
       }
     );
 
+
   if (mudou) {
+
     salvarCarrinho();
   }
 }
 
 
 /* ============================================================
-   MONTAR CARDÁPIO
+   RENDERIZAR CARDÁPIO
 ============================================================ */
 
 function renderizarCardapio() {
 
   instalarCssCardapio();
 
+
   const nav =
     document.querySelector(
       ".category-nav"
     );
 
+
   const container =
     el(
       "sectionsContainer"
     );
+
 
   if (
     !nav ||
@@ -1024,28 +1345,33 @@ function renderizarCardapio() {
     return;
   }
 
+
   nav.innerHTML =
     `
       <button
         class="${
           filtroAtual ===
-            "todos"
+          "todos"
             ? "active"
             : ""
         }"
+
         data-cat="todos"
       >
         ✨ Todos
       </button>
 
+
       ${
         categoriasCardapio
           .map(
             categoria => `
+
               <button
+
                 class="${
                   filtroAtual ===
-                    categoria.slug
+                  categoria.slug
                     ? "active"
                     : ""
                 }"
@@ -1071,6 +1397,7 @@ function renderizarCardapio() {
       }
     `;
 
+
   nav
     .querySelectorAll(
       "button[data-cat]"
@@ -1083,14 +1410,13 @@ function renderizarCardapio() {
           () => {
 
             filtrarCategoria(
-              botao
-                .dataset
-                .cat
+              botao.dataset.cat
             );
           }
         );
       }
     );
+
 
   const html =
     categoriasCardapio
@@ -1101,19 +1427,21 @@ function renderizarCardapio() {
             produtosCardapio
               .filter(
                 produto =>
-                  produto
-                    .categoria ===
-                  categoria
-                    .slug
+                  produto.categoria ===
+                  categoria.slug
               );
+
 
           if (
             !produtos.length
           ) {
+
             return "";
           }
 
+
           return `
+
             <section
               class="category-section"
 
@@ -1133,6 +1461,7 @@ function renderizarCardapio() {
                   </span>
 
                   <h2>
+
                     ${escaparHtml(
                       categoria.emoji ||
                       "🍽️"
@@ -1141,11 +1470,13 @@ function renderizarCardapio() {
                     ${escaparHtml(
                       categoria.nome
                     )}
+
                   </h2>
 
                 </div>
 
               </div>
+
 
               <div
                 class="category-grid"
@@ -1167,8 +1498,10 @@ function renderizarCardapio() {
       )
       .join("");
 
+
   container.innerHTML =
     html ||
+
     `
       <div
         class="empty-search"
@@ -1185,8 +1518,16 @@ function renderizarCardapio() {
       </div>
     `;
 
+
   atualizarProdutosVisual();
 }
+
+
+/* ============================================================
+   RENDERIZAR PRODUTO
+
+   A DESCRIÇÃO É COLOCADA COMPLETA.
+============================================================ */
 
 function renderizarProduto(
   produto
@@ -1194,10 +1535,19 @@ function renderizarProduto(
 
   const imagem =
     produto.imagem_url ||
+
     "https://placehold.co/800x600/171717/ffffff?text=Produto";
 
+
+  const descricao =
+    produto.descricao ||
+    "";
+
+
   return `
+
     <article
+
       class="product-card"
 
       data-category="${escaparHtml(
@@ -1210,18 +1560,18 @@ function renderizarProduto(
 
       data-name="${escaparHtml(
         String(
-          produto.nome ||
-          ""
-        )
-          .toLowerCase()
+          produto.nome || ""
+        ).toLowerCase()
       )}"
     >
+
 
       <div
         class="product-image"
       >
 
         <img
+
           src="${escaparHtml(
             imagem
           )}"
@@ -1238,15 +1588,16 @@ function renderizarProduto(
           "
         >
 
+
         <button
+
           class="heart"
 
           onclick="
             toggleFavorito(
               this,
               '${escaparJs(
-                produto
-                  .produto_id
+                produto.produto_id
               )}'
             )
           "
@@ -1255,6 +1606,7 @@ function renderizarProduto(
         >
           ♡
         </button>
+
 
         <div
           class="sold-overlay"
@@ -1272,6 +1624,7 @@ function renderizarProduto(
 
       </div>
 
+
       <div
         class="product-info"
       >
@@ -1282,12 +1635,13 @@ function renderizarProduto(
           )}
         </h3>
 
+
         <p>
           ${escaparHtml(
-            produto.descricao ||
-            ""
+            descricao
           )}
         </p>
+
 
         <div
           class="product-bottom"
@@ -1296,24 +1650,29 @@ function renderizarProduto(
           <strong
             class="price"
           >
+
             ${moeda(
               produto.preco
             )}
+
           </strong>
 
+
           <button
+
             class="add-button"
 
             onclick="
               adicionarProduto(
                 '${escaparJs(
-                  produto
-                    .produto_id
+                  produto.produto_id
                 )}'
               )
             "
           >
+
             Adicionar
+
           </button>
 
         </div>
@@ -1324,10 +1683,16 @@ function renderizarProduto(
   `;
 }
 
+
+/* ============================================================
+   ESTADO VISUAL DOS PRODUTOS
+============================================================ */
+
 function atualizarProdutosVisual() {
 
   const aberta =
     lojaAberta();
+
 
   document
     .querySelectorAll(
@@ -1336,29 +1701,33 @@ function atualizarProdutosVisual() {
     .forEach(
       card => {
 
+        const id =
+          card.dataset.produtoId;
+
+
         const produto =
-          produtosPorId[
-            card
-              .dataset
-              .produtoId
-          ];
+          produtosPorId[id];
+
 
         const botao =
           card.querySelector(
             ".add-button"
           );
 
+
         if (
           !produto ||
           !botao
         ) {
+
           return;
         }
 
+
         const disponivel =
-          produto
-            .disponivel !==
+          produto.disponivel !==
           false;
+
 
         card
           .classList
@@ -1367,60 +1736,62 @@ function atualizarProdutosVisual() {
             !disponivel
           );
 
-        if (
-          !disponivel
-        ) {
+
+        if (!disponivel) {
 
           botao.disabled =
             true;
 
           botao.textContent =
             "Esgotado";
+
+          return;
         }
 
-        else if (
-          !aberta
-        ) {
+
+        if (!aberta) {
 
           botao.disabled =
             true;
 
           botao.textContent =
             "Loja fechada";
+
+          return;
         }
 
-        else {
 
-          botao.disabled =
-            false;
+        botao.disabled =
+          false;
 
-          botao.textContent =
-            "Adicionar";
-        }
+        botao.textContent =
+          "Adicionar";
       }
     );
 }
 
 
 /* ============================================================
-   CARRINHO
+   PRODUTO DISPONÍVEL
 ============================================================ */
 
-function produtoDisponivel(
-  id
-) {
+function produtoDisponivel(id) {
 
   const produto =
     produtosPorId[id];
 
+
   return (
     !!produto &&
-    produto.disponivel !==
-      false &&
-    produto.ativo !==
-      false
+    produto.disponivel !== false &&
+    produto.ativo !== false
   );
 }
+
+
+/* ============================================================
+   ADICIONAR AO CARRINHO
+============================================================ */
 
 function adicionarProduto(
   id,
@@ -1428,9 +1799,7 @@ function adicionarProduto(
   precoFallback
 ) {
 
-  if (
-    !lojaAberta()
-  ) {
+  if (!lojaAberta()) {
 
     toast(
       "Loja fechada"
@@ -1439,15 +1808,14 @@ function adicionarProduto(
     return;
   }
 
+
   const produto =
-    produtosPorId[
-      id
-    ];
+    produtosPorId[id];
+
 
   if (
     produto &&
-    produto.disponivel ===
-      false
+    produto.disponivel === false
   ) {
 
     toast(
@@ -1457,10 +1825,12 @@ function adicionarProduto(
     return;
   }
 
+
   const nome =
     produto?.nome ||
     nomeFallback ||
     "Produto";
+
 
   const preco =
     Number(
@@ -1469,17 +1839,17 @@ function adicionarProduto(
       0
     );
 
+
   const item =
     carrinho.find(
       produtoCarrinho =>
-        produtoCarrinho.id ===
-        id
+        produtoCarrinho.id === id
     );
+
 
   if (item) {
 
-    item.qtd +=
-      1;
+    item.qtd += 1;
   }
 
   else {
@@ -1492,6 +1862,7 @@ function adicionarProduto(
     });
   }
 
+
   salvarCarrinho();
 
   atualizarCarrinho();
@@ -1501,57 +1872,68 @@ function adicionarProduto(
   );
 }
 
-function reduzirProduto(
-  id
-) {
+
+/* ============================================================
+   REDUZIR PRODUTO
+============================================================ */
+
+function reduzirProduto(id) {
 
   const item =
     carrinho.find(
       produto =>
-        produto.id ===
-        id
+        produto.id === id
     );
+
 
   if (!item) {
     return;
   }
 
-  item.qtd -=
-    1;
+
+  item.qtd -= 1;
+
 
   if (
-    item.qtd <=
-    0
+    item.qtd <= 0
   ) {
 
     carrinho =
       carrinho.filter(
         produto =>
-          produto.id !==
-          id
+          produto.id !== id
       );
   }
+
 
   salvarCarrinho();
 
   atualizarCarrinho();
 }
 
-function removerProduto(
-  id
-) {
+
+/* ============================================================
+   REMOVER PRODUTO
+============================================================ */
+
+function removerProduto(id) {
 
   carrinho =
     carrinho.filter(
       produto =>
-        produto.id !==
-        id
+        produto.id !== id
     );
+
 
   salvarCarrinho();
 
   atualizarCarrinho();
 }
+
+
+/* ============================================================
+   CÁLCULOS
+============================================================ */
 
 function subtotal() {
 
@@ -1560,13 +1942,11 @@ function subtotal() {
       soma,
       item
     ) =>
+
       soma +
-      Number(
-        item.preco
-      ) *
-      Number(
-        item.qtd
-      ),
+      Number(item.preco) *
+      Number(item.qtd),
+
     0
   );
 }
@@ -1578,10 +1958,10 @@ function quantidade() {
       soma,
       item
     ) =>
+
       soma +
-      Number(
-        item.qtd
-      ),
+      Number(item.qtd),
+
     0
   );
 }
@@ -1590,49 +1970,49 @@ function taxa() {
 
   if (
     tipoPedido ===
-      "Retirada"
+    "Retirada"
   ) {
+
     return 0;
   }
 
+
   const regiao =
-    el(
-      "region"
-    )
+    el("region")
       ?.value;
+
 
   const taxas =
     taxasAtuais();
 
+
   return Number(
-    taxas[
-      regiao
-    ] ||
-    0
+    taxas[regiao] || 0
   );
 }
+
+
+/* ============================================================
+   ATUALIZAR CARRINHO
+============================================================ */
 
 function atualizarCarrinho() {
 
   const lista =
-    el(
-      "cartList"
-    );
+    el("cartList");
+
 
   const qtd =
     quantidade();
 
+
   const total =
     subtotal();
 
-  [
-    el(
-      "headerCartCount"
-    ),
 
-    el(
-      "floatingCartCount"
-    )
+  [
+    el("headerCartCount"),
+    el("floatingCartCount")
   ]
     .forEach(
       contador => {
@@ -1645,33 +2025,28 @@ function atualizarCarrinho() {
       }
     );
 
+
   if (
-    el(
-      "floatingCartTotal"
-    )
+    el("floatingCartTotal")
   ) {
 
     el(
       "floatingCartTotal"
     ).textContent =
-      moeda(
-        total
-      );
+      moeda(total);
   }
 
+
   if (
-    el(
-      "cartSubtotal"
-    )
+    el("cartSubtotal")
   ) {
 
     el(
       "cartSubtotal"
     ).textContent =
-      moeda(
-        total
-      );
+      moeda(total);
   }
+
 
   if (lista) {
 
@@ -1695,6 +2070,7 @@ function atualizarCarrinho() {
         carrinho
           .map(
             item => `
+
               <div
                 class="cart-item"
               >
@@ -1709,16 +2085,13 @@ function atualizarCarrinho() {
 
                   <span>
                     ${moeda(
-                      Number(
-                        item.preco
-                      ) *
-                      Number(
-                        item.qtd
-                      )
+                      Number(item.preco) *
+                      Number(item.qtd)
                     )}
                   </span>
 
                 </div>
+
 
                 <div
                   class="cart-item-actions"
@@ -1736,9 +2109,11 @@ function atualizarCarrinho() {
                     −
                   </button>
 
+
                   <b>
                     ${item.qtd}
                   </b>
+
 
                   <button
                     onclick="
@@ -1751,6 +2126,7 @@ function atualizarCarrinho() {
                   >
                     +
                   </button>
+
 
                   <button
                     onclick="
@@ -1773,42 +2149,41 @@ function atualizarCarrinho() {
     }
   }
 
+
   atualizarResumo();
 }
 
+
+/* ============================================================
+   ABRIR / FECHAR CARRINHO
+============================================================ */
+
 function abrirCarrinho() {
 
-  el(
-    "cartDrawer"
-  )
+  el("cartDrawer")
     ?.classList
-    .add(
-      "active"
-    );
+    .add("active");
 
-  document
-    .body
-    .style
-    .overflow =
+
+  document.body.style.overflow =
     "hidden";
 }
 
 function fecharCarrinho() {
 
-  el(
-    "cartDrawer"
-  )
+  el("cartDrawer")
     ?.classList
-    .remove(
-      "active"
-    );
+    .remove("active");
 
-  document
-    .body
-    .style
-    .overflow =
+
+  document.body.style.overflow =
     "";
 }
+
+
+/* ============================================================
+   ITENS INVÁLIDOS
+============================================================ */
 
 function itensInvalidosCarrinho() {
 
@@ -1820,11 +2195,13 @@ function itensInvalidosCarrinho() {
           item.id
         ];
 
+
       return (
         produto &&
         (
           produto.disponivel ===
             false ||
+
           produto.ativo ===
             false
         )
@@ -1835,7 +2212,7 @@ function itensInvalidosCarrinho() {
 
 
 /* ============================================================
-   CHECKOUT
+   ABRIR CHECKOUT
 ============================================================ */
 
 async function abrirCheckout() {
@@ -1851,7 +2228,9 @@ async function abrirCheckout() {
     return;
   }
 
+
   await Promise.all([
+
     carregarStatusLoja({
       atualizar: false
     }),
@@ -1865,9 +2244,8 @@ async function abrirCheckout() {
     })
   ]);
 
-  if (
-    !lojaAberta()
-  ) {
+
+  if (!lojaAberta()) {
 
     alert(
       "🔴 A loja está fechada no momento."
@@ -1876,123 +2254,120 @@ async function abrirCheckout() {
     return;
   }
 
+
   const invalidos =
     itensInvalidosCarrinho();
+
 
   if (
     invalidos.length
   ) {
 
     alert(
+
       "Alguns itens estão esgotados ou indisponíveis:\n\n" +
+
       invalidos
         .map(
           item =>
             "• " +
             item.nome
         )
-        .join(
-          "\n"
-        )
+        .join("\n")
     );
+
 
     atualizarCarrinho();
 
     return;
   }
 
-  el(
-    "checkoutModal"
-  )
-    ?.classList
-    .add(
-      "active"
-    );
 
-  document
-    .body
-    .style
-    .overflow =
+  el("checkoutModal")
+    ?.classList
+    .add("active");
+
+
+  document.body.style.overflow =
     "hidden";
+
 
   fecharCarrinho();
 
   atualizarResumo();
 }
 
+
+/* ============================================================
+   FECHAR CHECKOUT
+============================================================ */
+
 function fecharCheckout() {
 
-  el(
-    "checkoutModal"
-  )
+  el("checkoutModal")
     ?.classList
-    .remove(
-      "active"
-    );
+    .remove("active");
 
-  document
-    .body
-    .style
-    .overflow =
+
+  document.body.style.overflow =
     "";
 }
 
-function selecionarTipo(
-  tipo
-) {
+
+/* ============================================================
+   ENTREGA / RETIRADA
+============================================================ */
+
+function selecionarTipo(tipo) {
 
   tipoPedido =
     tipo;
 
-  el(
-    "deliveryBtn"
-  )
+
+  el("deliveryBtn")
     ?.classList
     .toggle(
       "active",
-      tipo ===
-        "Entrega"
+      tipo === "Entrega"
     );
 
-  el(
-    "pickupBtn"
-  )
+
+  el("pickupBtn")
     ?.classList
     .toggle(
       "active",
-      tipo ===
-        "Retirada"
+      tipo === "Retirada"
     );
 
-  el(
-    "regionField"
-  )
+
+  el("regionField")
     ?.classList
     .toggle(
       "hidden",
-      tipo ===
-        "Retirada"
+      tipo === "Retirada"
     );
 
-  el(
-    "addressField"
-  )
+
+  el("addressField")
     ?.classList
     .toggle(
       "hidden",
-      tipo ===
-        "Retirada"
+      tipo === "Retirada"
     );
+
 
   atualizarResumo();
 }
 
+
+/* ============================================================
+   RESUMO CHECKOUT
+============================================================ */
+
 function atualizarResumo() {
 
   if (
-    el(
-      "checkoutSubtotal"
-    )
+    el("checkoutSubtotal")
   ) {
 
     el(
@@ -2003,10 +2378,9 @@ function atualizarResumo() {
       );
   }
 
+
   if (
-    el(
-      "checkoutFee"
-    )
+    el("checkoutFee")
   ) {
 
     el(
@@ -2017,10 +2391,9 @@ function atualizarResumo() {
       );
   }
 
+
   if (
-    el(
-      "checkoutTotal"
-    )
+    el("checkoutTotal")
   ) {
 
     el(
@@ -2032,25 +2405,33 @@ function atualizarResumo() {
       );
   }
 
+
   atualizarBotaoWhatsApp();
 }
+
+
+/* ============================================================
+   BOTÃO WHATSAPP
+============================================================ */
 
 function atualizarBotaoWhatsApp() {
 
   const botao =
-    el(
-      "sendWhatsApp"
-    );
+    el("sendWhatsApp");
+
 
   if (!botao) {
     return;
   }
 
+
   const aberta =
     lojaAberta();
 
+
   botao.disabled =
     !aberta;
+
 
   botao.textContent =
     aberta
@@ -2060,7 +2441,7 @@ function atualizarBotaoWhatsApp() {
 
 
 /* ============================================================
-   FAVORITOS E FILTROS
+   FAVORITOS
 ============================================================ */
 
 function favoritos() {
@@ -2068,8 +2449,7 @@ function favoritos() {
   return JSON.parse(
     localStorage.getItem(
       "cantinho_favoritos"
-    ) ||
-    "[]"
+    ) || "[]"
   );
 }
 
@@ -2081,26 +2461,26 @@ function toggleFavorito(
   let lista =
     favoritos();
 
+
   lista =
-    lista.includes(
-      id
-    )
+    lista.includes(id)
+
       ? lista.filter(
           item =>
-            item !==
-            id
+            item !== id
         )
+
       : [
           ...lista,
           id
         ];
 
+
   localStorage.setItem(
     "cantinho_favoritos",
-    JSON.stringify(
-      lista
-    )
+    JSON.stringify(lista)
   );
+
 
   restaurarFavoritos();
 
@@ -2111,6 +2491,7 @@ function restaurarFavoritos() {
 
   const lista =
     favoritos();
+
 
   document
     .querySelectorAll(
@@ -2124,16 +2505,17 @@ function restaurarFavoritos() {
             ".heart"
           );
 
+
         if (!botao) {
           return;
         }
 
+
         const ativo =
           lista.includes(
-            card
-              .dataset
-              .produtoId
+            card.dataset.produtoId
           );
+
 
         botao
           .classList
@@ -2141,6 +2523,7 @@ function restaurarFavoritos() {
             "active",
             ativo
           );
+
 
         botao.textContent =
           ativo
@@ -2155,8 +2538,14 @@ function mostrarFavoritos() {
   somenteFavoritos =
     !somenteFavoritos;
 
+
   aplicarFiltro();
 }
+
+
+/* ============================================================
+   FILTRO DE CATEGORIA
+============================================================ */
 
 function filtrarCategoria(
   categoria
@@ -2164,6 +2553,7 @@ function filtrarCategoria(
 
   filtroAtual =
     categoria;
+
 
   document
     .querySelectorAll(
@@ -2176,39 +2566,45 @@ function filtrarCategoria(
           .classList
           .toggle(
             "active",
-            botao
-              .dataset
-              .cat ===
-              categoria
+
+            botao.dataset.cat ===
+            categoria
           );
       }
     );
 
+
   aplicarFiltro();
 }
+
+
+/* ============================================================
+   FILTRO DE PESQUISA
+============================================================ */
 
 function aplicarFiltro() {
 
   const termo =
     (
-      el(
-        "searchDesktop"
-      )
+      el("searchDesktop")
         ?.value ||
-      el(
-        "searchMobile"
-      )
+
+      el("searchMobile")
         ?.value ||
+
       ""
     )
       .trim()
       .toLowerCase();
 
+
   const favs =
     favoritos();
 
+
   let encontrados =
     0;
+
 
   document
     .querySelectorAll(
@@ -2220,6 +2616,7 @@ function aplicarFiltro() {
         let encontradosSecao =
           0;
 
+
         secao
           .querySelectorAll(
             ".product-card"
@@ -2230,40 +2627,41 @@ function aplicarFiltro() {
               const categoriaOk =
                 filtroAtual ===
                   "todos" ||
-                card
-                  .dataset
-                  .category ===
+
+                card.dataset.category ===
                   filtroAtual;
+
 
               const pesquisaOk =
                 !termo ||
+
                 (
                   (
-                    card
-                      .dataset
-                      .name ||
+                    card.dataset.name ||
                     ""
                   ) +
+
                   " " +
+
                   card.innerText
                 )
                   .toLowerCase()
-                  .includes(
-                    termo
-                  );
+                  .includes(termo);
+
 
               const favoritoOk =
                 !somenteFavoritos ||
+
                 favs.includes(
-                  card
-                    .dataset
-                    .produtoId
+                  card.dataset.produtoId
                 );
+
 
               const mostrar =
                 categoriaOk &&
                 pesquisaOk &&
                 favoritoOk;
+
 
               card
                 .classList
@@ -2272,51 +2670,56 @@ function aplicarFiltro() {
                   !mostrar
                 );
 
+
               if (mostrar) {
 
-                encontrados +=
-                  1;
+                encontrados += 1;
 
-                encontradosSecao +=
-                  1;
+                encontradosSecao += 1;
               }
             }
           );
+
 
         secao
           .classList
           .toggle(
             "filtered-out",
+
             encontradosSecao ===
-              0
+            0
           );
       }
     );
 
-  el(
-    "emptySearch"
-  )
+
+  el("emptySearch")
     ?.classList
     .toggle(
       "hidden",
-      encontrados !==
-        0
+      encontrados !== 0
     );
 }
 
-function syncSearch(
-  origem
-) {
+
+/* ============================================================
+   SINCRONIZAR CAMPO DE PESQUISA
+============================================================ */
+
+function syncSearch(origem) {
 
   const destino =
     origem.id ===
       "searchDesktop"
+
       ? el(
           "searchMobile"
         )
+
       : el(
           "searchDesktop"
         );
+
 
   if (destino) {
 
@@ -2324,62 +2727,61 @@ function syncSearch(
       origem.value;
   }
 
+
   aplicarFiltro();
 }
 
 
 /* ============================================================
-   INTERFACE
+   ROLAR PARA CARDÁPIO
 ============================================================ */
 
 function rolarCardapio() {
 
-  el(
-    "cardapio"
-  )
+  el("cardapio")
     ?.scrollIntoView({
-      behavior:
-        "smooth"
+      behavior: "smooth"
     });
 }
 
-function toast(
-  texto
-) {
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+function toast(texto) {
 
   const elemento =
-    el(
-      "toast"
-    );
+    el("toast");
+
 
   if (!elemento) {
     return;
   }
 
+
   elemento.textContent =
     texto;
 
+
   elemento
     .classList
-    .add(
-      "active"
-    );
+    .add("active");
+
 
   clearTimeout(
-    window
-      .cantinhoToastTimer
+    window.cantinhoToastTimer
   );
 
-  window
-    .cantinhoToastTimer =
+
+  window.cantinhoToastTimer =
     setTimeout(
       () => {
 
         elemento
           .classList
-          .remove(
-            "active"
-          );
+          .remove("active");
+
       },
       1600
     );
@@ -2387,7 +2789,7 @@ function toast(
 
 
 /* ============================================================
-   ENVIAR PEDIDO
+   FINALIZAR PEDIDO
 ============================================================ */
 
 async function finalizarPedido() {
@@ -2398,6 +2800,7 @@ async function finalizarPedido() {
     configOk
   ] =
     await Promise.all([
+
       carregarStatusLoja({
         atualizar: true
       }),
@@ -2410,6 +2813,7 @@ async function finalizarPedido() {
         atualizar: false
       })
     ]);
+
 
   if (
     sb &&
@@ -2427,9 +2831,8 @@ async function finalizarPedido() {
     return;
   }
 
-  if (
-    !lojaAberta()
-  ) {
+
+  if (!lojaAberta()) {
 
     alert(
       "🔴 A loja está fechada no momento."
@@ -2438,31 +2841,36 @@ async function finalizarPedido() {
     return;
   }
 
+
   const invalidos =
     itensInvalidosCarrinho();
+
 
   if (
     invalidos.length
   ) {
 
     alert(
+
       "Alguns itens estão esgotados ou indisponíveis:\n\n" +
+
       invalidos
         .map(
           item =>
             "• " +
             item.nome
         )
-        .join(
-          "\n"
-        ) +
+        .join("\n") +
+
       "\n\nRemova esses itens para continuar."
     );
+
 
     atualizarCarrinho();
 
     return;
   }
+
 
   if (
     !carrinho.length
@@ -2475,10 +2883,10 @@ async function finalizarPedido() {
     return;
   }
 
+
   const numero =
     String(
-      configCardapio
-        .whatsapp ||
+      configCardapio.whatsapp ||
       ""
     )
       .replace(
@@ -2486,10 +2894,10 @@ async function finalizarPedido() {
         ""
       );
 
+
   if (
     !numero ||
-    configCardapio
-      .whatsapp ===
+    configCardapio.whatsapp ===
       "COLOQUE_SEU_NUMERO_AQUI"
   ) {
 
@@ -2500,52 +2908,46 @@ async function finalizarPedido() {
     return;
   }
 
+
   const nome =
-    el(
-      "customerName"
-    )
+    el("customerName")
       ?.value
       .trim();
+
 
   const telefone =
-    el(
-      "customerPhone"
-    )
+    el("customerPhone")
       ?.value
       .trim();
+
 
   const regiao =
-    el(
-      "region"
-    )
+    el("region")
       ?.value;
+
 
   const endereco =
-    el(
-      "address"
-    )
+    el("address")
       ?.value
       .trim();
+
 
   const pagamento =
-    el(
-      "payment"
-    )
+    el("payment")
       ?.value;
 
+
   const troco =
-    el(
-      "changeFor"
-    )
+    el("changeFor")
       ?.value
       .trim();
 
+
   const observacao =
-    el(
-      "notes"
-    )
+    el("notes")
       ?.value
       .trim();
+
 
   if (
     !nome ||
@@ -2560,9 +2962,11 @@ async function finalizarPedido() {
     return;
   }
 
+
   if (
     tipoPedido ===
       "Entrega" &&
+
     (
       !regiao ||
       !endereco
@@ -2576,21 +2980,26 @@ async function finalizarPedido() {
     return;
   }
 
+
   let mensagem =
     "🍕 *NOVO PEDIDO - CANTINHO PIZZA BURGUER*\n\n";
+
 
   mensagem +=
     `👤 *Cliente:* ${nome}\n`;
 
+
   mensagem +=
     `📱 *Telefone:* ${telefone}\n`;
+
 
   mensagem +=
     `📦 *Recebimento:* ${tipoPedido}\n`;
 
+
   if (
     tipoPedido ===
-      "Entrega"
+    "Entrega"
   ) {
 
     mensagem +=
@@ -2600,33 +3009,34 @@ async function finalizarPedido() {
       `📍 *Endereço:* ${endereco}\n`;
   }
 
+
   mensagem +=
     "\n🧾 *ITENS*\n";
+
 
   carrinho
     .forEach(
       item => {
 
         mensagem +=
+
           `${item.qtd}x ${item.nome} — ${moeda(
-            Number(
-              item.preco
-            ) *
-            Number(
-              item.qtd
-            )
+            Number(item.preco) *
+            Number(item.qtd)
           )}\n`;
       }
     );
+
 
   mensagem +=
     `\n💵 *Subtotal:* ${moeda(
       subtotal()
     )}\n`;
 
+
   if (
     tipoPedido ===
-      "Entrega"
+    "Entrega"
   ) {
 
     mensagem +=
@@ -2635,14 +3045,17 @@ async function finalizarPedido() {
       )}\n`;
   }
 
+
   mensagem +=
     `💰 *TOTAL:* ${moeda(
       subtotal() +
       taxa()
     )}\n`;
 
+
   mensagem +=
     `💳 *Pagamento:* ${pagamento}\n`;
+
 
   if (troco) {
 
@@ -2650,18 +3063,20 @@ async function finalizarPedido() {
       `💵 *Troco para:* ${troco}\n`;
   }
 
-  if (
-    observacao
-  ) {
+
+  if (observacao) {
 
     mensagem +=
       `📝 *Obs:* ${observacao}\n`;
   }
 
+
   window.open(
+
     `https://wa.me/${numero}?text=${encodeURIComponent(
       mensagem
     )}`,
+
     "_blank"
   );
 }
@@ -2677,17 +3092,23 @@ function iniciarRealtime() {
     return;
   }
 
+
   sb
     .channel(
       "cantinho-cardapio-realtime"
     )
+
+
+    /* PRODUTOS */
 
     .on(
       "postgres_changes",
 
       {
         event: "*",
+
         schema: "public",
+
         table:
           "produtos_estoque"
       },
@@ -2698,12 +3119,17 @@ function iniciarRealtime() {
       }
     )
 
+
+    /* CATEGORIAS */
+
     .on(
       "postgres_changes",
 
       {
         event: "*",
+
         schema: "public",
+
         table:
           "categorias_cardapio"
       },
@@ -2714,19 +3140,31 @@ function iniciarRealtime() {
       }
     )
 
+
+    /* CONFIGURAÇÕES */
+
     .on(
       "postgres_changes",
 
       {
         event: "*",
+
         schema: "public",
+
         table:
           "config_cardapio",
+
         filter:
           "id=eq.1"
       },
 
       payload => {
+
+        const novoModo =
+          payload
+            ?.new
+            ?.modo_loja;
+
 
         if (
           [
@@ -2734,28 +3172,28 @@ function iniciarRealtime() {
             "aberta",
             "fechada"
           ].includes(
-            payload
-              ?.new
-              ?.modo_loja
+            novoModo
           )
         ) {
 
           modoLoja =
-            payload
-              .new
-              .modo_loja;
+            novoModo;
         }
+
 
         carregarConfigCardapio();
       }
     )
+
 
     .subscribe();
 }
 
 
 /* ============================================================
-   FUNÇÕES DISPONÍVEIS PARA OS BOTÕES HTML
+   FUNÇÕES GLOBAIS
+
+   NECESSÁRIAS PARA OS BOTÕES DO HTML
 ============================================================ */
 
 window.adicionarProduto =
@@ -2810,13 +3248,18 @@ document.addEventListener(
 
   async () => {
 
+
+    /* INSTALAR CSS */
+
     instalarCssCardapio();
 
-    el(
-      "searchDesktop"
-    )
+
+    /* PESQUISA DESKTOP */
+
+    el("searchDesktop")
       ?.addEventListener(
         "input",
+
         evento => {
 
           syncSearch(
@@ -2825,11 +3268,13 @@ document.addEventListener(
         }
       );
 
-    el(
-      "searchMobile"
-    )
+
+    /* PESQUISA CELULAR */
+
+    el("searchMobile")
       ?.addEventListener(
         "input",
+
         evento => {
 
           syncSearch(
@@ -2838,51 +3283,66 @@ document.addEventListener(
         }
       );
 
-    el(
-      "region"
-    )
+
+    /* REGIÃO */
+
+    el("region")
       ?.addEventListener(
         "change",
         atualizarResumo
       );
 
-    el(
-      "payment"
-    )
+
+    /* PAGAMENTO */
+
+    el("payment")
       ?.addEventListener(
         "change",
+
         () => {
 
-          el(
-            "changeField"
-          )
+          const pagamento =
+            el("payment")
+              ?.value;
+
+
+          el("changeField")
             ?.classList
             .toggle(
               "hidden",
 
-              el(
-                "payment"
-              )
-                ?.value !==
+              pagamento !==
                 "Dinheiro"
             );
         }
       );
 
+
+    /* CARRINHO */
+
     atualizarCarrinho();
+
+
+    /* SUPABASE NÃO CONFIGURADO */
 
     if (!sb) {
 
       console.error(
+
         "Supabase não configurado. Verifique config.js e a biblioteca @supabase/supabase-js."
       );
+
 
       atualizarStatus();
 
       return;
     }
 
+
+    /* CARREGAR DADOS */
+
     await Promise.all([
+
       carregarConfigCardapio({
         atualizar: false
       }),
@@ -2896,6 +3356,9 @@ document.addEventListener(
       })
     ]);
 
+
+    /* ATUALIZAR TELA */
+
     atualizarTaxasNoHtml();
 
     atualizarStatus();
@@ -2904,31 +3367,49 @@ document.addEventListener(
 
     restaurarFavoritos();
 
+
+    /* REALTIME */
+
     iniciarRealtime();
+
+
+    /* VERIFICAR STATUS A CADA 15 SEGUNDOS */
 
     setInterval(
       () => {
 
         carregarStatusLoja();
+
       },
       15000
     );
+
+
+    /* ATUALIZAR CARDÁPIO A CADA 60 SEGUNDOS */
 
     setInterval(
       () => {
 
         carregarCardapio();
+
       },
       60000
     );
+
+
+    /* ATUALIZAR CONFIGURAÇÕES */
 
     setInterval(
       () => {
 
         carregarConfigCardapio();
+
       },
       60000
     );
+
+
+    /* QUANDO CLIENTE VOLTAR PARA A PÁGINA */
 
     document.addEventListener(
       "visibilitychange",

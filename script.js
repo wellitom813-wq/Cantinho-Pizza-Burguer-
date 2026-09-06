@@ -2124,10 +2124,12 @@ document.addEventListener(
     const heroTitle = $(".hero-copy h1");
     const heroText = $(".hero-copy p");
     const heroButton = $(".hero-copy button");
+
     if (heroSeal) heroSeal.textContent = site.hero_selo || site.nome_loja || "CANTINHO PIZZA BURGUER";
     if (heroTitle) heroTitle.textContent = site.hero_titulo || "Seu pedido do jeito certo.";
     if (heroText) heroText.textContent = site.hero_texto || "Escolha seus produtos e finalize pelo WhatsApp.";
     if (heroButton) heroButton.textContent = site.hero_botao_texto || "Ver cardápio";
+
     if (hero && site.hero_imagem_url) {
       hero.classList.add("cms-has-image");
       hero.style.backgroundImage = `url("${String(site.hero_imagem_url).replaceAll('"', '%22')}")`;
@@ -2138,11 +2140,13 @@ document.addEventListener(
 
     const storeName = $(".store-copy h2");
     const storeSummary = $(".store-copy p");
+
     if (storeName) storeName.textContent = site.nome_loja || "Cantinho Pizza Burguer";
     if (storeSummary) storeSummary.textContent = site.resumo_cardapio || "";
 
     const logoTop = $(".logo");
     const logoStore = $(".store-logo");
+
     if (site.logo_url) {
       const img = `<img src="${esc(site.logo_url)}" alt="${esc(site.nome_loja)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`;
       if (logoTop) logoTop.innerHTML = img;
@@ -2150,21 +2154,32 @@ document.addEventListener(
     }
 
     const tags = $$(".store-tags span");
+
     if (tags[0]) tags[0].style.display = site.aceita_entrega === false ? "none" : "";
     if (tags[1]) tags[1].style.display = site.aceita_retirada === false ? "none" : "";
     if (tags[2] && site.tempo_entrega_texto) tags[2].textContent = `⏱️ ${site.tempo_entrega_texto}`;
 
     const deliveryBtn = document.getElementById("deliveryBtn");
     const pickupBtn = document.getElementById("pickupBtn");
+
     if (deliveryBtn) deliveryBtn.style.display = site.aceita_entrega === false ? "none" : "";
     if (pickupBtn) pickupBtn.style.display = site.aceita_retirada === false ? "none" : "";
+
     if (typeof window.selecionarTipo === "function") {
-      if (site.aceita_entrega === false && site.aceita_retirada !== false) window.selecionarTipo("Retirada");
-      if (site.aceita_retirada === false && site.aceita_entrega !== false) window.selecionarTipo("Entrega");
+      if (site.aceita_entrega === false && site.aceita_retirada !== false) {
+        window.selecionarTipo("Retirada");
+      }
+
+      if (site.aceita_retirada === false && site.aceita_entrega !== false) {
+        window.selecionarTipo("Entrega");
+      }
     }
 
     const adminLink = $(".btn-admin-loja");
-    if (adminLink) adminLink.style.display = site.mostrar_link_admin ? "" : "none";
+
+    if (adminLink) {
+      adminLink.style.display = site.mostrar_link_admin ? "" : "none";
+    }
 
     renderFooter();
     renderMaintenance();
@@ -2172,167 +2187,571 @@ document.addEventListener(
 
   function renderFooter() {
     let footer = document.getElementById("cmsFooter");
+
     if (!footer) {
       footer = document.createElement("footer");
       footer.id = "cmsFooter";
       footer.className = "cms-footer";
+
       const bottom = $(".mobile-bottom");
       document.body.insertBefore(footer, bottom || null);
     }
+
     footer.innerHTML = `
       <div class="cms-footer-grid">
-        <div><strong>${esc(site?.nome_loja || "Cantinho Pizza Burguer")}</strong><p>${esc(site?.rodape_texto || "Delivery")}</p></div>
-        <div><strong>Atendimento</strong><p>${site?.telefone_exibicao ? esc(site.telefone_exibicao) : "Pedido pelo WhatsApp"}${site?.tempo_entrega_texto ? `<br>Tempo estimado: ${esc(site.tempo_entrega_texto)}` : ""}</p></div>
-        <div><strong>Informações</strong><p>${site?.endereco_loja ? esc(site.endereco_loja) : "Entrega e retirada"}${site?.instagram_url ? `<br><a href="${esc(site.instagram_url)}" target="_blank" rel="noopener">Instagram</a>` : ""}</p></div>
+        <div>
+          <strong>${esc(site?.nome_loja || "Cantinho Pizza Burguer")}</strong>
+          <p>${esc(site?.rodape_texto || "Delivery")}</p>
+        </div>
+
+        <div>
+          <strong>Atendimento</strong>
+          <p>
+            ${site?.telefone_exibicao ? esc(site.telefone_exibicao) : "Pedido pelo WhatsApp"}
+            ${site?.tempo_entrega_texto ? `<br>Tempo estimado: ${esc(site.tempo_entrega_texto)}` : ""}
+          </p>
+        </div>
+
+        <div>
+          <strong>Informações</strong>
+          <p>
+            ${site?.endereco_loja ? esc(site.endereco_loja) : "Entrega e retirada"}
+            ${site?.instagram_url ? `<br><a href="${esc(site.instagram_url)}" target="_blank" rel="noopener">Instagram</a>` : ""}
+          </p>
+        </div>
       </div>
-      <div class="cms-footer-copy">© ${new Date().getFullYear()} ${esc(site?.nome_loja || "Cantinho Pizza Burguer")}. Todos os direitos reservados.</div>
+
+      <div class="cms-footer-copy">
+        © ${new Date().getFullYear()} ${esc(site?.nome_loja || "Cantinho Pizza Burguer")}. Todos os direitos reservados.
+      </div>
     `;
   }
 
   function renderMaintenance() {
     const old = document.getElementById("cmsMaintenance");
+
     if (!site?.manutencao_ativa) {
       old?.remove();
       return;
     }
-    const box = old || document.createElement("div");
+
+    const box =
+      old ||
+      document.createElement("div");
+
     box.id = "cmsMaintenance";
     box.className = "cms-maintenance";
-    box.innerHTML = `<div class="cms-maintenance-card"><div class="icon">🛠️</div><h1>${esc(site.nome_loja || "Cantinho Pizza Burguer")}</h1><p>${esc(site.manutencao_mensagem || "Estamos fazendo uma atualização. Voltamos em breve.")}</p></div>`;
-    if (!old) document.body.appendChild(box);
+
+    box.innerHTML = `
+      <div class="cms-maintenance-card">
+        <div class="icon">🛠️</div>
+        <h1>${esc(site.nome_loja || "Cantinho Pizza Burguer")}</h1>
+        <p>${esc(site.manutencao_mensagem || "Estamos fazendo uma atualização. Voltamos em breve.")}</p>
+      </div>
+    `;
+
+    if (!old) {
+      document.body.appendChild(box);
+    }
   }
 
   function avisoValido(a) {
     if (!a?.ativo) return false;
+
     const now = Date.now();
-    if (a.inicio && new Date(a.inicio).getTime() > now) return false;
-    if (a.fim && new Date(a.fim).getTime() < now) return false;
+
+    if (
+      a.inicio &&
+      new Date(a.inicio).getTime() > now
+    ) {
+      return false;
+    }
+
+    if (
+      a.fim &&
+      new Date(a.fim).getTime() < now
+    ) {
+      return false;
+    }
+
     return true;
   }
 
   function limparAvisos() {
-    $$(".cms-alert-bar,.cms-home-message,.cms-popup-wrap").forEach((el) => el.remove());
+    $$(".cms-alert-bar,.cms-home-message,.cms-popup-wrap")
+      .forEach((elemento) => elemento.remove());
   }
 
   function renderAvisos(lista) {
     limparAvisos();
-    const avisos = (lista || []).filter(avisoValido).sort((a,b) => Number(a.ordem||0)-Number(b.ordem||0));
-    const header = $("header.topbar");
-    const main = document.querySelector("main#inicio") || document.querySelector("main");
 
-    avisos.filter(a => a.tipo === "faixa").forEach((a) => {
-      const el = document.createElement("div");
-      el.className = "cms-alert-bar";
-      el.innerHTML = `${a.titulo ? `<strong>${esc(a.titulo)}</strong>` : ""}${esc(a.mensagem)}${a.botao_texto && a.botao_url ? `<a href="${esc(a.botao_url)}">${esc(a.botao_texto)}</a>` : ""}`;
-      header?.insertAdjacentElement("afterend", el);
-    });
+    const avisos =
+      (lista || [])
+        .filter(avisoValido)
+        .sort(
+          (a, b) =>
+            Number(a.ordem || 0) -
+            Number(b.ordem || 0)
+        );
 
-    avisos.filter(a => a.tipo === "inicio").forEach((a) => {
-      const el = document.createElement("section");
-      el.className = "cms-home-message";
-      el.innerHTML = `${a.titulo ? `<strong>${esc(a.titulo)}</strong>` : ""}<p>${esc(a.mensagem)}</p>${a.botao_texto && a.botao_url ? `<a href="${esc(a.botao_url)}">${esc(a.botao_texto)}</a>` : ""}`;
-      main?.prepend(el);
-    });
+    const header =
+      $("header.topbar");
 
-    const popup = avisos.find(a => a.tipo === "popup" && sessionStorage.getItem(`cantinho_aviso_${a.id}`) !== "visto");
-    if (popup) {
-      const wrap = document.createElement("div");
-      wrap.className = "cms-popup-wrap";
-      wrap.innerHTML = `<div class="cms-popup"><h3>${esc(popup.titulo || "Aviso")}</h3><p>${esc(popup.mensagem)}</p><div class="cms-popup-actions">${popup.botao_texto && popup.botao_url ? `<a href="${esc(popup.botao_url)}">${esc(popup.botao_texto)}</a>` : ""}<button type="button">Fechar</button></div></div>`;
-      wrap.querySelector("button")?.addEventListener("click", () => {
-        sessionStorage.setItem(`cantinho_aviso_${popup.id}`, "visto");
-        wrap.remove();
+    const main =
+      document.querySelector("main#inicio") ||
+      document.querySelector("main");
+
+    avisos
+      .filter(a => a.tipo === "faixa")
+      .forEach((a) => {
+        const elemento =
+          document.createElement("div");
+
+        elemento.className =
+          "cms-alert-bar";
+
+        elemento.innerHTML =
+          `${a.titulo ? `<strong>${esc(a.titulo)}</strong>` : ""}` +
+          `${esc(a.mensagem)}` +
+          `${a.botao_texto && a.botao_url ? `<a href="${esc(a.botao_url)}">${esc(a.botao_texto)}</a>` : ""}`;
+
+        header?.insertAdjacentElement(
+          "afterend",
+          elemento
+        );
       });
-      document.body.appendChild(wrap);
+
+    avisos
+      .filter(a => a.tipo === "inicio")
+      .forEach((a) => {
+        const elemento =
+          document.createElement("section");
+
+        elemento.className =
+          "cms-home-message";
+
+        elemento.innerHTML =
+          `${a.titulo ? `<strong>${esc(a.titulo)}</strong>` : ""}` +
+          `<p>${esc(a.mensagem)}</p>` +
+          `${a.botao_texto && a.botao_url ? `<a href="${esc(a.botao_url)}">${esc(a.botao_texto)}</a>` : ""}`;
+
+        main?.prepend(elemento);
+      });
+
+    const popup =
+      avisos.find(
+        a =>
+          a.tipo === "popup" &&
+          sessionStorage.getItem(
+            `cantinho_aviso_${a.id}`
+          ) !== "visto"
+      );
+
+    if (popup) {
+      const wrap =
+        document.createElement("div");
+
+      wrap.className =
+        "cms-popup-wrap";
+
+      wrap.innerHTML = `
+        <div class="cms-popup">
+          <h3>${esc(popup.titulo || "Aviso")}</h3>
+
+          <p>
+            ${esc(popup.mensagem)}
+          </p>
+
+          <div class="cms-popup-actions">
+            ${
+              popup.botao_texto &&
+              popup.botao_url
+                ? `<a href="${esc(popup.botao_url)}">${esc(popup.botao_texto)}</a>`
+                : ""
+            }
+
+            <button type="button">
+              Fechar
+            </button>
+          </div>
+        </div>
+      `;
+
+      wrap
+        .querySelector("button")
+        ?.addEventListener(
+          "click",
+          () => {
+            sessionStorage.setItem(
+              `cantinho_aviso_${popup.id}`,
+              "visto"
+            );
+
+            wrap.remove();
+          }
+        );
+
+      document.body.appendChild(
+        wrap
+      );
     }
   }
 
   function aplicarRegioes() {
-    const ativas = regioes.filter(r => r.ativo !== false).sort((a,b) => Number(a.ordem||0)-Number(b.ordem||0));
-    const select = document.getElementById("region");
+    const ativas =
+      regioes
+        .filter(
+          r =>
+            r.ativo !== false
+        )
+        .sort(
+          (a, b) =>
+            Number(a.ordem || 0) -
+            Number(b.ordem || 0)
+        );
+
+    const select =
+      document.getElementById(
+        "region"
+      );
+
     if (select) {
-      const atual = select.value;
-      select.innerHTML = `<option value="">Selecione</option>` + ativas.map(r => `<option value="${esc(r.codigo)}">${esc(r.nome || r.codigo)} — ${moeda(r.taxa)}</option>`).join("");
-      if (ativas.some(r => r.codigo === atual)) select.value = atual;
+      const atual =
+        select.value;
+
+      select.innerHTML =
+        `<option value="">Selecione</option>` +
+        ativas
+          .map(
+            r =>
+              `<option value="${esc(r.codigo)}">${esc(r.nome || r.codigo)} — ${moeda(r.taxa)}</option>`
+          )
+          .join("");
+
+      if (
+        ativas.some(
+          r =>
+            r.codigo === atual
+        )
+      ) {
+        select.value =
+          atual;
+      }
     }
 
-    const grid = $(".fee-grid");
-    if (grid) grid.innerHTML = ativas.map(r => `<article><strong>${esc(r.nome || r.codigo)}</strong><span>${moeda(r.taxa)}</span></article>`).join("");
+    const grid =
+      $(".fee-grid");
 
-    // O script principal usa taxasAtuais(). Ao substituir essa função,
-    // qualquer região criada no painel passa a calcular a taxa corretamente.
-    window.taxasAtuais = () => Object.fromEntries(ativas.map(r => [r.codigo, Number(r.taxa || 0)]));
-    if (typeof window.atualizarResumo === "function") window.atualizarResumo();
+    if (grid) {
+      grid.innerHTML =
+        ativas
+          .map(
+            r =>
+              `<article><strong>${esc(r.nome || r.codigo)}</strong><span>${moeda(r.taxa)}</span></article>`
+          )
+          .join("");
+    }
+
+    window.taxasAtuais =
+      () =>
+        Object.fromEntries(
+          ativas.map(
+            r => [
+              r.codigo,
+              Number(r.taxa || 0)
+            ]
+          )
+        );
+
+    if (
+      typeof window.atualizarResumo ===
+      "function"
+    ) {
+      window.atualizarResumo();
+    }
   }
 
   function ajustarTrocoAtual() {
-    const select = document.getElementById("payment");
-    const opt = select?.selectedOptions?.[0];
-    const aceita = opt?.dataset?.troco === "1";
-    document.getElementById("changeField")?.classList.toggle("hidden", !aceita);
+    const select =
+      document.getElementById(
+        "payment"
+      );
+
+    const opt =
+      select?.selectedOptions?.[0];
+
+    const aceita =
+      opt?.dataset?.troco === "1";
+
+    document
+      .getElementById(
+        "changeField"
+      )
+      ?.classList.toggle(
+        "hidden",
+        !aceita
+      );
   }
 
   function aplicarPagamentos() {
-    const ativas = pagamentos.filter(p => p.ativo !== false).sort((a,b) => Number(a.ordem||0)-Number(b.ordem||0));
-    const select = document.getElementById("payment");
-    if (!select) return;
-    const atual = select.value;
-    select.innerHTML = `<option value="">Selecione</option>` + ativas.map(p => `<option value="${esc(p.nome)}" data-codigo="${esc(p.codigo)}" data-troco="${p.aceita_troco ? "1" : "0"}">${esc(p.nome)}</option>`).join("");
-    if (ativas.some(p => p.nome === atual)) select.value = atual;
+    const ativas =
+      pagamentos
+        .filter(
+          p =>
+            p.ativo !== false
+        )
+        .sort(
+          (a, b) =>
+            Number(a.ordem || 0) -
+            Number(b.ordem || 0)
+        );
 
-    if (!select.dataset.cmsPaymentBound) {
-      select.dataset.cmsPaymentBound = "1";
-      select.addEventListener("change", () => {
-        // O script antigo também reage ao pagamento. Rodar no próximo ciclo
-        // garante que a configuração do CMS seja a decisão final.
-        setTimeout(ajustarTrocoAtual, 0);
-        if (typeof window.atualizarResumo === "function") window.atualizarResumo();
-      });
+    const select =
+      document.getElementById(
+        "payment"
+      );
+
+    if (!select) {
+      return;
     }
+
+    const atual =
+      select.value;
+
+    select.innerHTML =
+      `<option value="">Selecione</option>` +
+      ativas
+        .map(
+          p =>
+            `<option value="${esc(p.nome)}" data-codigo="${esc(p.codigo)}" data-troco="${p.aceita_troco ? "1" : "0"}">${esc(p.nome)}</option>`
+        )
+        .join("");
+
+    if (
+      ativas.some(
+        p =>
+          p.nome === atual
+      )
+    ) {
+      select.value =
+        atual;
+    }
+
+    if (
+      !select.dataset
+        .cmsPaymentBound
+    ) {
+      select.dataset
+        .cmsPaymentBound =
+          "1";
+
+      select.addEventListener(
+        "change",
+        () => {
+          setTimeout(
+            ajustarTrocoAtual,
+            0
+          );
+
+          if (
+            typeof window
+              .atualizarResumo ===
+            "function"
+          ) {
+            window.atualizarResumo();
+          }
+        }
+      );
+    }
+
     ajustarTrocoAtual();
   }
 
   function instalarPedidoMinimo() {
-    if (pedidoMinimoInstalado || typeof window.finalizarPedido !== "function") return;
-    const original = window.finalizarPedido;
-    window.finalizarPedido = async function (...args) {
-      const minimo = Number(site?.pedido_minimo || 0);
-      const totalProdutos = typeof window.subtotal === "function" ? Number(window.subtotal() || 0) : 0;
-      if (minimo > 0 && totalProdutos < minimo) {
-        alert(`Pedido mínimo: ${moeda(minimo)}. Adicione mais itens para finalizar.`);
-        return;
-      }
-      return original.apply(this, args);
-    };
-    pedidoMinimoInstalado = true;
+    if (
+      pedidoMinimoInstalado ||
+      typeof window.finalizarPedido !==
+        "function"
+    ) {
+      return;
+    }
+
+    const original =
+      window.finalizarPedido;
+
+    window.finalizarPedido =
+      async function (...args) {
+        const minimo =
+          Number(
+            site?.pedido_minimo ||
+            0
+          );
+
+        const totalProdutos =
+          typeof window.subtotal ===
+            "function"
+            ? Number(
+                window.subtotal() ||
+                0
+              )
+            : 0;
+
+        if (
+          minimo > 0 &&
+          totalProdutos < minimo
+        ) {
+          alert(
+            `Pedido mínimo: ${moeda(minimo)}. Adicione mais itens para finalizar.`
+          );
+
+          return;
+        }
+
+        return original.apply(
+          this,
+          args
+        );
+      };
+
+    pedidoMinimoInstalado =
+      true;
   }
 
   async function carregarTudo() {
-    if (!client) return;
-    const [s, a, r, p] = await Promise.all([
-      client.from("site_config").select("*").eq("id", 1).single(),
-      client.from("avisos_site").select("*").order("ordem", {ascending:true}).order("id", {ascending:false}),
-      client.from("regioes_entrega").select("*").order("ordem", {ascending:true}),
-      client.from("formas_pagamento").select("*").order("ordem", {ascending:true})
-    ]);
-    if (!s.error && s.data) site = s.data;
-    if (!r.error) regioes = r.data || [];
-    if (!p.error) pagamentos = p.data || [];
+    if (!client) {
+      return;
+    }
+
+    const [
+      s,
+      a,
+      r,
+      p
+    ] =
+      await Promise.all([
+        client
+          .from("site_config")
+          .select("*")
+          .eq("id", 1)
+          .single(),
+
+        client
+          .from("avisos_site")
+          .select("*")
+          .order(
+            "ordem",
+            {
+              ascending: true
+            }
+          )
+          .order(
+            "id",
+            {
+              ascending: false
+            }
+          ),
+
+        client
+          .from("regioes_entrega")
+          .select("*")
+          .order(
+            "ordem",
+            {
+              ascending: true
+            }
+          ),
+
+        client
+          .from("formas_pagamento")
+          .select("*")
+          .order(
+            "ordem",
+            {
+              ascending: true
+            }
+          )
+      ]);
+
+    if (
+      !s.error &&
+      s.data
+    ) {
+      site =
+        s.data;
+    }
+
+    if (!r.error) {
+      regioes =
+        r.data || [];
+    }
+
+    if (!p.error) {
+      pagamentos =
+        p.data || [];
+    }
+
     aplicarSite();
     aplicarRegioes();
     aplicarPagamentos();
     instalarPedidoMinimo();
-    if (!a.error) renderAvisos(a.data || []);
+
+    if (!a.error) {
+      renderAvisos(
+        a.data || []
+      );
+    }
   }
 
   function realtime() {
-    if (!client || channel) return;
-    channel = client.channel("cantinho-cms-public")
-      .on("postgres_changes", {event:"*",schema:"public",table:"site_config"}, carregarTudo)
-      .on("postgres_changes", {event:"*",schema:"public",table:"avisos_site"}, carregarTudo)
-      .on("postgres_changes", {event:"*",schema:"public",table:"regioes_entrega"}, carregarTudo)
-      .on("postgres_changes", {event:"*",schema:"public",table:"formas_pagamento"}, carregarTudo)
-      .subscribe();
+    if (
+      !client ||
+      channel
+    ) {
+      return;
+    }
+
+    channel =
+      client
+        .channel(
+          "cantinho-cms-public"
+        )
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "site_config"
+          },
+          carregarTudo
+        )
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "avisos_site"
+          },
+          carregarTudo
+        )
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "regioes_entrega"
+          },
+          carregarTudo
+        )
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "formas_pagamento"
+          },
+          carregarTudo
+        )
+        .subscribe();
   }
 
   async function init() {
@@ -2341,7 +2760,16 @@ document.addEventListener(
     realtime();
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
-  else init();
+  if (
+    document.readyState ===
+    "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      init
+    );
+  }
+  else {
+    init();
+  }
 })();
-

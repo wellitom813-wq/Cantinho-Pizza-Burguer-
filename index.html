@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260908-final">
+  <link rel="stylesheet" href="style.css?v=20260908-1737-final">
 </head>
 <body>
 <header class="topbar">
@@ -24,7 +24,6 @@
     </div>
   </div>
 </header>
-
 <main id="inicio">
   <section class="hero" aria-label="Capa Cantinho Pizza Burguer"></section>
 
@@ -36,16 +35,13 @@
       <div class="store-tags"><span>🛵 Entrega</span><span>🏪 Retirada</span><span>🕕 18h às 22h</span></div>
     </div>
   </section>
-
   <section class="menu-tools" id="cardapio">
     <div class="mobile-search"><span>⌕</span><input id="searchMobile" type="search" placeholder="Buscar produto"></div>
     <nav class="category-nav"><button class="active" data-cat="todos">✨ Todos</button></nav>
   </section>
-
   <div id="stockMessage" class="system-message hidden"></div>
   <div id="sectionsContainer"><div class="empty-search"><strong>Carregando cardápio...</strong></div></div>
   <div id="emptySearch" class="empty-search hidden"><strong>Nenhum produto encontrado</strong><span>Tente outro nome ou outra categoria.</span></div>
-
   <section class="fees">
     <div><span>TAXAS DE ENTREGA</span><h2>Taxa por região</h2><p>A taxa é adicionada automaticamente ao finalizar o pedido.</p></div>
     <div class="fee-grid">
@@ -56,9 +52,7 @@
     </div>
   </section>
 </main>
-
 <div class="floating-cart" onclick="abrirCarrinho()"><span>🛒 <b id="floatingCartCount">0</b></span><div><small>Meu pedido</small><strong id="floatingCartTotal">R$ 0,00</strong></div><b>→</b></div>
-
 <div class="drawer" id="cartDrawer">
   <div class="backdrop" onclick="fecharCarrinho()"></div>
   <aside class="drawer-panel">
@@ -67,7 +61,6 @@
     <div class="drawer-footer"><div><span>Subtotal</span><strong id="cartSubtotal">R$ 0,00</strong></div><button type="button" onclick="abrirCheckout()">Continuar</button></div>
   </aside>
 </div>
-
 <div class="checkout-modal" id="checkoutModal">
   <div class="backdrop" onclick="fecharCheckout()"></div>
   <section class="checkout-sheet">
@@ -86,7 +79,6 @@
     <button id="sendWhatsApp" class="whatsapp" type="button" onclick="finalizarPedido()">💬 Enviar pedido pelo WhatsApp</button>
   </section>
 </div>
-
 <div id="toast" class="toast"></div>
 
 <nav class="mobile-bottom">
@@ -97,9 +89,8 @@
 </nav>
 
 <a href="/admin/" class="btn-admin-loja" title="Área Administrativa">🔒 Área Administrativa</a>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js?v=20260908-final"></script>
-<script src="script.js?v=20260908-emoji-final"></script>
+<script src="config.js?v=20260908-1737-final"></script>
+<script src="script.js?v=20260908-1737-emoji-final"></script>
 </body>
 </html>

@@ -2,91 +2,274 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0b0b0b">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b0d">
   <title>Painel Administrativo | Cantinho Pizza Burguer</title>
   <link rel="stylesheet" href="admin.css">
+  <style>
+    :root{--bg:#08090b;--card:#101216;--card2:#15181d;--line:#282c33;--text:#fff;--muted:#a8adb7;--red:#ea1d2c;--green:#22c55e;--orange:#f59e0b}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    [hidden]{display:none!important}
+    .shell{min-height:100vh}
+    .login-page{min-height:100vh;display:grid;place-items:center;padding:24px}
+    .login-card{width:min(460px,100%);background:linear-gradient(180deg,#14161a,#0d0f12);border:1px solid var(--line);border-radius:24px;padding:28px;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+    .login-icon{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;margin:0 auto 18px;background:rgba(234,29,44,.13);font-size:32px}
+    .eyebrow{display:block;text-align:center;font-size:12px;font-weight:900;letter-spacing:.16em;color:#ff6a73}
+    .login-card h1{text-align:center;margin:8px 0 8px;font-size:30px}
+    .login-card>p{text-align:center;color:var(--muted);line-height:1.5;margin:0 0 24px}
+    .form-grid{display:grid;gap:14px}
+    label{display:grid;gap:7px;font-size:13px;font-weight:800;color:#d7d9dd}
+    input{width:100%;border:1px solid #30343b;background:#0b0d10;color:white;border-radius:12px;padding:13px 14px;outline:none}
+    input:focus{border-color:#666d78}
+    .btn{border:0;border-radius:12px;padding:13px 16px;font-weight:900;color:white;background:#282c32}
+    .btn.primary{background:var(--red)}
+    .btn.green{background:#16883e}
+    .btn.red{background:#b91c1c}
+    .btn.gray{background:#30343a}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+    .login-msg{min-height:22px;margin:12px 0 0;text-align:center;font-size:13px;color:#ff858c}
+    .back-link{display:block;text-align:center;color:#d8d8d8;text-decoration:none;margin-top:16px;font-size:14px}
+    .dashboard{width:min(1220px,100%);margin:0 auto;padding:22px 16px 60px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+    .brand small{display:block;color:#ff6a73;font-size:11px;font-weight:900;letter-spacing:.14em;margin-bottom:4px}
+    .brand h1{font-size:25px;margin:0}
+    .top-actions{display:flex;gap:10px;align-items:center}
+    .top-actions a{text-decoration:none}
+    .status-card{border:1px solid var(--line);border-radius:20px;background:var(--card);padding:20px;margin-bottom:18px}
+    .status-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .status-head small{display:block;color:#ff6a73;font-size:11px;font-weight:900;letter-spacing:.14em;margin-bottom:4px}
+    .status-head h2{margin:0;font-size:22px}
+    .status-pill{padding:8px 11px;border-radius:999px;background:#23272e;font-size:12px;font-weight:900}
+    .status-pill.open{background:rgba(34,197,94,.16);color:#6ee7a0;border:1px solid rgba(34,197,94,.35)}
+    .status-pill.closed{background:rgba(239,68,68,.15);color:#ff8d8d;border:1px solid rgba(239,68,68,.35)}
+    .status-description{color:var(--muted);line-height:1.55;margin:14px 0 16px}
+    .status-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .status-message{margin-top:12px;font-size:13px;color:#cbd0d8;min-height:20px}
+    .loading-panel{border:1px dashed #333943;border-radius:18px;padding:20px;color:var(--muted);text-align:center}
+    .fatal{margin:18px 0;padding:14px;border-radius:12px;background:#351515;color:#ffb0b0;border:1px solid #6a2424}
+    @media(max-width:700px){.dashboard{padding:16px 12px 50px}.topbar{align-items:flex-start}.top-actions{flex-direction:column;align-items:stretch}.status-actions{grid-template-columns:1fr}.login-card{padding:22px}.brand h1{font-size:21px}}
+  </style>
 </head>
 <body>
-  <main class="page-shell">
-    <section id="loginView" class="auth-card">
-      <div class="brand-icon">🍕</div>
+<div class="shell">
+  <section id="loginPage" class="login-page">
+    <div class="login-card">
+      <div class="login-icon">🍕</div>
       <span class="eyebrow">ACESSO RESTRITO</span>
       <h1>Painel Administrativo</h1>
-      <p>Controle completo do cardápio, fotos, preços, estoque, categorias, taxas, horários, status da loja e conteúdo do site.</p>
-      <form id="loginForm" class="stack">
-        <label><span>E-mail</span><input id="email" type="email" autocomplete="username" placeholder="Seu e-mail" required></label>
-        <label><span>Senha</span><input id="senha" type="password" autocomplete="current-password" placeholder="Sua senha" required></label>
+      <p>Controle produtos, estoque, categorias, capa, avisos, entrega, pagamentos, horários e conteúdo do Cantinho Pizza Burguer.</p>
+
+      <form id="loginForm" class="form-grid">
+        <label>
+          E-mail
+          <input id="email" type="email" autocomplete="username" placeholder="Seu e-mail" required>
+        </label>
+        <label>
+          Senha
+          <input id="senha" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+        </label>
         <button id="btnEntrar" class="btn primary" type="submit">Entrar</button>
-        <p id="loginMsg" class="msg"></p>
       </form>
+      <div id="loginMsg" class="login-msg"></div>
       <a class="back-link" href="../">← Voltar para a loja</a>
+    </div>
+  </section>
+
+  <main id="dashboard" class="dashboard" hidden>
+    <header class="topbar">
+      <div class="brand">
+        <small>CANTINHO PIZZA BURGUER</small>
+        <h1>Painel Administrativo</h1>
+      </div>
+      <div class="top-actions">
+        <a class="btn gray" href="../" target="_blank" rel="noopener">↗ Ver site</a>
+        <button id="btnSair" class="btn gray" type="button">Sair</button>
+      </div>
+    </header>
+
+    <section id="controleLojaCard" class="status-card">
+      <div class="status-head">
+        <div>
+          <small>STATUS DA LOJA</small>
+          <h2>Controle de abertura</h2>
+        </div>
+        <span id="statusPill" class="status-pill">Carregando...</span>
+      </div>
+      <p id="statusDescricao" class="status-description">Verificando o modo atual da loja...</p>
+      <div class="status-actions">
+        <button id="btnAbrirLoja" class="btn green" type="button">ABRIR LOJA AGORA</button>
+        <button id="btnFecharLoja" class="btn red" type="button">FECHAR LOJA AGORA</button>
+        <button id="btnAutomatico" class="btn gray" type="button">VOLTAR AO HORÁRIO AUTOMÁTICO</button>
+      </div>
+      <div id="statusMensagem" class="status-message"></div>
     </section>
 
-    <section id="dashboardView" class="dashboard hidden">
-      <header class="topbar">
-        <div><span class="eyebrow">CANTINHO PIZZA BURGUER</span><h1>Painel Administrativo</h1><p id="adminEmail" class="muted"></p></div>
-        <button id="btnSair" class="btn ghost" type="button">Sair</button>
-      </header>
-
-      <section class="card store-card">
-        <div class="section-head"><div><span class="eyebrow">STATUS DA LOJA</span><h2>Controle de abertura</h2></div><span id="storeBadge" class="status-badge">Carregando...</span></div>
-        <p id="storeHelp" class="muted"></p>
-        <div class="status-actions">
-          <button class="btn success" type="button" data-store-mode="aberta">ABRIR LOJA AGORA</button>
-          <button class="btn danger" type="button" data-store-mode="fechada">FECHAR LOJA AGORA</button>
-          <button class="btn secondary" type="button" data-store-mode="automatico">VOLTAR AO HORÁRIO AUTOMÁTICO</button>
-        </div>
-        <p id="storeMsg" class="msg"></p>
-      </section>
-
-      <section class="card">
-        <div class="section-head wrap-head"><div><span class="eyebrow">GERENCIAR CARDÁPIO</span><h2>Controle total</h2></div><button id="btnNovoProduto" class="btn primary" type="button">+ Novo produto</button></div>
-        <div class="tabs" role="tablist">
-          <button class="tab active" data-tab="produtos" type="button">🍔 Produtos</button>
-          <button class="tab" data-tab="categorias" type="button">🗂️ Categorias</button>
-          <button class="tab" data-tab="config" type="button">⚙️ Configurações</button>
-        </div>
-        <div id="tabProdutos" class="tab-panel">
-          <div class="stats-grid">
-            <div class="stat"><span>Total</span><strong id="statTotal">0</strong></div>
-            <div class="stat"><span>Disponíveis</span><strong id="statDisponiveis">0</strong></div>
-            <div class="stat"><span>Esgotados</span><strong id="statEsgotados">0</strong></div>
-            <div class="stat"><span>Ocultos</span><strong id="statOcultos">0</strong></div>
-          </div>
-          <div class="toolbar">
-            <input id="buscaProduto" type="search" placeholder="Buscar produto...">
-            <select id="filtroCategoria"><option value="todos">Todas as categorias</option></select>
-            <button id="btnTodosDisponiveis" class="btn success" type="button">Todos disponíveis</button>
-            <button id="btnTodosEsgotados" class="btn danger" type="button">Todos esgotados</button>
-          </div>
-          <p id="produtoMsg" class="msg"></p><div id="listaProdutos" class="product-list"></div>
-        </div>
-        <div id="tabCategorias" class="tab-panel hidden">
-          <div class="section-head wrap-head inner-head"><div><h3>Categorias</h3><p class="muted">Crie, edite, oculte e organize as categorias.</p></div><button id="btnNovaCategoria" class="btn primary" type="button">+ Nova categoria</button></div>
-          <p id="categoriaMsg" class="msg"></p><div id="listaCategorias" class="category-list"></div>
-        </div>
-        <div id="tabConfig" class="tab-panel hidden">
-          <form id="configForm" class="config-form">
-            <label class="full"><span>WhatsApp dos pedidos</span><input id="cfgWhatsapp" placeholder="5587999999999"></label>
-            <label><span>Horário de abertura</span><input id="cfgAbertura" type="time"></label>
-            <label><span>Horário de fechamento</span><input id="cfgFechamento" type="time"></label>
-            <fieldset class="full"><legend>Dias de funcionamento automático</legend><div class="days-grid">
-              <label><input type="checkbox" name="dia" value="0"> Domingo</label><label><input type="checkbox" name="dia" value="1"> Segunda</label><label><input type="checkbox" name="dia" value="2"> Terça</label><label><input type="checkbox" name="dia" value="3"> Quarta</label><label><input type="checkbox" name="dia" value="4"> Quinta</label><label><input type="checkbox" name="dia" value="5"> Sexta</label><label><input type="checkbox" name="dia" value="6"> Sábado</label>
-            </div></fieldset>
-            <label><span>Taxa N1</span><input id="cfgN1" type="number" min="0" step="0.01"></label><label><span>Taxa N3</span><input id="cfgN3" type="number" min="0" step="0.01"></label><label><span>Taxa N5</span><input id="cfgN5" type="number" min="0" step="0.01"></label><label><span>Taxa C2</span><input id="cfgC2" type="number" min="0" step="0.01"></label>
-            <div class="full"><button class="btn primary" type="submit">Salvar configurações</button></div><p id="configMsg" class="msg full"></p>
-          </form>
-        </div>
-      </section>
-    </section>
+    <div id="panelBoot" class="loading-panel">Carregando controles do site...</div>
+    <div id="fatalMsg" class="fatal" hidden></div>
   </main>
+</div>
 
-  <div id="modal" class="modal" aria-hidden="true"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Editar</h2><button id="btnFecharModal" class="icon-btn" type="button" aria-label="Fechar">✕</button></div><div id="modalBody"></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../config.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../config.js"></script>
-  <script src="admin.js"></script>
-  <script src="cms-admin.js"></script>
+<script>
+(() => {
+  'use strict';
+
+  const cfg = window.SUPABASE_CONFIG || window.supabaseConfig || {};
+  const URL = cfg.url || window.SUPABASE_URL;
+  const KEY = cfg.key || cfg.anonKey || window.SUPABASE_ANON_KEY || window.SUPABASE_PUBLISHABLE_KEY;
+
+  const loginPage = document.getElementById('loginPage');
+  const dashboard = document.getElementById('dashboard');
+  const form = document.getElementById('loginForm');
+  const email = document.getElementById('email');
+  const senha = document.getElementById('senha');
+  const btnEntrar = document.getElementById('btnEntrar');
+  const btnSair = document.getElementById('btnSair');
+  const loginMsg = document.getElementById('loginMsg');
+  const fatalMsg = document.getElementById('fatalMsg');
+  const panelBoot = document.getElementById('panelBoot');
+
+  if (!window.supabase || !URL || !KEY) {
+    loginMsg.textContent = 'Configuração do Supabase não encontrada em ../config.js.';
+    return;
+  }
+
+  const sbAdmin = window.supabase.createClient(URL, KEY);
+  window.CANTINHO_ADMIN_SB = sbAdmin;
+
+  function mostrarLogin() {
+    loginPage.hidden = false;
+    dashboard.hidden = true;
+  }
+
+  function mostrarPainel() {
+    loginPage.hidden = true;
+    dashboard.hidden = false;
+    setTimeout(() => { if (panelBoot) panelBoot.style.display = 'none'; }, 1200);
+  }
+
+  async function checarSessao() {
+    const { data, error } = await sbAdmin.auth.getSession();
+    if (error || !data?.session?.user) {
+      mostrarLogin();
+      return false;
+    }
+    mostrarPainel();
+    await carregarStatus();
+    return true;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    loginMsg.textContent = '';
+    btnEntrar.disabled = true;
+    btnEntrar.textContent = 'Entrando...';
+    try {
+      const { error } = await sbAdmin.auth.signInWithPassword({
+        email: email.value.trim(),
+        password: senha.value
+      });
+      if (error) throw error;
+      location.reload();
+    } catch (err) {
+      loginMsg.textContent = err?.message || 'Não foi possível entrar.';
+    } finally {
+      btnEntrar.disabled = false;
+      btnEntrar.textContent = 'Entrar';
+    }
+  });
+
+  btnSair.addEventListener('click', async () => {
+    await sbAdmin.auth.signOut();
+    location.reload();
+  });
+
+  const pill = document.getElementById('statusPill');
+  const descricao = document.getElementById('statusDescricao');
+  const mensagem = document.getElementById('statusMensagem');
+  const botoesStatus = [
+    document.getElementById('btnAbrirLoja'),
+    document.getElementById('btnFecharLoja'),
+    document.getElementById('btnAutomatico')
+  ];
+
+  function renderStatus(modo) {
+    pill.className = 'status-pill';
+    if (modo === 'aberta') {
+      pill.textContent = 'LOJA ABERTA';
+      pill.classList.add('open');
+      descricao.textContent = 'Modo manual: a loja foi forçada a ficar ABERTA. Ela continuará aberta até você fechar ou voltar ao horário automático.';
+    } else if (modo === 'fechada') {
+      pill.textContent = 'LOJA FECHADA';
+      pill.classList.add('closed');
+      descricao.textContent = 'Modo manual: a loja foi forçada a ficar FECHADA. Ela continuará fechada até você abrir ou voltar ao horário automático.';
+    } else {
+      pill.textContent = 'HORÁRIO AUTOMÁTICO';
+      descricao.textContent = 'A abertura e o fechamento seguem os dias e horários configurados no painel.';
+    }
+  }
+
+  async function carregarStatus() {
+    const { data, error } = await sbAdmin
+      .from('loja_config')
+      .select('modo')
+      .eq('id', 1)
+      .single();
+
+    if (error) {
+      mensagem.textContent = 'Não foi possível carregar o status da loja: ' + error.message;
+      renderStatus('automatico');
+      return;
+    }
+    renderStatus(data?.modo || 'automatico');
+  }
+
+  async function definirStatus(modo) {
+    botoesStatus.forEach(b => b.disabled = true);
+    mensagem.textContent = 'Salvando...';
+    try {
+      const { error } = await sbAdmin
+        .from('loja_config')
+        .update({ modo })
+        .eq('id', 1);
+      if (error) throw error;
+      renderStatus(modo);
+      mensagem.textContent = modo === 'aberta'
+        ? 'Loja aberta. O cardápio já está liberado para pedidos.'
+        : modo === 'fechada'
+          ? 'Loja fechada. Novos pedidos ficam bloqueados.'
+          : 'Loja voltou a seguir o horário automático.';
+    } catch (err) {
+      mensagem.textContent = 'Erro ao alterar o status: ' + (err?.message || 'tente novamente');
+    } finally {
+      botoesStatus.forEach(b => b.disabled = false);
+    }
+  }
+
+  document.getElementById('btnAbrirLoja').addEventListener('click', () => definirStatus('aberta'));
+  document.getElementById('btnFecharLoja').addEventListener('click', () => definirStatus('fechada'));
+  document.getElementById('btnAutomatico').addEventListener('click', () => definirStatus('automatico'));
+
+  sbAdmin.channel('cantinho-admin-status')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'loja_config', filter: 'id=eq.1' }, (payload) => {
+      const modo = payload?.new?.modo;
+      if (['automatico','aberta','fechada'].includes(modo)) renderStatus(modo);
+    })
+    .subscribe();
+
+  checarSessao().catch((err) => {
+    fatalMsg.hidden = false;
+    fatalMsg.textContent = err?.message || 'Erro ao iniciar o painel.';
+  });
+})();
+</script>
+
+<!-- PAINEL COMPLETO: produtos, categorias, site, capa, avisos, entrega e pagamentos -->
+<script src="painel-cardapio-total.js"></script>
 </body>
 </html>

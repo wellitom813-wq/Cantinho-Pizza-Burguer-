@@ -1,6 +1,7 @@
 /* ============================================================
    CANTINHO PIZZA BURGUER
    SCRIPT PÚBLICO — CARDÁPIO 100% CONTROLADO PELO ADMIN
+   COMPATIBILIDADE: EMOJIS CODIFICADOS EM UNICODE (SEGURO EM NOTEBOOK/CELULAR)
 ============================================================ */
 
 const PADRAO_DIAS_ABERTOS = [0, 2, 3, 5, 6];
@@ -110,14 +111,6 @@ function salvarCarrinho() {
 ============================================================ */
 
 function taxasAtuais() {
-  if (Array.isArray(window.__cantinhoCmsRegions) && window.__cantinhoCmsRegions.length) {
-    return Object.fromEntries(
-      window.__cantinhoCmsRegions
-        .filter(item => item.ativo !== false)
-        .map(item => [item.codigo, Number(item.taxa || 0)])
-    );
-  }
-
   return {
     N1: Number(configCardapio.taxa_n1 || 0),
     N3: Number(configCardapio.taxa_n3 || 0),
@@ -200,21 +193,6 @@ async function carregarConfigCardapio({
 }
 
 function atualizarTaxasNoHtml() {
-  const cmsRegioes = Array.isArray(window.__cantinhoCmsRegions)
-    ? window.__cantinhoCmsRegions.filter(item => item.ativo !== false)
-    : [];
-
-  if (cmsRegioes.length) {
-    const grid = document.querySelector(".fee-grid");
-    if (grid) {
-      grid.innerHTML = cmsRegioes
-        .sort((a,b) => Number(a.ordem || 0) - Number(b.ordem || 0))
-        .map(item => `<article><strong>${escaparHtml(item.nome || item.codigo)}</strong><span>${moeda(item.taxa)}</span></article>`)
-        .join("");
-    }
-    return;
-  }
-
   const taxas =
     taxasAtuais();
 
@@ -596,7 +574,7 @@ function renderizarCardapio() {
         class="${filtroAtual === "todos" ? "active" : ""}"
         data-cat="todos"
       >
-        ✨ Todos
+        \u2728 Todos
       </button>
     ` +
     categoriasCardapio
@@ -613,7 +591,7 @@ function renderizarCardapio() {
             )}"
           >
             ${escaparHtml(
-              categoria.emoji || "🍽️"
+              categoria.emoji || "\uD83C\uDF7D\uFE0F"
             )}
             ${escaparHtml(
               categoria.nome
@@ -670,7 +648,7 @@ function renderizarCardapio() {
 
                   <h2>
                     ${escaparHtml(
-                      categoria.emoji || "🍽️"
+                      categoria.emoji || "\uD83C\uDF7D\uFE0F"
                     )}
                     ${escaparHtml(
                       categoria.nome
@@ -757,7 +735,7 @@ function renderizarProduto(
           )}')"
           aria-label="Favoritar"
         >
-          ♡
+          \u2661
         </button>
 
         <div class="sold-overlay">
@@ -1411,8 +1389,8 @@ function atualizarBotaoWhatsApp() {
 
   botao.textContent =
     aberta
-      ? "💬 Enviar pedido pelo WhatsApp"
-      : "🔒 Loja fechada";
+      ? "\uD83D\uDCAC Enviar pedido pelo WhatsApp"
+      : "\uD83D\uDD12 Loja fechada";
 }
 
 
@@ -1487,8 +1465,8 @@ function restaurarFavoritos() {
 
         botao.textContent =
           ativo
-            ? "♥"
-            : "♡";
+            ? "\u2665"
+            : "\u2661";
       }
     );
 }
@@ -1713,7 +1691,7 @@ async function finalizarPedido() {
 
   if (!lojaAberta()) {
     alert(
-      "🔴 A loja está fechada no momento."
+      "\uD83D\uDD34 A loja está fechada no momento."
     );
 
     return;
@@ -1826,30 +1804,30 @@ async function finalizarPedido() {
   }
 
   let mensagem =
-    "🍕 *NOVO PEDIDO - CANTINHO PIZZA BURGUER*\n\n";
+    "\uD83C\uDF55 *NOVO PEDIDO - CANTINHO PIZZA BURGUER*\n\n";
 
   mensagem +=
-    `👤 *Cliente:* ${nome}\n`;
+    `\uD83D\uDC64 *Cliente:* ${nome}\n`;
 
   mensagem +=
-    `📱 *Telefone:* ${telefone}\n`;
+    `\uD83D\uDCF1 *Telefone:* ${telefone}\n`;
 
   mensagem +=
-    `📦 *Recebimento:* ${tipoPedido}\n`;
+    `\uD83D\uDCE6 *Recebimento:* ${tipoPedido}\n`;
 
   if (
     tipoPedido ===
       "Entrega"
   ) {
     mensagem +=
-      `🗺️ *Região:* ${regiao}\n`;
+      `\uD83D\uDDFA\uFE0F *Região:* ${regiao}\n`;
 
     mensagem +=
-      `📍 *Endereço:* ${endereco}\n`;
+      `\uD83D\uDCCD *Endereço:* ${endereco}\n`;
   }
 
   mensagem +=
-    "\n🧾 *ITENS*\n";
+    "\n\uD83E\uDDFE *ITENS*\n";
 
   carrinho.forEach(
     item => {
@@ -1862,7 +1840,7 @@ async function finalizarPedido() {
   );
 
   mensagem +=
-    `\n💵 *Subtotal:* ${moeda(
+    `\n\uD83D\uDCB5 *Subtotal:* ${moeda(
       subtotal()
     )}\n`;
 
@@ -1871,28 +1849,28 @@ async function finalizarPedido() {
       "Entrega"
   ) {
     mensagem +=
-      `🛵 *Taxa:* ${moeda(
+      `\uD83D\uDEF5 *Taxa:* ${moeda(
         taxa()
       )}\n`;
   }
 
   mensagem +=
-    `💰 *TOTAL:* ${moeda(
+    `\uD83D\uDCB0 *TOTAL:* ${moeda(
       subtotal() +
       taxa()
     )}\n`;
 
   mensagem +=
-    `💳 *Pagamento:* ${pagamento}\n`;
+    `\uD83D\uDCB3 *Pagamento:* ${pagamento}\n`;
 
   if (troco) {
     mensagem +=
-      `💵 *Troco para:* ${troco}\n`;
+      `\uD83D\uDCB5 *Troco para:* ${troco}\n`;
   }
 
   if (observacao) {
     mensagem +=
-      `📝 *Obs:* ${observacao}\n`;
+      `\uD83D\uDCDD *Obs:* ${observacao}\n`;
   }
 
   window.open(
@@ -2126,8 +2104,7 @@ document.addEventListener(
       .cms-footer{max-width:1180px;margin:32px auto 110px;padding:28px 20px;border-top:1px solid rgba(255,255,255,.10);color:#aaa}.cms-footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.cms-footer strong{color:#fff}.cms-footer p{margin:7px 0 0;line-height:1.5}.cms-footer a{color:#fff}.cms-footer-copy{margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);font-size:13px}
       .cms-maintenance{position:fixed;inset:0;z-index:999999;background:#070707;color:#fff;display:grid;place-items:center;padding:28px;text-align:center}.cms-maintenance-card{max-width:560px}.cms-maintenance-card .icon{font-size:48px}.cms-maintenance-card h1{font-size:30px;margin:14px 0 10px}.cms-maintenance-card p{color:#cfcfcf;line-height:1.6;font-size:16px}
       .hero.cms-has-image{position:relative;background-size:cover!important;background-position:center!important;overflow:hidden}.hero.cms-has-image:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.40))}.hero.cms-has-image>*{position:relative;z-index:1}
-      .hero.cms-cover-full{display:block!important;padding:0!important;min-height:0!important;height:auto!important;background:none!important;overflow:hidden}.hero.cms-cover-full:before{display:none!important}.hero.cms-cover-full> :not(.cms-hero-cover){display:none!important}.cms-hero-cover{display:block!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center!important}
-      @media(max-width:700px){.cms-footer-grid{grid-template-columns:1fr}.cms-footer{margin-bottom:120px}.cms-alert-bar{font-size:13px}.cms-home-message{margin-left:12px;margin-right:12px}.hero.cms-cover-full{border-radius:0!important}}
+      @media(max-width:700px){.cms-footer-grid{grid-template-columns:1fr}.cms-footer{margin-bottom:120px}.cms-alert-bar{font-size:13px}.cms-home-message{margin-left:12px;margin-right:12px}}
     `;
     document.head.appendChild(style);
   }
@@ -2152,29 +2129,12 @@ document.addEventListener(
     if (heroTitle) heroTitle.textContent = site.hero_titulo || "Seu pedido do jeito certo.";
     if (heroText) heroText.textContent = site.hero_texto || "Escolha seus produtos e finalize pelo WhatsApp.";
     if (heroButton) heroButton.textContent = site.hero_botao_texto || "Ver cardápio";
-    if (hero) {
-      const oldCover = hero.querySelector(".cms-hero-cover");
-      if (site.hero_imagem_url && site.hero_capa_completa !== false) {
-        hero.classList.remove("cms-has-image");
-        hero.classList.add("cms-cover-full");
-        hero.style.backgroundImage = "";
-        const cover = oldCover || document.createElement("img");
-        cover.className = "cms-hero-cover";
-        cover.alt = site.nome_loja ? `Capa ${site.nome_loja}` : "Capa Cantinho Pizza Burguer";
-        cover.src = site.hero_imagem_url;
-        cover.loading = "eager";
-        cover.fetchPriority = "high";
-        if (!oldCover) hero.prepend(cover);
-      } else if (site.hero_imagem_url) {
-        oldCover?.remove();
-        hero.classList.remove("cms-cover-full");
-        hero.classList.add("cms-has-image");
-        hero.style.backgroundImage = `url("${String(site.hero_imagem_url).replaceAll('"', '%22')}")`;
-      } else {
-        oldCover?.remove();
-        hero.classList.remove("cms-cover-full", "cms-has-image");
-        hero.style.backgroundImage = "";
-      }
+    if (hero && site.hero_imagem_url) {
+      hero.classList.add("cms-has-image");
+      hero.style.backgroundImage = `url("${String(site.hero_imagem_url).replaceAll('"', '%22')}")`;
+    } else if (hero) {
+      hero.classList.remove("cms-has-image");
+      hero.style.backgroundImage = "";
     }
 
     const storeName = $(".store-copy h2");
@@ -2193,7 +2153,7 @@ document.addEventListener(
     const tags = $$(".store-tags span");
     if (tags[0]) tags[0].style.display = site.aceita_entrega === false ? "none" : "";
     if (tags[1]) tags[1].style.display = site.aceita_retirada === false ? "none" : "";
-    if (tags[2] && site.tempo_entrega_texto) tags[2].textContent = `⏱️ ${site.tempo_entrega_texto}`;
+    if (tags[2] && site.tempo_entrega_texto) tags[2].textContent = `⏱\uFE0F ${site.tempo_entrega_texto}`;
 
     const deliveryBtn = document.getElementById("deliveryBtn");
     const pickupBtn = document.getElementById("pickupBtn");
@@ -2239,7 +2199,7 @@ document.addEventListener(
     const box = old || document.createElement("div");
     box.id = "cmsMaintenance";
     box.className = "cms-maintenance";
-    box.innerHTML = `<div class="cms-maintenance-card"><div class="icon">🛠️</div><h1>${esc(site.nome_loja || "Cantinho Pizza Burguer")}</h1><p>${esc(site.manutencao_mensagem || "Estamos fazendo uma atualização. Voltamos em breve.")}</p></div>`;
+    box.innerHTML = `<div class="cms-maintenance-card"><div class="icon">\uD83D\uDEE0\uFE0F</div><h1>${esc(site.nome_loja || "Cantinho Pizza Burguer")}</h1><p>${esc(site.manutencao_mensagem || "Estamos fazendo uma atualização. Voltamos em breve.")}</p></div>`;
     if (!old) document.body.appendChild(box);
   }
 
@@ -2289,7 +2249,6 @@ document.addEventListener(
   }
 
   function aplicarRegioes() {
-    window.__cantinhoCmsRegions = regioes;
     const ativas = regioes.filter(r => r.ativo !== false).sort((a,b) => Number(a.ordem||0)-Number(b.ordem||0));
     const select = document.getElementById("region");
     if (select) {

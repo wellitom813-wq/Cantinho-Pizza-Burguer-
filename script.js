@@ -2103,7 +2103,7 @@ document.addEventListener(
       .cms-popup h3{font-size:22px;margin:0 0 8px}.cms-popup p{color:#d2d2d2;line-height:1.55;margin:0 0 18px}.cms-popup-actions{display:flex;gap:10px;flex-wrap:wrap}.cms-popup button,.cms-popup a{border:0;border-radius:12px;padding:12px 16px;font-weight:900}.cms-popup button{background:#292929;color:#fff}.cms-popup a{background:var(--red,#ea1d2c);color:#fff;text-decoration:none}
       .cms-footer{max-width:1180px;margin:32px auto 110px;padding:28px 20px;border-top:1px solid rgba(255,255,255,.10);color:#aaa}.cms-footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.cms-footer strong{color:#fff}.cms-footer p{margin:7px 0 0;line-height:1.5}.cms-footer a{color:#fff}.cms-footer-copy{margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);font-size:13px}
       .cms-maintenance{position:fixed;inset:0;z-index:999999;background:#070707;color:#fff;display:grid;place-items:center;padding:28px;text-align:center}.cms-maintenance-card{max-width:560px}.cms-maintenance-card .icon{font-size:48px}.cms-maintenance-card h1{font-size:30px;margin:14px 0 10px}.cms-maintenance-card p{color:#cfcfcf;line-height:1.6;font-size:16px}
-      .hero.cms-has-image,.hero.cms-cover-only{position:relative;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;overflow:hidden}.hero.cms-has-image:before,.hero.cms-cover-only:before{content:none!important;display:none!important;background:none!important}.hero.cms-cover-only>*{display:none!important}
+      .hero.cms-has-image{position:relative;background-size:cover!important;background-position:center!important;overflow:hidden}.hero.cms-has-image:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.40))}.hero.cms-has-image>*{position:relative;z-index:1}
       @media(max-width:700px){.cms-footer-grid{grid-template-columns:1fr}.cms-footer{margin-bottom:120px}.cms-alert-bar{font-size:13px}.cms-home-message{margin-left:12px;margin-right:12px}}
     `;
     document.head.appendChild(style);
@@ -2121,13 +2121,20 @@ document.addEventListener(
     if (brandSub) brandSub.textContent = site.subtitulo_marca || "Delivery oficial";
 
     const hero = $(".hero");
-    if (hero) {
-      // A capa já possui a arte/texto dentro da própria imagem.
-      // Não renderizamos título, subtítulo, botão ou emojis por cima dela.
-      hero.classList.add("cms-has-image", "cms-cover-only");
-      hero.replaceChildren();
-      const capaUrl = String(site.hero_imagem_url || "/assets/capa-cantinho.webp").trim();
-      hero.style.backgroundImage = `url("${capaUrl.replaceAll('"', '%22')}")`;
+    const heroSeal = $(".hero-copy > span");
+    const heroTitle = $(".hero-copy h1");
+    const heroText = $(".hero-copy p");
+    const heroButton = $(".hero-copy button");
+    if (heroSeal) heroSeal.textContent = site.hero_selo || site.nome_loja || "CANTINHO PIZZA BURGUER";
+    if (heroTitle) heroTitle.textContent = site.hero_titulo || "Seu pedido do jeito certo.";
+    if (heroText) heroText.textContent = site.hero_texto || "Escolha seus produtos e finalize pelo WhatsApp.";
+    if (heroButton) heroButton.textContent = site.hero_botao_texto || "Ver cardápio";
+    if (hero && site.hero_imagem_url) {
+      hero.classList.add("cms-has-image");
+      hero.style.backgroundImage = `url("${String(site.hero_imagem_url).replaceAll('"', '%22')}")`;
+    } else if (hero) {
+      hero.classList.remove("cms-has-image");
+      hero.style.backgroundImage = "";
     }
 
     const storeName = $(".store-copy h2");
